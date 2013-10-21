@@ -61,4 +61,5 @@ class Tank_auth_groups extends Tank_auth {
                                 
                 return $loggedIn;
     }
+    
 }
