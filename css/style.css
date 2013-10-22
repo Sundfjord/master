@@ -6,7 +6,46 @@
         Purpose of the stylesheet follows.
 */
 
-root { 
-    display: block;
+body {
+    margin: 0 auto;
 }
 
+#header { 
+    background-color: #3b5999;
+    border-bottom: 1px solid black;
+    color: white;
+}
+
+#header h3 {
+    margin: 0 0 0 25px;
+    width: 175px;
+    padding: 3px 0 3px 0;
+    border-right: 1px solid black;
+}
+
+#sidebar {
+    float:left;
+    width: 200px;
+    border-right: 1px solid black;
+    
+}
+
+#content {
+    float:left;
+    margin: 0 10px 0 10px;
+}
+
+#footer {
+    background-color: #3b5999;
+    text-align: center;
+    width: 100%;
+    float: left;
+    padding: 20px;
+}
+
+#footer li {
+        list-style: none;
+        padding: 10px;
+        display: inline;
+        font-size: 16px;
+}
