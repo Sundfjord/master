@@ -39,9 +39,7 @@ $captcha = array(
 ?>
 <div class="container">
     <div class="row">
-        <center>
-            <!--<img src="LOGO FILE" />-->
-        </center>   
+        <center><img src="LOGO FILE" /></center>   
         <br />
     </div>
     <div class="row">
