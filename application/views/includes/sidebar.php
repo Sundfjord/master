@@ -1,17 +1,19 @@
 <?php if ( $coach === TRUE ) : ?>
-                <h3>Coach Menu</h3>
+                
 <ul>
-    <li>Home</li>
-    <li>About</li>
-    <li>Things</li>
+    <li>Teams</li>
+    <li>Messages</li>
+    <li>My profile</li>
+    <li>Log out</li>
 </ul>
     
             <?php else : ?>
-                <h3>Player Menu</h3>
+               
 <ul>
-    <li>Home</li>
-    <li>About</li>
-    <li>Things</li>
+    <li>Teams</li>
+    <li>Messages</li>
+    <li>My profile</li>
+    <li>Log out</li>
 </ul>
             <?php endif; ?>
 
