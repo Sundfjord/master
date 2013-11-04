@@ -19,6 +19,7 @@ $(document).ready(function(){
     * SEARCH PLAYER
     **************************************
     *************************************/
+    
     $("#search_player").keyup(function(e)
     {
     	// Sletter innhold i feltet dersom man trykker esc
@@ -118,7 +119,6 @@ $(document).ready(function(){
     **************************************
     *************************************/
         
-        
         $("#search_team").keyup(function(e)
     {
     	// Sletter innhold i feltet dersom man trykker esc
@@ -129,7 +129,7 @@ $(document).ready(function(){
 		 
         //Henter teksten frå inputfeltet, og resetter counten til 0.
         var filter = $(this).val(), count = 0;
-        var searching = false;
+        var soking = false;
         //Looper gjennom ordlisten
         $(".teamname").each(function()
         {
@@ -207,7 +207,7 @@ $(document).ready(function(){
 	$('#legg_til_ord').click(function(){
 		if ($('#legg_til_ord').hasClass('btn-primary'))
 	    {
-	    	$('#ord').val($("#search_team").val());
+	    	$('#ord').val($("#sok").val());
 	    	$('#grad').focus();
 	    }
 	});
