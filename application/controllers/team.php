@@ -16,21 +16,21 @@ class Team extends CI_Controller
     {
         if (!$this->tank_auth->is_logged_in()) {
             redirect('/auth/login/');
-        } else {
-
-            $data['title'] = 'Team';
-            $data['main_content'] = 'team_v';
-            $data['username']	= $this->tank_auth->get_username();
-            $data['coach'] = $this->tank_auth->is_admin();
-            $this->load->vars($data);
-            $this->load->view('includes/template');
-        }
+        } else 
+            {
+                $data['title'] = 'Team';
+                $data['main_content'] = 'team_v';
+                $data['username'] = $this->tank_auth->get_username();
+                $data['coach'] = $this->tank_auth->is_admin();
+                $this->load->vars($data);
+                $this->load->view('includes/template');
+            }
     }
     
     public function create_team() {
         
-        $this->form_validation->set_rules('teamname', 'Team Name', 'trim|required|min_length[4]|max_length[50]|xss_clean|is_unique[teams.teamname]');
-        $this->form_validation->set_rules('sport', 'Sport', 'required|greater_than[0]');
+        $this->form_validation->set_rules('teamname', 'Team Name', 'trim|required|min_length[4]|max_length[50]|xss_clean'); //|is_unique[teams.teamname]
+        $this->form_validation->set_rules('sport', 'Sport', 'required');
         
         
         if ($this->form_validation->run() === FALSE) {
@@ -44,6 +44,7 @@ class Team extends CI_Controller
             
             if ($result) {
                 $this->index();
+                //show success message
             }
         }
     }
@@ -54,6 +55,32 @@ class Team extends CI_Controller
 
         $data['results'] = $this->team_m->search_team($search_term);
 
-        $this->load->view('search_team_v',$data);
+        $this->load->view('search_team_v', $data);
     }
+    
+    public function get_team()
+    {
+        $data = array(
+        'result' => $this->team_m->get_team());
+        
+        $this->load->view('includes/sidebar', $data);
+    }
+    
+    public function update_team()
+    {
+        $this->form_validation->set_rules('teamname', 'Team Name', 'trim|required|min_length[4]|max_length[50]|xss_clean|is_unique[teams.teamname]');
+        
+        $update = $this->team_m->update_team();
+        
+        $this->load->view('team_v', $update);
+    }
+    
+    //public function join_team() 
+    //{               
+     //   $selected_team = $val['team_id'];
+        
+    //    $this->team_m->join_team($selected_team);
+
+    //    $this->load->view('team_v');
+    //}
 }

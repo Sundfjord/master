@@ -12,20 +12,25 @@ class Team_m extends CI_Model {
             'teamname'  => $this->input->post('teamname'),
             'sport'     => $this->input->post('sport')
                 );
-        
         $this->db->insert('teams', $teamdata);
         
         if ($this->db->affected_rows() === 1) {
-            return $teamdata;
+            
+            $insert_id = $this->db->insert_id();
+            $this->db->set('user_id', $this->session->userdata('user_id'));
+            $this->db->set('team_id', $insert_id);
+            $success = $this->db->insert('is_coach_of');
+            return $success;
+            
         }
     }
     
     public function search_team($search_term='default')
     {
         // Use the Active Record class for safer queries.
-        $this->db->select('teamname, sport');
+        $this->db->select('teamname, team_id, sport');
         $this->db->from('teams');
-        $this->db->like('teamname',$search_term);
+        $this->db->like('teamname', $search_term);
 
         // Execute the query.
         $query = $this->db->get();
@@ -33,4 +38,38 @@ class Team_m extends CI_Model {
         // Return the results.
         return $query->result_array();
     }
+    
+    public function get_team()
+    {
+        $this->db->select('teamname')->from('teams')->where('coaches', $this->session->userdata('user_id'));
+        $this->db->order_by('teamname', 'asc');
+        $query = $this->db->get();
+        
+        if($query->num_rows() > 0)
+        {
+            foreach($query->result() as $row)
+            {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+    
+    public function update_team($new_teamname)
+    {
+        $data = array (
+            'teamname' => $new_teamname);
+        $this->db->where('team_id', $team_id);
+        $this->db->update('teams', $data);
+        
+        
+        return $this->db->affected_rows() > 0;
+    }
+       
+        //$this->db->select('id', $this->session->userdata('id'));
+        //$this->db->from('users');
+        //$this->db->join('teams', 'teams.players = users.id' );
+        //$this->db->where('teams', $selected_team);
+        //$result = $this->db->get();   
+
 }
