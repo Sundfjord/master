@@ -1,25 +1,31 @@
 <?php if ( $coach === TRUE ) : ?>
                 
-<ul>
-    <li>Teams</li>
-        <ul>
-            <li>Superteam</li>
-            <li>Megateam</li>
-            <li>Gigateam</li>
-            <li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="<?php echo base_url('index.php/team/create_team'); ?>">Create a team</a></li> 
+<ul id="menu" class="nav nav-tabs nav-stacked">
+    <li class="active" data-toggle="collapse" data-target="#submenu"><a href="#"><i class="icon-list"></i>My Teams<i style="float: right;"class="icon-chevron-down"></i></a></li>
+        <ul id="submenu" class="nav nav-list collapse">
+            <li><a href="#">Epic United</a></li>
+            <li><a href="#">Awesome Rovers</a></li>
+            <li><a href="#">Boston Fuckups</a></li>
+            <li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="<?php echo base_url('index.php/team/create_team'); ?>"><i class="icon-plus"></i>Create a team</a></li> 
         </ul>
-    <li>Messages</li>
-    <li>My profile</li>
-    <li><a href="<?php echo base_url('index.php/auth/logout'); ?>">Logout</a></li>
+    <li><a href="#"><i class="icon-envelope"></i>Messages</a></li>
+    <li><a href="#"><i class="icon-user"></i>My Profile</a></li>
+    <li><a href="#"><i class="icon-off"></i>Logout</a></li>
 </ul>
     
             <?php else : ?>
                
-<ul>
-    <li>Teams</li>
-    <li>Messages</li>
-    <li>My profile</li>
-    <li><a href="<?php echo base_url('index.php/auth/logout'); ?>">Logout</a></li>
+<ul class="nav nav-tabs nav-stacked">
+    <li data-toggle="collapse" data-target="#test"><a href="#"><i class="icon-list"></i>My Teams</a></li>
+        <ul class="nav nav-list collapse" id="test">
+            <li><a href="#">Epic United</a></li>
+            <li><a href="#">Awesome Rovers</a></li>
+            <li><a href="#">Boston Fuckups</a></li>
+            <li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="<?php echo base_url('index.php/team/create_team'); ?>"><i class="icon-plus"></i>Create a team</a></li> 
+        </ul>
+    <li><a href="#"><i class="icon-envelope"></i>Messages</a></li>
+    <li><a href="#"><i class="icon-user"></i>My Profile</a></li>
+    <li><a href="#"><i class="icon-off"></i>Logout</a></li>
 </ul>
             <?php endif; ?>
 
