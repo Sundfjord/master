@@ -212,6 +212,38 @@ $(document).ready(function(){
 	    }
 	});
         
-  
+        $(document).ready(function(){
+ 		  var str=location.href.toLowerCase();
+        $('.navigation li a').each(function() {
+                if (str.indexOf(this.href.toLowerCase()) > -1) {
+						$("li.highlight").removeClass("highlight");
+                        $(this).parent().addClass("highlight"); 
+                   }
+              	 							}); 
+		$('li.highlight').parents().each(function(){
+												  
+					if ($(this).is('li')){
+						$(this).addClass("highlight"); 
+						}							  
+												  });
+	   });
+           
+           
+        $('#team_tabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
 
-});
+        // store the currently selected tab in the hash value
+        $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+            var id = $(e.target).attr("href").substr(1);
+            window.location.hash = id;
+        });
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        $('#team_tabs a[href="' + hash + '"]').tab('show');
+    
+           
+       
+   });
