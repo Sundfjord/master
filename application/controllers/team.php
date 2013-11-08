@@ -22,6 +22,7 @@ class Team extends CI_Controller
                 $data['main_content'] = 'team_v';
                 $data['username'] = $this->tank_auth->get_username();
                 $data['coach'] = $this->tank_auth->is_admin();
+                $data['result'] = $this->team_m->get_team_by_coach();
                 $this->load->vars($data);
                 $this->load->view('includes/template');
             }
@@ -58,12 +59,13 @@ class Team extends CI_Controller
         $this->load->view('search_team_v', $data);
     }
     
-    public function get_team()
+    public function get_team_by_coach()
     {
-        $data = array(
-        'result' => $this->team_m->get_team());
+        $datas = array(
+        'coach'     => $this->tank_auth->is_admin(),
+        'result'    => $this->team_m->get_team_by_coach());
         
-        $this->load->view('includes/sidebar', $data);
+        $this->load->view('includes/sidebar', $datas);
     }
     
     public function update_team()

@@ -9,7 +9,7 @@ class Search_m extends CI_Model {
     public function get_teams()
     {
         // Fetch all teams in the database
-        $this->db->select('team_id, teamname, sport');
+        $this->db->select('id, teamname, sport');
         $this->db->from('teams');
         
         $query = $this->db->get();
@@ -20,7 +20,7 @@ class Search_m extends CI_Model {
         foreach ($query->result_array() as $team)
         {	
                 $statuser[] = array(
-                    'team_id'   =>  $team['team_id'],
+                    'id'        =>  $team['id'],
                     'teamname'  =>  $team['teamname'],
                     'sport'     =>  $team['sport'],
                         );

@@ -28,7 +28,7 @@ class Team_m extends CI_Model {
     public function search_team($search_term='default')
     {
         // Use the Active Record class for safer queries.
-        $this->db->select('teamname, team_id, sport');
+        $this->db->select('teamname, id, sport');
         $this->db->from('teams');
         $this->db->like('teamname', $search_term);
 
@@ -39,15 +39,18 @@ class Team_m extends CI_Model {
         return $query->result_array();
     }
     
-    public function get_team()
+    public function get_team_by_coach()
     {
-        $this->db->select('teamname')->from('teams')->where('coaches', $this->session->userdata('user_id'));
+        $this->db->select('teamname, id');
+        $this->db->from('is_coach_of');
+        $this->db->join('teams', 'is_coach_of.team_id = teams.id');
+        $this->db->where('is_coach_of.user_id', $this->session->userdata('user_id'));
         $this->db->order_by('teamname', 'asc');
         $query = $this->db->get();
         
         if($query->num_rows() > 0)
         {
-            foreach($query->result() as $row)
+            foreach($query->result_array() as $row)
             {
                 $data[] = $row;
             }
@@ -59,7 +62,7 @@ class Team_m extends CI_Model {
     {
         $data = array (
             'teamname' => $new_teamname);
-        $this->db->where('team_id', $team_id);
+        $this->db->where('id', $team_id);
         $this->db->update('teams', $data);
         
         

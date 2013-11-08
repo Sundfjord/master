@@ -3,10 +3,10 @@
 <ul id="menu" class="nav nav-pills nav-stacked">
     <li data-toggle="collapse" data-target="#submenu"><a href="#"><span class="glyphicon glyphicon-list"></span>My Teams<span style="float:right; "class="glyphicon glyphicon-chevron-down"></span></a></li>
         <ul id="submenu" class="nav nav-list collapse">
-            <li><a href="<?php echo base_url(); ?>">Epic United</a></li>
-            <li><a href="<?php echo base_url(); ?>">Awesome Rovers</a></li>
-            <li><a href="<?php echo base_url(); ?>">Boston Fuckups</a></li>
-            <li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="<?php echo base_url('index.php/team/create_team'); ?>"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li> 
+            <?php foreach ($result as $row): ?>
+            <?php echo '<li><a href="team/id=' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?> 
+            <?php endforeach; ?>
+            <li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="<?php echo base_url('index.php/team/create_team'); ?>"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li>
         </ul>
     <li><a href="<?php echo base_url(); ?>index.php/message"><span class="glyphicon glyphicon-envelope"></span>Messages</a></li>
     <li><a href="<?php echo base_url(); ?>index.php/profile"><span class="glyphicon glyphicon-user"></span></i>My Profile</a></li>
