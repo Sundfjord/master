@@ -1,27 +1,21 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Home extends CI_Controller 
+class Home extends MY_Controller 
 {
 
     function __construct() {
         
         parent::__construct();
-       
-        $this->load->library('tank_auth_groups', '', 'tank_auth');
+        $this->load->library('form_validation');
+        
     }
     
     function index()
     {
-        if (!$this->tank_auth->is_logged_in()) {
-            redirect('/auth/login/');
-        } else {
-
-            $data['title'] = 'Home';
-            $data['main_content'] = 'home_v';
-            $data['username']	= $this->tank_auth->get_username();
-            $data['coach'] = $this->tank_auth->is_admin();
-            $this->load->vars($data);
-            $this->load->view('includes/template');
-        }
+        $home_data['title'] = 'Home';
+        $home_data['main_content'] = 'home_v';
+        $this->load->vars($home_data);
+        $this->load->view('includes/template');
     }
+
 }
