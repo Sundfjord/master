@@ -18,8 +18,8 @@ class Search extends CI_Controller
             redirect('/auth/login/');
         } else 
             {
-                $data['title'] = 'Search';
-                $data['main_content'] = 'search_v';
+                //$data['title'] = 'Search';
+                $data['main_content'] = 'team_v';
                 $data['username'] = $this->tank_auth->get_username();
                 $data['coach'] = $this->tank_auth->is_admin();
                 $data['teams'] = $this->search_m->get_teams();

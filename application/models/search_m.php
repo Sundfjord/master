@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Search_m extends CI_Model {
+class Search_m extends MY_Model {
     
     function __construct() {
         parent::__construct();
