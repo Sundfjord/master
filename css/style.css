@@ -95,15 +95,43 @@ ul {
 
 #team_tabs {
     margin: 0 auto;
-    width: 35%;
+    width: 40%;
 }
 
 #team_content {
     margin: 0 auto;
 }
 
+.team_menu {
+    text-align: center;
+    margin: 40px 0 30px 0;
+    list-style-type: none;
+}
+
+.team_menu > li {
+    display: inline;
+    padding: 20px;
+    background-color: #ddd;
+    border-radius: 10px;
+    
+} 
+
+.team_menu > li:hover {
+    background-color: #cacaca;
+}
+
+.team_menu > li > a:hover {
+    text-decoration: none;
+    color: #428bca;
+}
+
 #input_form {
     width: 220px;
+}
+
+#edit {
+    width: 40%;
+    margin: 0 auto;
 }
 
 /* FOOTER */
