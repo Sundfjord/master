@@ -246,4 +246,7 @@ $(document).ready(function(){
     
            
        
+        $(document).ready(function() {
+        $('#team_table').dataTable();
+} );            
    });

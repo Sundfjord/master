@@ -100,6 +100,20 @@ ul {
 
 #team_content {
     margin: 0 auto;
+    width: 100%;
+}
+
+#manage_squad {
+    margin: 0 auto;
+    width:40%;
+}
+
+#search {
+    margin: 20px 0 30px 0;
+}
+
+#search_player {
+    margin-bottom: 10px;
 }
 
 .team_menu {
@@ -130,8 +144,8 @@ ul {
 }
 
 #edit {
-    width: 40%;
     margin: 0 auto;
+    width: 40%;
 }
 
 /* FOOTER */
