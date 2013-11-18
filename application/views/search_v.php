@@ -64,7 +64,7 @@
             <?php foreach ($teams as $team):?>
             
             <tr>
-                <td class="left"><input form="team" type="checkbox" name="team[]" id="air" value="<?php echo $team['team_id'];?>" > </td>
+                <td class="left"><input form="team" type="checkbox" name="team[]" id="air" value="<?php echo $team['id'];?>" > </td>
                 <td class="middle_l"><div class="teamname"><?php echo $team['teamname'];?></div></td>
                 <td class="middle_r"><div class="sport"><?php echo $team['sport'];?></div></td>
                 

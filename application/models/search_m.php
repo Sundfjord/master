@@ -48,7 +48,7 @@ class Search_m extends MY_Model {
                     'id'        =>  $v['id'],
                     'username'  =>  $v['username'],
                     'email'     =>  $v['email']
-                        );
+                    );
         }
 
         // Returns players

@@ -25,11 +25,78 @@
             <p>More content</p>
         </div>
         
-        <div class="tab-pane fade" id="manage_squad">
-            <p>Dude, enough with the content already</p>
-            <br>
-            <p> Oh great, more content </p>
-            <br>
+        <div class="tab-pane fade" id="manage_squad" class="dataTables_wrapper">
+            
+            <form id="remove_player" action="<?php echo base_url('index.php/team/remove_player/'. $teaminfo->id); ?>" method="post">
+                
+                <table id="team_table" class="table table-striped table-bordered dataTable">
+                <thead>
+                    <tr> 
+                        <th class="left" scope="col"><input rel="popover" class="check_all" id="selectall" type="checkbox" />
+                        <th class="middle_l" scope="col">Name</th>
+                        <th class="middle_r" scope="col">Email</th>
+                    </tr>
+                </thead>
+                <tbody>	
+                    <?php foreach ($squad as $s):?> 
+                        <tr>
+                            <td class="left"><input type="checkbox" name="squad[]" id="air" value="<?php echo $s['id'];?>" /> </td>
+                            <td class="middle_l"><div class="username"><?php echo $s['username'];?></div></td>
+                            <td class="middle_r"><div class="email"><?php echo $s['email'];?></div></td>
+                        </tr>
+                    <?php endforeach;?>
+                </tbody>
+            </table>
+            
+            <div id="knapp_bar">
+                <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp_bar"><span class="glyphicon glyphicon-plus-sign"></span>Add more players</button>
+                <button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-trash"></span>Remove Player</button>
+            </div>
+            
+            </form>
+           
+            <div id="add_player_accordion" class="collapse">
+            
+                <div id="search"> 
+                    <?php if (empty($players)) {?>
+                    <div>
+                        <h2>Apparently, there are no players. </h2>
+                        <p>Ask your players to create a profile in order to start rollin'.</p>
+                    </div>
+
+                    <?php } else {?>
+
+                    <input type="text" class="input-medium search-query" id="search_player" autocomplete="off" placeholder="Søk eller legg til..." onfocus="if
+                    (this.value==this.defaultValue) this.value='';">
+
+                    <form id="add_player_form" action="<?php echo base_url('index.php/team/add_player/'. $teaminfo->id); ?>" method="post">
+                    <table id="team_table" class="table table-striped table-bordered dataTable">
+                        <thead>
+                            <tr class="tabellheader"> 
+                                <th class="left" scope="col"><input rel="popover" class="check_all" id="selectall" type="checkbox" />
+                                <th class="middle_l" scope="col">Name</th>
+                                <th class="middle_r" scope="col">Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>	
+                            <?php foreach ($players as $p):?> 
+                            <tr>
+                                <td class="left"><input type="checkbox" name="players[]" id="air" value="<?php echo $p['id'];?>" /> </td>
+                                <td class="middle_l"><div class="username"><?php echo $p['username'];?></div></td>
+                                <td class="middle_r"><div class="email"><?php echo $p['email'];?></div></td>
+                            </tr>
+                            <?php endforeach;?>
+                        </tbody>
+                    </table>
+
+                    <button class="btn btn-info" type="submit" >Add player(s) to team</button>
+                    </form>
+                    <?php } ?>
+                
+                </div>
+            
+            </div>
+            
         </div>
         
         <div class="tab-pane fade" id="edit">
@@ -116,6 +183,8 @@
         var hash = window.location.hash;
         $('#team_tabs a[href="' + hash + '"]').tab('show');
     </script>
+    
+    
     
     <?php else : ?>
         
