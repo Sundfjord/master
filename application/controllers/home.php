@@ -14,6 +14,7 @@ class Home extends MY_Controller
     {
         $home_data['title'] = 'Home';
         $home_data['main_content'] = 'home_v';
+        $home_data['teams'] = $this->team_m->get_teams();
         $this->load->vars($home_data);
         $this->load->view('includes/template');
     }

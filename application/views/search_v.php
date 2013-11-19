@@ -47,6 +47,7 @@
 
     <?php } else {?>
     
+    
     <input type="text" class="input-medium search-query" id="search_team" autocomplete="off" placeholder="Søk eller legg til..." onfocus="if
     (this.value===this.defaultValue) this.value='';">
     
@@ -74,12 +75,12 @@
         </tbody>
     
     </table>
-    <form id="team" action="<?php echo base_url(); ?>index.php/search/join_team" method="post">
+    <form id="team" action="<?php echo base_url(); ?>index.php/team/join_team" method="post">
         <button class="btn btn-info" type="submit" >Join team</button>
     </form>
     
-    
+    </div>
             <?php } ?>
-</div>
+
 
 <?php endif; ?>

@@ -26,6 +26,21 @@
         </div>
         
         <div class="tab-pane fade" id="manage_squad" class="dataTables_wrapper">
+        
+            <?php if (empty($squad)) {?>
+            
+            <div>
+                <h3>There is currently no players on <?php echo $teaminfo->teamname; ?> </h3>
+                <p>Press the button below to add players.</p>
+            </div>
+            
+            <div id="knapp_bar">
+                
+                <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp_bar"><span class="glyphicon glyphicon-plus-sign"></span>Add more players</button>
+                
+            </div>
+            
+            <?php } else {?>
             
             <form id="remove_player" action="<?php echo base_url('index.php/team/remove_player/'. $teaminfo->id); ?>" method="post">
                 
@@ -54,7 +69,9 @@
             </div>
             
             </form>
-           
+            
+            <?php } ?>
+            
             <div id="add_player_accordion" class="collapse">
             
                 <div id="search"> 

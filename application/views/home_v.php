@@ -18,5 +18,16 @@
         <!-- HTML to display for players here -->
         <h3>Player area</h3>
         <p> Welcome, <?php echo $username; ?> </p>
+        
+        <ul class="team_menu">
+            <?php foreach ($plr_result as $row): ?>
+                <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?> 
+            <?php endforeach; 
+                if(count($result) <= 2) 
+                {
+                    echo '<li><a data-toggle="modal" id="join_team" data-backdrop="true" href="#join_team_modal" href="base_url(index.php/team/join_team)"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';
+                }
+             ?>
+        </ul>
     <?php endif; ?>
 </div>
