@@ -108,7 +108,7 @@ class Team extends MY_Controller
             if ($this->input->post('delete') === $this->input->post('must_match_teamname')) 
             {
                 
-                $deleted = $this->team_m->delete_team($id);
+                $deleted = $this->team_m->delete_team();
                 redirect('/');
             } 
             else 

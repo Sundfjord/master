@@ -38,7 +38,7 @@ class MY_Controller extends CI_Controller
         
         if ($this->form_validation->run() === FALSE) {
             
-            $this->index();
+            redirect('/');
         }
         
         else {

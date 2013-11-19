@@ -34,9 +34,9 @@
                 <p>Press the button below to add players.</p>
             </div>
             
-            <div id="knapp_bar">
+            <div id="knapp">
                 
-                <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp_bar"><span class="glyphicon glyphicon-plus-sign"></span>Add more players</button>
+                <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp"><span class="glyphicon glyphicon-plus-sign"></span>Add more players</button>
                 
             </div>
             
@@ -107,6 +107,7 @@
                     </table>
 
                     <button class="btn btn-info" type="submit" >Add player(s) to team</button>
+                    
                     </form>
                     <?php } ?>
                 
