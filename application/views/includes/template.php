@@ -6,11 +6,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="robots" content="noindex">
         <title><?php echo $title; ?></title>
-        <script src="<?php echo base_url(); ?>/js/jquery.js" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo base_url(); ?>/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo base_url(); ?>/js/functions.js" type="text/javascript" charset="utf-8"></script>
-        <link rel="stylesheet" href="<?php echo base_url();?>/css/bootstrap.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>/css/style.css" type="text/css" media="screen" />
+        <script src="<?php echo base_url(); ?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo base_url(); ?>js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo base_url(); ?>js/jquery.dataTables.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="<?php echo base_url(); ?>js/dataTables.bootstrap.js" type="text/javascript" charset="utf-8" ></script>
+        <script src="<?php echo base_url(); ?>js/functions.js" type="text/javascript" charset="utf-8"></script>
+        <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/jquery.dataTables.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/dataTables.bootstrap.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
     </head>
     
     <body>
