@@ -8,15 +8,12 @@ class Team_m extends MY_Model {
     
     public function search_team($search_term='default')
     {
-        // Use the Active Record class for safer queries.
         $this->db->select('teamname, id, sport');
         $this->db->from('teams');
         $this->db->like('teamname', $search_term);
 
-        // Execute the query.
         $query = $this->db->get();
 
-        // Return the results.
         return $query->result_array();
     }
     
@@ -31,6 +28,36 @@ class Team_m extends MY_Model {
             if($query->num_rows() === 1)
                 
                 return $query->row();
+    }
+    
+    public function get_teams()
+    {
+        // Fetch all teams in the database
+        $this->db->select('teams.id AS id, 
+                           teams.teamname AS teamname, 
+                           teams.sport AS sport');
+        $this->db->select('users.username AS username');
+        $this->db->from('is_coach_of');
+        $this->db->join('teams', 'is_coach_of.team_id = teams.id');
+        $this->db->join('users', 'is_coach_of.user_id = users.id');
+        
+        $query = $this->db->get();
+        $query->result_array(); 
+
+        // Storing in array
+        $statuser = array();
+        foreach ($query->result_array() as $team)
+        {	
+                $statuser[] = array(
+                    'id'        =>  $team['id'],
+                    'teamname'  =>  $team['teamname'],
+                    'sport'     =>  $team['sport'],
+                    'coach'     =>  $team['username']
+                        );
+        }
+
+        // Returns teams
+        return $statuser;
     }
     
     public function update_team()
@@ -137,6 +164,32 @@ class Team_m extends MY_Model {
             }
             return $data;
         }
+    }
+    
+    public function get_team_by_player()
+    {
+        $this->db->select('teamname, id');
+        $this->db->from('plays_for');
+        $this->db->join('teams', 'plays_for.team_id = teams.id');
+        $this->db->where('plays_for.user_id', $this->session->userdata('user_id'));
+        $this->db->order_by('teamname', 'asc');
+        $query = $this->db->get();
+        
+        if($query->num_rows() > 0)
+        {
+            foreach($query->result_array() as $row)
+            {
+                $data[] = $row;
+            }
+            return $data;
+        }
+    }
+    
+    public function join_team($value)
+    {      
+                $this->db->set('user_id', $this->session->userdata('user_id'));
+                $this->db->set('team_id', $value);
+                $this->db->insert('plays_for');
     }
     
 }

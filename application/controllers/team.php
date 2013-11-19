@@ -15,6 +15,7 @@ class Team extends MY_Controller
         $team_data['title'] = 'Team'; //title should be $teamname
         $team_data['main_content'] = 'team_v';
         $team_data['teaminfo'] = $this->team_m->get_page($id);
+        $team_data['teams'] = $this->team_m->get_teams();
         $team_data['squad'] = $this->team_m->get_squad();
         $team_data['players'] = $this->team_m->get_players();
         $this->load->vars($team_data);
@@ -121,5 +122,17 @@ class Team extends MY_Controller
             redirect($this->input->post('redirect'));
         }
     
+    }
+    
+    public function join_team()
+    {
+        $data = $this->input->post('team'); //this returns an array so use foreach to extract data
+
+        foreach( $data as $key => $value)
+        {
+            $this->team_m->join_team($value);
+        }
+        
+        $this->index();
     }
 }

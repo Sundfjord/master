@@ -19,6 +19,7 @@ class MY_Controller extends CI_Controller
             $data['username'] = $this->tank_auth->get_username();
             $data['coach'] = $this->tank_auth->is_admin();
             $data['result'] = $this->team_m->get_team_by_coach();
+            $data['plr_result'] = $this->team_m->get_team_by_player();
             $this->load->vars($data);
             
         }
@@ -45,7 +46,7 @@ class MY_Controller extends CI_Controller
             $result = $this->team_m->add_team();
             
             if ($result) {
-                $this->index();
+                redirect('/');
                 //show success message
             }
         }
@@ -58,6 +59,15 @@ class MY_Controller extends CI_Controller
         'result'    => $this->team_m->get_team_by_coach());
          
        $this->load->view('includes/sidebar', $datas);
+    }
+    
+    public function get_team_by_playerS()
+    {
+        $plr_data = array(
+        'coach'     => $this->tank_auth->is_admin(),
+        'result'    => $this->team_m->get_team_by_player());
+         
+       $this->load->view('includes/sidebar', $plr_data);
     }
     
     public function search_team()

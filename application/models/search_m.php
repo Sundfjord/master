@@ -9,8 +9,13 @@ class Search_m extends MY_Model {
     public function get_teams()
     {
         // Fetch all teams in the database
-        $this->db->select('id, teamname, sport');
-        $this->db->from('teams');
+        $this->db->select('teams.id AS id, 
+                           teams.teamname AS teamname, 
+                           teams.sport AS sport');
+        $this->db->select('users.username AS username');
+        $this->db->from('is_coach_of');
+        $this->db->join('teams', 'is_coach_of.team_id = teams.id');
+        $this->db->join('users', 'is_coach_of.user_id = users.id');
         
         $query = $this->db->get();
         $query->result_array(); 
@@ -23,6 +28,7 @@ class Search_m extends MY_Model {
                     'id'        =>  $team['id'],
                     'teamname'  =>  $team['teamname'],
                     'sport'     =>  $team['sport'],
+                    'coach'     =>  $team['username']
                         );
         }
 
