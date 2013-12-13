@@ -7,6 +7,7 @@ class Team extends MY_Controller
         
         parent::__construct();
         $this->load->library('form_validation');
+        $this->load->library('When');
     }
     
     public function index()
@@ -31,6 +32,11 @@ class Team extends MY_Controller
         $this->load->view('team_v', $datas);
     }
     
+    public function getTeamEvents()
+    {
+        
+    }
+    
     public function add_player()
     {
         $this->form_validation->set_rules('players', 'Players', 'required'); 
@@ -46,7 +52,9 @@ class Team extends MY_Controller
             foreach($data as $key => $players)
             {
                 $this->db->where('user_id', $players);
-                $exists = $this->db->get('plays_for', $this->uri->segment(3));
+                $exists = $this->db->get_where('plays_for', array(
+                    'team_id' => $this->uri->segment(3)) 
+                        );
                     if($exists->num_rows() === 0)
                     {
                         $this->team_m->add_player($players);
@@ -107,7 +115,6 @@ class Team extends MY_Controller
             
             if ($this->input->post('delete') === $this->input->post('must_match_teamname')) 
             {
-                
                 $deleted = $this->team_m->delete_team();
                 redirect('/');
             } 
@@ -134,5 +141,98 @@ class Team extends MY_Controller
         }
         
         $this->index();
+    }
+    
+    public function json()
+    {
+        header("Content-Type: application/json");
+        echo $this->team_m->jsonEvents();
+    }
+    
+    public function add_event()
+    {
+        $this->form_validation->set_rules('eventname', 'Event Name', 'required|max_length[25]|min_length[6]');
+        $this->form_validation->set_rules('eventdesc', 'Event Description', 'max_length[140]');
+        $this->form_validation->set_rules('frequency', 'Event Description', 'required');
+        $this->form_validation->set_rules('event_start_date', 'Start Date', 'required');
+        if($this->input->post('frequency') !== 'single') 
+        {
+            $this->form_validation->set_rules('event_end_date', 'End Date', 'required');
+        }
+        $this->form_validation->set_rules('event_start_time', 'Start Time', 'required');
+        $this->form_validation->set_rules('event_end_time', 'End Time', 'required');
+        $this->form_validation->set_rules('location', 'Location', 'required');
+        
+        
+        if($this->form_validation->run() === FALSE) {
+            $this->load->view('fail_v');
+            
+        }
+        else { //on success
+            $start_date = $this->input->post('event_start_date');
+            //convert to valid MYSQL date format
+            $start = date("Y-m-d", strtotime($start_date));
+            
+            $start_time = $this->input->post('event_start_time');
+            $end_time = $this->input->post('event_end_time');
+            
+            //Insert event information into Events table
+            $this->team_m->add_event();
+            
+            $eventid = $this->db->insert_id();
+            
+            if($this->input->post('frequency') === 'single') 
+            { 
+                $r  = new When();
+                $r  ->recur($start, 'daily')
+                    ->count(1)
+                    ->wkst(1);
+                
+                while($result = $r->next())
+                    {
+                        $this->team_m->add_episodes($eventid, $result, $start_time, $end_time);
+                    }
+                    
+                    redirect('/');
+            }
+            else 
+            {
+                $end_date = $this->input->post('event_end_date');
+                //convert to valid MYSQL date format
+                $end = date("Y-m-d", strtotime($end_date));
+
+                    $r  = new When();
+                    $r  ->recur($start, $this->input->post('frequency'))
+                        ->until($end)
+                        ->wkst(1);
+                    
+                    while($result = $r->next())
+                    {
+                        $this->team_m->add_episodes($eventid, $result, $start_time, $end_time);
+                    }
+                    
+                    redirect('/');
+            }
+        } 
+    }
+    
+    public function edit_event()
+    {
+        
+    }
+    
+    public function delete_event()
+    {
+        
+    }
+    
+    public function edit_episode()
+    {
+        
+    }
+    
+    public function delete_episode()
+    {
+        
     }
 }
