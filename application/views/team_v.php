@@ -1,8 +1,9 @@
 <div>
     <?php if ( $coach === TRUE ) : ?>
         
-    <h2><?php echo $teaminfo->teamname; ?> </h2> 
-    <br>
+    <h2><?php echo $teaminfo->teamname; ?> </h2>
+    <h4><?php echo $teaminfo->sport; ?> team</h4>
+    
     
     <ul id="team_tabs" class="nav nav-tabs">
         <li><a href="#schedule" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span>Schedule</a></li>
@@ -18,7 +19,14 @@
     
     <div id="team_content" class="tab-content">
         <div class="tab-pane fade in active" id="schedule">
-            <p>Content</p>
+            <div id="knapp_bar">
+                <button type="button" id="add_event" class="btn btn-info" href="#add_event_modal"> <span class="glyphicon glyphicon-plus-sign"></span>Add event</button>
+                <button type="button" id="edit_event" class="btn btn-default" href="#edit_event_modal"> <span class="glyphicon glyphicon-edit"></span>Edit events</button>
+                <button type="button" id="delete_event" class="btn btn-danger" href="#delete_event_modal"> <span class="glyphicon glyphicon-trash"></span>Delete event</button>
+            </div>
+            <div id="calendar">
+                
+            </div>
         </div>
         
         <div class="tab-pane fade" id="stats">
@@ -55,7 +63,7 @@
                 <tbody>	
                     <?php foreach ($squad as $s):?> 
                         <tr>
-                            <td class="left"><input type="checkbox" name="squad[]" id="air" value="<?php echo $s['id'];?>" /> </td>
+                            <td class="left"><input type="checkbox" name="squad[]" value="<?php echo $s['id'];?>" /> </td>
                             <td class="middle_l"><div class="username"><?php echo $s['username'];?></div></td>
                             <td class="middle_r"><div class="email"><?php echo $s['email'];?></div></td>
                         </tr>
@@ -125,7 +133,7 @@
 
                     <div class="form-group">
                         <label for="teamname">Team Name:</label><br>
-                        <input name="teamname" type="text" placeholder="<?php echo $teaminfo->teamname; ?>" class="form-control" value="<?php echo set_value('teamname'); ?>">
+                        <input autofocus name="teamname" type="text" placeholder="<?php echo $teaminfo->teamname; ?>" class="form-control" value="<?php echo set_value('teamname'); ?>">
                         <input name="redirect" type="hidden" value="<?= $this->uri->uri_string() ?>" />
                     </div>
 
@@ -184,25 +192,129 @@
         
     </div>
     
-    <!-- Must be moved into Functions.js -->
-    <script>
-    $('#team_tabs a').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show');
-        });
-
-        // store the currently selected tab in the hash value
-        $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
-            var id = $(e.target).attr("href").substr(1);
-            window.location.hash = id;
-        });
-
-        // on load of the page: switch to the currently selected tab
-        var hash = window.location.hash;
-        $('#team_tabs a[href="' + hash + '"]').tab('show');
-    </script>
+    <!-- ADD EVENT MODAL -->
     
+    <div class="modal fade" id="add_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add event</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div id="modal_body_wrap">
+                        <form id="add_event_form" action="<?php echo base_url('index.php/team/add_event/'.$teaminfo->id); ?>" method="post">
+                        <div class="event_field form-group">
+                            <label class="sr-only">Event name</label>
+                            <input placeholder="Event name" id="event_name" name="eventname" class="form-control" type="text">
+                        </div>
+
+                        <div class="event_field form-group">
+                            <label class="sr-only">Event description</label>
+                            <input placeholder="Event description (optional)" name="eventdesc" class="form-control" type="text">
+                        </div>
+                            
+                        <div class="form-inline">
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="single" value="single"  /> Single session
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="daily" value="daily"> Daily
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="weekly" value="weekly" checked> Weekly
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="monthly" value="monthly"> Monthly
+                            </label>
+                        </div>
+                            
+                        <div class="form-inline">
+
+                            <div class="event_field_half bfh-datepicker" data-min="today" data-name="event_start_date" data-date="" data-placeholder="Start date" data-format="d-m-y" data-align="right">
+                                <input type="text">
+                            </div>
+
+                            <div class="event_field_half bfh-datepicker" data-date="" data-name="event_end_date" data-placeholder="End date" data-format="d-m-y" data-align="right">
+                                <input type="text">
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-inline">
+
+                            <div class="event_field_half bfh-timepicker" data-time="" data-name="event_start_time" data-placeholder="Start time" data-align="right"> 
+                                <input type="text">
+                            </div>
+
+                            <div class="event_field_half bfh-timepicker" data-time="" data-name="event_end_time" data-placeholder="End time" data-align="right"> 
+                                <input type="text">
+                            </div>
+                        </div>
+
+                        <div class="event_field form-group">
+                            <label class="sr-only">Location</label>
+                            <input placeholder="Location" name="location" class="form-control" type="text">
+                        </div>
+                            
+                    </div>
+
+                </div>
+            
+                
+                <div class="modal-footer">
+                    
+                        <button class="btn btn-lg btn-info" type="submit">Add event</button>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     
+    <div class="modal fade" id="edit_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Edit event</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>sdfsds</p>
+
+                </div>
+            
+                
+                <div class="modal-footer">
+                        
+                    
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    
+    <div class="modal fade" id="delete_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Delete event</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>sdasdasds</p>
+
+                </div>
+            
+                
+                <div class="modal-footer">
+                        <button class="btn btn-lg btn-info" type="submit">Edit event</button>
+                    
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     
     <?php else : ?>
         
@@ -210,4 +322,3 @@
     
     <?php endif; ?>
 </div>
-
