@@ -16,10 +16,122 @@ $(document).ready(function(){
     
     /*************************************
     **************************************
+    * CALENDAR
+    **************************************
+    *************************************/
+    
+    $('#calendar').fullCalendar({
+        firstDay:'1',
+        defaultView: 'basicWeek',
+        height: 500,
+        header: 
+        {
+            left: '',
+            center: '',
+            right: 'prev,next, basicWeek,basicDay'
+        },
+        columnFormat: 'ddd d/M',
+        allDay: false,
+        eventSources:
+                [
+            {
+                url: 'http://localhost/master/index.php/team/json'
+            }
+                ]
+            
+        });
+    
+    /*************************************
+    **************************************
+    * BLABLA
+    **************************************
+    *************************************/
+   
+    if(document.getElementById("single").checked){
+        $(".disabled form-control").prop("disabled");
+    };
+    
+    /*************************************
+    **************************************
+    * DATES
+    **************************************
+    *************************************/
+    
+    
+    
+    /*************************************
+    **************************************
+    * MODALS
+    **************************************
+    *************************************/
+    
+    $('#add_event').click(function() {
+        $('#add_event_modal').modal({
+            
+        });
+        
+    });
+    
+    $('#edit_event').click(function() {
+        $('#edit_event_modal').modal({
+            
+        });
+        
+    });
+    
+    $('#delete_event').click(function() {
+        $('#delete_event_modal').modal({
+            
+        });
+        
+    });
+    
+    
+    /*************************************
+    **************************************
+    * POPOVERS
+    **************************************
+    *************************************/
+    
+    $('#gay').popover({
+        placement: top,
+        title: "Just a heads-up",
+        content: "This date can be no more than 1 year from the start date."
+        
+    });
+    
+    /*************************************
+    **************************************
+    * TABS
+    **************************************
+    *************************************/
+    
+    $('#team_tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+        // store the currently selected tab in the hash value
+        $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
+            var id = $(e.target).attr("href").substr(1);
+            window.location.hash = id;
+        });
+
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        $('#team_tabs a[href="' + hash + '"]').tab('show');
+    
+    $("#add_event_modal").on('shown', function() {
+    $(this).find("[autofocus]:first").focus();
+    });
+    
+    /*************************************
+    **************************************
     * SEARCH PLAYER
     **************************************
     *************************************/
     
+
     $("#search_player").keyup(function(e)
     {
     	// Sletter innhold i feltet dersom man trykker esc
@@ -112,13 +224,13 @@ $(document).ready(function(){
 	    	$('#grad').focus();
 	    }
 	});
-        
+
     /*************************************
     **************************************
     * SEARCH TEAM
     **************************************
     *************************************/
-        
+
         $("#search_team").keyup(function(e)
     {
     	// Sletter innhold i feltet dersom man trykker esc
@@ -244,9 +356,5 @@ $(document).ready(function(){
         var hash = window.location.hash;
         $('#team_tabs a[href="' + hash + '"]').tab('show');
     
-           
-       
-        $(document).ready(function() {
-        $('#team_table').dataTable();
-} );            
-   });
+        $('#team_table').dataTable();           
+        });
