@@ -24,6 +24,7 @@ $(document).ready(function(){
         firstDay:'1',
         defaultView: 'basicWeek',
         height: 500,
+        editable: true,
         header: 
         {
             left: '',
@@ -31,14 +32,9 @@ $(document).ready(function(){
             right: 'prev,next, basicWeek,basicDay'
         },
         columnFormat: 'ddd d/M',
-        allDay: false,
-        eventSources:
-                [
-            {
-                url: 'http://localhost/master/index.php/team/json'
-            }
-                ]
-            
+        allDayDefault: false,
+        events: 'http://localhost/master/index.php/team/json'
+                
         });
     
     /*************************************
@@ -53,11 +49,65 @@ $(document).ready(function(){
     
     /*************************************
     **************************************
-    * DATES
+    * DATES AND TIMES
     **************************************
     *************************************/
     
+    $('#start-date').datepicker({
+        format: "dd-mm-yyyy",
+        weekStart: 1,
+        startDate: "today",
+        autoclose: true
+    }); 
     
+    $('#end-date').datepicker({
+        format: "dd-mm-yyyy",
+        weekStart: 1,
+        startDate: "+1d",
+        endDate: "+1y",
+        showMeridian: false,
+        autoclose: true
+    });
+    
+    $('#start-time').datetimepicker({
+        format: "hh:ii",
+        weekStart: 1,
+        startDate: "today",
+        autoclose: true,
+        minuteStep: 15,
+        startView: 1,
+        todayHighlight: true
+        
+    });
+    
+    $('#end-time').datetimepicker({
+        format: "hh:ii",
+        weekStart: 1,
+        endDate: "+1y",
+        autoclose: true,
+        minuteStep: 15,
+        startView: 1
+    });
+    
+    $('#edit-start-time').datetimepicker({
+        format: "hh:ii",
+        weekStart: 1,
+        startDate: "today",
+        autoclose: true,
+        minuteStep: 15,
+        startView: 1,
+        todayHighlight: true
+        
+    });
+    
+    $('#edit-end-time').datetimepicker({
+        format: "hh:ii",
+        weekStart: 1,
+        endDate: "+1y",
+        autoclose: true,
+        minuteStep: 15,
+        startView: 1
+    });
     
     /*************************************
     **************************************
@@ -66,26 +116,16 @@ $(document).ready(function(){
     *************************************/
     
     $('#add_event').click(function() {
-        $('#add_event_modal').modal({
-            
-        });
-        
+        $('#add_event_modal').modal();
     });
     
     $('#edit_event').click(function() {
-        $('#edit_event_modal').modal({
-            
-        });
-        
+        $('#edit_event_modal').modal();
     });
     
     $('#delete_event').click(function() {
-        $('#delete_event_modal').modal({
-            
-        });
-        
+        $('#delete_event_modal').modal();
     });
-    
     
     /*************************************
     **************************************
@@ -193,7 +233,7 @@ $(document).ready(function(){
         $('#stripetabell').trigger("appendCache");
     });
 
-    $('#search_player').live('keypress', function(e){
+    /* $('#search_player').live('keypress', function(e){
   		// Trykker enter
   		if(e.keyCode === 13)
   		{
@@ -214,7 +254,7 @@ $(document).ready(function(){
 		  		event.preventDefault();
 		  	}
 	  	}
-	});
+	}); */
 
 	// Legger til tekst i modal dersom knappen er blå, og man trykker på den
 	$('#legg_til_ord').click(function(){
@@ -292,7 +332,7 @@ $(document).ready(function(){
         $('#stripetabell').trigger("appendCache");
     });
 
-    $('#search_team').live('keypress', function(e){
+    /* $('#search_team').live('keypress', function(e){
   		// Trykker enter
   		if(e.keyCode === 13)
   		{
@@ -313,7 +353,7 @@ $(document).ready(function(){
 		  		event.preventDefault();
 		  	}
 	  	}
-	});
+	}); */
 
 	// Legger til tekst i modal dersom knappen er blå, og man trykker på den
 	$('#legg_til_ord').click(function(){

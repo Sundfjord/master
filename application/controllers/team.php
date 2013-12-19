@@ -19,6 +19,7 @@ class Team extends MY_Controller
         $team_data['teams'] = $this->team_m->get_teams();
         $team_data['squad'] = $this->team_m->get_squad();
         $team_data['players'] = $this->team_m->get_players();
+        $team_data['eventdata'] = $this->team_m->getTeamEvents();
         $this->load->vars($team_data);
         $this->load->view('includes/template');
     }
@@ -27,14 +28,17 @@ class Team extends MY_Controller
     {
         $datas = array(
         'coach'     => $this->tank_auth->is_admin(),
-        'result'    => $this->team_m->get_squad());
+        'result'    => $this->team_m->get_squad()
+                );
          
         $this->load->view('team_v', $datas);
     }
     
     public function getTeamEvents()
     {
+        $eventdata = $this->team_m->getTeamEvents();
         
+        $this->load->view('team_v', $eventdata);
     }
     
     public function add_player()
@@ -145,7 +149,6 @@ class Team extends MY_Controller
     
     public function json()
     {
-        header("Content-Type: application/json");
         echo $this->team_m->jsonEvents();
     }
     
@@ -173,8 +176,7 @@ class Team extends MY_Controller
             //convert to valid MYSQL date format
             $start = date("Y-m-d", strtotime($start_date));
             
-            $start_time = $this->input->post('event_start_time');
-            $end_time = $this->input->post('event_end_time');
+            $this->input->post('event_end_time');
             
             //Insert event information into Events table
             $this->team_m->add_event();
@@ -190,7 +192,7 @@ class Team extends MY_Controller
                 
                 while($result = $r->next())
                     {
-                        $this->team_m->add_episodes($eventid, $result, $start_time, $end_time);
+                        $this->team_m->add_episodes($eventid, $result);
                     }
                     
                     redirect('/');
@@ -208,7 +210,7 @@ class Team extends MY_Controller
                     
                     while($result = $r->next())
                     {
-                        $this->team_m->add_episodes($eventid, $result, $start_time, $end_time);
+                        $this->team_m->add_episodes($eventid, $result);
                     }
                     
                     redirect('/');
@@ -218,12 +220,43 @@ class Team extends MY_Controller
     
     public function edit_event()
     {
+        $this->form_validation->set_rules('edited_eventname', 'Event Name', 'required|max_length[25]|min_length[6]');
+        $this->form_validation->set_rules('edited_eventdesc', 'Event Description', 'max_length[140]');
+        $this->form_validation->set_rules('edited_start_time', 'Start Time', 'required');
+        $this->form_validation->set_rules('edited_end_time', 'End Time', 'required');
+        $this->form_validation->set_rules('edited_location', 'Location', 'required');
         
+        if($this->form_validation->run() === FALSE) {
+            $this->load->view('fail_v');
+            
+        }
+        else 
+        { //on success
+           $this->team_m->edit_event();
+        }
+        
+        redirect('/');
     }
     
     public function delete_event()
     {
-        
+        $this->form_validation->set_rules('events', 'Events', 'required'); 
+
+        if ($this->form_validation->run() == FALSE) 
+        {
+            $this->load->view('fail_v');
+        }
+        else //success
+        {
+            $data = $this->input->post('events'); //this returns an array so use foreach to extract data
+            
+            foreach($data as $key => $events)
+            {
+                $this->team_m->delete_event($events);
+            }
+
+        redirect('/');
+        }   
     }
     
     public function edit_episode()

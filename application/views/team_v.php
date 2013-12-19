@@ -10,7 +10,6 @@
         <li><a href="#stats" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span>Statistics</a></li>
         <li><a href="#manage_squad" data-toggle="tab"><span class="glyphicon glyphicon-list-alt"></span>Manage squad</a></li>
         <li><a href="#edit" data-toggle="tab"><span class="glyphicon glyphicon-edit"></span>Edit</a></li>
-        
     </ul>
     
     <!-- Tab panes -->
@@ -189,12 +188,14 @@
             </div>
         </div>
         
-        
-    </div>
+        </div>
     
+</div>
+   
+<div>
     <!-- ADD EVENT MODAL -->
     
-    <div class="modal fade" id="add_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="add_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="add_event" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -203,98 +204,171 @@
                 </div>
 
                 <div class="modal-body">
-                    <div id="modal_body_wrap">
+                    
                         <form id="add_event_form" action="<?php echo base_url('index.php/team/add_event/'.$teaminfo->id); ?>" method="post">
-                        <div class="event_field form-group">
+                        <div class="form-group">
                             <label class="sr-only">Event name</label>
                             <input placeholder="Event name" id="event_name" name="eventname" class="form-control" type="text">
                         </div>
 
-                        <div class="event_field form-group">
+                        <div class="form-group">
                             <label class="sr-only">Event description</label>
                             <input placeholder="Event description (optional)" name="eventdesc" class="form-control" type="text">
                         </div>
+                        
+                        <label class="radio-inline">
+                            <input type="radio" name="frequency" id="single" value="single"> Single session
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="frequency" id="daily" value="daily"> Daily
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="frequency" id="weekly" value="weekly" checked> Weekly
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="frequency" id="monthly" value="monthly"> Monthly
+                        </label>
                             
-                        <div class="form-inline">
-                            <label class="radio-inline">
-                                <input type="radio" name="frequency" id="single" value="single"  /> Single session
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="frequency" id="daily" value="daily"> Daily
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="frequency" id="weekly" value="weekly" checked> Weekly
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="frequency" id="monthly" value="monthly"> Monthly
-                            </label>
+                        <div class="form-group row">
+                            <div class="col-xs-6">
+                                <label class="sr-only">Start date</label>
+                                <div class="input-group date" id="start-date">
+                                    <input class="form-control" name="start_date" placeholder="Start date" type="text">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </div>
+                        
+                            <div class="col-xs-6">
+                                <label class="sr-only">End date</label>
+                                <div class="input-group date" id="end-date">
+                                    <input class="form-control" name="end_date" placeholder="End date" type="text">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </div>
                         </div>
                             
-                        <div class="form-inline">
-
-                            <div class="event_field_half bfh-datepicker" data-min="today" data-name="event_start_date" data-date="" data-placeholder="Start date" data-format="d-m-y" data-align="right">
-                                <input type="text">
+                        <div class="form-group row">
+                            <div class="col-xs-6">
+                                <label class="sr-only">Start time</label>
+                                <div class="input-group date" id="start-time">
+                                    <input class="form-control" name="start_time" placeholder="Start time" type="text">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                </div>
                             </div>
+                        
 
-                            <div class="event_field_half bfh-datepicker" data-date="" data-name="event_end_date" data-placeholder="End date" data-format="d-m-y" data-align="right">
-                                <input type="text">
-                            </div>
-                            
-                        </div>
-
-                        <div class="form-inline">
-
-                            <div class="event_field_half bfh-timepicker" data-time="" data-name="event_start_time" data-placeholder="Start time" data-align="right"> 
-                                <input type="text">
-                            </div>
-
-                            <div class="event_field_half bfh-timepicker" data-time="" data-name="event_end_time" data-placeholder="End time" data-align="right"> 
-                                <input type="text">
+                        
+                            <div class="col-xs-6">
+                                <label class="sr-only">End time</label>
+                                <div class="input-group date" id="end-time">
+                                    <input class="form-control" name="end_time" placeholder="End time" type="text">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="event_field form-group">
+                        
+                        <div class="form-group">
                             <label class="sr-only">Location</label>
-                            <input placeholder="Location" name="location" class="form-control" type="text">
+                            <input class="form-control" placeholder="Location" name="location" type="text">
                         </div>
                             
-                    </div>
+                </div>
 
-                </div>
-            
-                
                 <div class="modal-footer">
-                    
-                        <button class="btn btn-lg btn-info" type="submit">Add event</button>
-                    </form>
+                    <button class="btn btn-lg btn-info" type="submit">Add event</button>
                 </div>
+                
+                </form>
+                
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     
-    <div class="modal fade" id="edit_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <!-- EDIT EVENT MODAL -->
+    
+    <div class="modal fade" id="edit_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="edit_event" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+                
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Edit event</h4>
                 </div>
 
                 <div class="modal-body">
-                    <p>sdfsds</p>
+                    
+                     <div class="panel-group" id="accordion">
+                         <?php foreach ($eventdata as $row): ?>
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h4 class="panel-title">
+                            <?php echo '<a data-toggle="collapse" data-parent="#accordion" href="#collapse' . $row['id'] . '">' . $row['name'] . '</a>' ;?>
+                          </h4>
+                        </div>
+                        <?php echo '<div id="collapse' . $row['id'] . '" class="panel-collapse collapse">' ;?>
+                          <div class="panel-body">
+                            <form id="edit_event_form" action="<?php echo base_url('index.php/team/edit_event/'.$row['id']); ?>" method="post">
 
-                </div>
-            
-                
-                <div class="modal-footer">
-                        
+                                <div class="form-group">
+                                    <label class="sr-only">Event name</label>
+                                    <input value="<?php echo $row['name']; ?>" placeholder="Event name" id="event_name" name="edited_eventname" class="form-control" type="text">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only">Event description</label>
+                                    <input value="<?php echo $row['description']; ?>" placeholder="Event description (optional)" name="edited_eventdesc" class="form-control" type="text">
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-xs-6">
+                                        <label class="sr-only">Start time</label>
+                                        <div class="input-group date" id="edit-start-time">
+                                            <input value="<?php echo $row['start_time']; ?>" class="form-control" name="edited_start_time" placeholder="Start time" type="text" class="form-control">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-6">
+                                        <label class="sr-only">End time</label>
+                                        <div class="input-group date" id="edit-end-time">
+                                            <input value="<?php echo $row['end_time']; ?>" class="form-control" name="edited_end_time" placeholder="End time" type="text" class="form-control">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="sr-only">Location</label>
+                                    <input value="<?php echo $row['location']; ?>" placeholder="Location" name="edited_location" class="form-control" type="text">
+                                </div>
+
+                            <div>
+                                <button class="btn btn-info" type="submit">Save changes</button>
+                            </div>
+
+                                </form>                          
+                          </div>
+                        </div>
+                      </div>
+                      
+                      
+                         <?php endforeach; ?>
+                    </div>
                     
                 </div>
+             
+               
+                <div class="modal-footer">
+                    <button class="btn btn-lg btn-info" type="button">Done</button>
+                </div>
+                
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <!-- DELETE EVENT MODAL -->
     
-    <div class="modal fade" id="delete_event_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="true">
+    <div class="modal fade" id="delete_event_modal" keyboard="true" tabindex="-3" role="dialog" aria-labelledby="delete_event" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -302,23 +376,40 @@
                     <h4 class="modal-title">Delete event</h4>
                 </div>
 
-                <div class="modal-body">
-                    <p>sdasdasds</p>
-
-                </div>
-            
-                
-                <div class="modal-footer">
-                        <button class="btn btn-lg btn-info" type="submit">Edit event</button>
+                <div class="modal-body">                                                                        
+                    <form id="delete_event_form" action="<?php echo base_url('index.php/team/delete_event'); ?>" method="post">
+                    <table id="event_table" class="table table-striped table-bordered dataTable">
+                        <thead>
+                            <tr class="tabellheader"> 
+                                <th class="left" scope="col"><input rel="popover" class="check_all" id="selectall" type="checkbox" />
+                                <th class="middle_l" scope="col">Event Name</th>
+                                <th class="middle_r" scope="col">Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>	
+                            <?php foreach ($eventdata as $row):?> 
+                            <tr>
+                                <td class="left"><input type="checkbox" name="events[]" id="air" value="<?php echo $row['id'];?>" /> </td>
+                                <td class="middle_l"><div class="eventname"><?php echo $row['name'];?></div></td>
+                                <td class="middle_r"><div class="location"><?php echo $row['location'];?></div></td>
+                            </tr>
+                            <?php endforeach;?>
+                        </tbody>
+                    </table>
                     
                 </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-lg btn-info" type="submit">Delete event</button>
+                </div>
+                </form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
+</div>
     <?php else : ?>
         
     <!-- Player stuff -->
     
     <?php endif; ?>
-</div>
+

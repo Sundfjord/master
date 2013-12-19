@@ -105,11 +105,9 @@ class Team_m extends MY_Model {
     
     public function getTeamEvents()
     {
-        $this->db->select('id, name, description, location');
+        $this->db->select('id, name, description, location, start_time, end_time');
         $this->db->from('events');
-        $this->db->join('events', 'episodes.event_id = events.id');
-        $this->db->join('teams', 'events.team_id = teams.id');
-        $this->db->where('team_id', $this->uri->segment(3));
+        $this->db->where('team_id', $this->uri->segment(2));
         $query = $this->db->get();
         
         if($query->num_rows() > 0)
@@ -117,9 +115,12 @@ class Team_m extends MY_Model {
             foreach($query->result_array() as $v)
             {
                 $data[] = array(
-                    'id'        =>  $v['id'],
-                    'username'  =>  $v['username'],
-                    'email'     =>  $v['email']
+                    'id'            =>  $v['id'],
+                    'name'          =>  $v['name'],
+                    'description'   =>  $v['description'],
+                    'location'      =>  $v['location'],
+                    'start_time'    =>  $v['start_time'],
+                    'end_time'      =>  $v['end_time']
                     );
             }
             return $data;
@@ -217,24 +218,27 @@ class Team_m extends MY_Model {
     
     public function jsonEvents()
     {
-        $this->db->order_by('event_date', 'desc');
+        $this->db->select('episodes.id, event_id, event_date, name, description, location, start_time, end_time');
+        $this->db->order_by('event_date', 'asc');
         $this->db->limit(7);
         $this->db->join('events', 'episodes.event_id = events.id');
-        $events = $this->db->get('episodes')->result();
+        $events = $this->db->get('episodes');
         
         $jsonevents = array();
-        foreach ($events as $e)
+        foreach ($events->result_array() as $e)
         {
             $jsonevents[] = array(
-                'id'            =>  $e->id,
-                'event_id'      =>  $e->event_id,
-                'name'          =>  $e->name,
-                'description'   =>  $e->description,
-                'location'      =>  $e->location,
-                'start_time'    =>  $e->start_time,
-                'end_time'      =>  $e->end_time
+                'id'            =>  $e['id'],
+                'event_id'      =>  $e['event_id'],
+                'start'         =>  $e['event_date'] . " " . $e['start_time'],
+                'title'         =>  $e['name'],
+                'description'   =>  $e['description'],
+                'location'      =>  $e['location'],
+                'start_time'    =>  $e['start_time'],
+                'end_time'      =>  $e['end_time'],
             );
         }
+        
         return json_encode($jsonevents);
     }
     
@@ -244,7 +248,9 @@ class Team_m extends MY_Model {
             'team_id'       =>  $this->uri->segment(3),
             'name'          =>  $this->input->post('eventname'),
             'description'   =>  $this->input->post('eventdesc'),
-            'location'      =>  $this->input->post('location')
+            'location'      =>  $this->input->post('location'),
+            'start_time'    =>  $this->input->post('event_start_time'),
+            'end_time'      =>  $this->input->post('event_end_time')
         );
         
         $this->db->insert('events', $eventinfo);
@@ -252,28 +258,46 @@ class Team_m extends MY_Model {
         return $this->db->affected_rows() > 0;
     }
     
-    public function add_single_episode($eventid, $start, $start_time, $end_time)
+    public function add_single_episode($eventid, $start)
     {
         $datestring = $start->format('Y-m-d');
         $episodeinfo = array(
             'event_date'    => $datestring,
             'event_id'      => $eventid,
-            'start_time'    => $start_time,
-            'end_time'      => $end_time
                 );
         $this->db->insert('episodes', $episodeinfo);
     }
     
-    public function add_episodes($eventid, $result, $start_time, $end_time)
+    public function add_episodes($eventid, $result)
     {   
         $datestring = $result->format('Y-m-d');
         $episodesinfo = array(
             'event_date'    => $datestring,
             'event_id'      => $eventid,
-            'start_time'    =>  $start_time,
-            'end_time'      =>  $end_time
                 );
         $this->db->insert('episodes', $episodesinfo); 
+    }
+    
+    public function edit_event()
+    {
+        $updateinfo = array(
+            'name'          =>  $this->input->post('edited_eventname'),
+            'description'   =>  $this->input->post('edited_eventdesc'),
+            'location'      =>  $this->input->post('edited_location'),
+            'start_time'    =>  $this->input->post('edited_event_start_time'),
+            'end_time'      =>  $this->input->post('edited_event_end_time') 
+        );
+        
+        $this->db->where('id', $this->uri->segment(3));
+        $this->db->update('events', $updateinfo);
+    }
+    
+    public function delete_event($events)
+    {
+        $this->db->where('id', $events);
+        $this->db->delete('events');
+        
+        return $this->db->affected_rows() > 0;
     }
     
 }
