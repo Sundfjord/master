@@ -10,41 +10,37 @@
         <script src="<?php echo base_url(); ?>js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
         <script src="<?php echo base_url(); ?>js/jquery.dataTables.js" type="text/javascript" charset="utf-8" ></script>
         <script src="<?php echo base_url(); ?>js/dataTables.bootstrap.js" type="text/javascript" charset="utf-8" ></script>
-        <script src="<?php echo base_url(); ?>js/fullcalendar.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/bootstrap-datepicker.js" type='text/javascript' ></script>
-        <script src="<?php echo base_url(); ?>js/bootstrap-formhelpers.js" type='text/javascript' ></script>
+        <script src="<?php echo base_url(); ?>js/bootstrap-datetimepicker.js" type='text/javascript' ></script>
+        <script src="<?php echo base_url(); ?>js/fullcalendar.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/functions.js" type="text/javascript" charset="utf-8"></script>
         <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/jquery.dataTables.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/dataTables.bootstrap.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/fullcalendar.css" type="text/css" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-datepicker.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-formhelpers.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/fullcalendar.css" type="text/css" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
 
     </head>
     
     <body>
-        <div id="wrapper">
-            <div id="header">
-                <?php $this->load->view('includes/header'); ?>
-            </div><!--header-->
+        
             
-                <div id="sidebar">
-                    <?php $this->load->view('includes/sidebar'); ?>
-                </div><!--sidebar-->
+        <?php   $this->load->view('includes/header'); 
 
-                <div id="content"
+                $this->load->view('includes/sidebar'); ?>
+
+                <div id="content">
                     <?php $this->load->view($main_content); ?>
-                </div><!--Content-->
-
-            <div id="footer">
+                </div>
                 <?php $this->load->view('includes/footer'); ?>
-            </div><!--footer-->
 
-        </div><!--Wrapper-->
     </body>
-</html> 
+    
+</html>
+        
+   
 
 
 

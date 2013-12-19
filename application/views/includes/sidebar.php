@@ -1,10 +1,12 @@
+<div id="sidebar">
+
 <?php if ( $coach === TRUE ) : ?>
 
 <ul id="menu" class="nav nav-pills nav-stacked">
     <li><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-list"></span>My Teams</a></li>
         <ul id="submenu" class="nav">
             <?php foreach ($result as $row): ?>
-            <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?> 
+            <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' . $row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
                 if(count($result) <= 2) 
                 {
@@ -130,3 +132,5 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+</div>
