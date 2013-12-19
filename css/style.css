@@ -39,7 +39,7 @@ body {
 	margin:0;
 	width: 15%;
         border-right: 1px solid #ddd;
-        min-height: 570px;
+        min-height: 700px;
 }
 
 ul {
@@ -58,10 +58,6 @@ ul {
 
 #add_event_form {
     padding: 10px;
-}
-
-#modal_body_wrap {
-    width: 105%;
 }
 
 .input-group-addon > .glyphicon {
