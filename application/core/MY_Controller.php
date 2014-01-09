@@ -8,6 +8,7 @@ class MY_Controller extends CI_Controller
         parent::__construct();
         $this->load->library('tank_auth_groups', '', 'tank_auth');
         $this->load->model('team_m');
+        $this->load->model('profile_m');
         
         if (!$this->tank_auth->is_logged_in()) 
         {
@@ -17,6 +18,7 @@ class MY_Controller extends CI_Controller
         else 
         {
             $data['username'] = $this->tank_auth->get_username();
+            $data['userdata'] = $this->profile_m->get_userdata();
             $data['coach'] = $this->tank_auth->is_admin();
             $data['result'] = $this->team_m->get_team_by_coach();
             $data['plr_result'] = $this->team_m->get_team_by_player();
@@ -29,6 +31,7 @@ class MY_Controller extends CI_Controller
     {
         
     }
+    
     
     public function create_team() {
         
