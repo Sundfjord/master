@@ -5,6 +5,9 @@
 <ul id="menu" class="nav nav-pills nav-stacked">
     <li><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-list"></span>My Teams</a></li>
         <ul id="submenu" class="nav">
+            <?php if (empty($result)) {?>
+            <?php echo '<li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="base_url(index.php/team/create_team)"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li>'; ?>
+            <?php } else {?>
             <?php foreach ($result as $row): ?>
             <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' . $row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
@@ -12,7 +15,7 @@
                 {
                     echo '<li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="base_url(index.php/team/create_team)"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li>';
                 }
-             ?>
+              } ?>
         </ul>
     <li><a href="<?php echo base_url(); ?>index.php/message"><span class="glyphicon glyphicon-envelope"></span>Messages</a></li>
     <li><a href="<?php echo base_url(); ?>index.php/profile"><span class="glyphicon glyphicon-user"></span></i>My Profile</a></li>
@@ -24,6 +27,9 @@
 <ul id="menu" class="nav nav-pills nav-stacked">
     <li><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-list"></span>My Teams</a></li>
         <ul id="submenu" class="nav">
+            <?php if (empty($plr_result)) {?>
+            <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?>
+            <?php } else {?>
             <?php foreach ($plr_result as $row): ?>
             <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
@@ -31,7 +37,7 @@
                 {
                     echo '<li><a data-toggle="modal" id="join_team" data-backdrop="true" href="#join_team_modal" href="base_url(index.php/team/join_team)"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';
                 }
-             ?>
+              } ?>
         </ul>
     <li><a href="<?php echo base_url(); ?>index.php/message"><span class="glyphicon glyphicon-envelope"></span>Messages</a></li>
     <li><a href="<?php echo base_url(); ?>index.php/profile"><span class="glyphicon glyphicon-user"></span></i>My Profile</a></li>
