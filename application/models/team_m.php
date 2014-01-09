@@ -17,9 +17,8 @@ class Team_m extends MY_Model {
         return $query->result_array();
     }
     
-    public function get_page()
+    public function get_page($id)
     {
-            $id = $this->uri->segment(2);
             $this->db->select('id, teamname, sport');
             $this->db->where('id', $id);
             
@@ -218,29 +217,56 @@ class Team_m extends MY_Model {
     
     public function jsonEvents()
     {
-        $this->db->select('episodes.id, event_id, event_date, name, description, location, start_time, end_time');
+        $this->db->select('episodes.id, team_id, event_id, event_date, name, description, location, start_time, end_time, altered_name, altered_description, altered_location, altered_start_time, altered_end_time, is_altered');
         $this->db->order_by('event_date', 'asc');
-        $this->db->limit(7);
         $this->db->join('events', 'episodes.event_id = events.id');
         $events = $this->db->get('episodes');
         
         $jsonevents = array();
+        
         foreach ($events->result_array() as $e)
         {
-            $jsonevents[] = array(
-                'id'            =>  $e['id'],
-                'event_id'      =>  $e['event_id'],
-                'start'         =>  $e['event_date'] . " " . $e['start_time'],
-                'title'         =>  $e['name'],
-                'description'   =>  $e['description'],
-                'location'      =>  $e['location'],
-                'start_time'    =>  $e['start_time'],
-                'end_time'      =>  $e['end_time'],
-            );
+            $nullcheck = $e['is_altered'];
+            if($nullcheck === '0')
+            {
+                $jsonevents[] = array(
+                    'id'            =>  $e['id'],
+                    'event_id'      =>  $e['event_id'],
+                    'team'          =>  $e['team_id'],
+                    'start'         =>  $e['event_date'] . " " . $e['start_time'],
+                    'date'          =>  $e['event_date'],
+                    'title'         =>  $e['name'],
+                    'description'   =>  $e['description'],
+                    'location'      =>  $e['location'],
+                    'start_time'    =>  $e['start_time'],
+                    'end_time'      =>  $e['end_time'],
+                    'is_altered'    =>  $e['is_altered']
+                );
+            }
+            else
+            {
+                 $jsonevents[] = array(
+                    'id'            =>  $e['id'],
+                    'event_id'      =>  $e['event_id'],
+                    'team'          =>  $e['team_id'],
+                    'start'         =>  $e['event_date'] . " " . $e['altered_start_time'],
+                    'date'          =>  $e['event_date'],
+                    'title'         =>  $e['altered_name'],
+                    'description'   =>  $e['altered_description'],
+                    'location'      =>  $e['altered_location'],
+                    'start_time'    =>  $e['altered_start_time'],
+                    'end_time'      =>  $e['altered_end_time'],
+                    'is_altered'    =>  $e['is_altered']
+                );
+            }
         }
         
-        return json_encode($jsonevents);
+        return json_encode($jsonevents); 
     }
+    
+    
+    
+    
     
     public function add_event()
     {
@@ -249,8 +275,8 @@ class Team_m extends MY_Model {
             'name'          =>  $this->input->post('eventname'),
             'description'   =>  $this->input->post('eventdesc'),
             'location'      =>  $this->input->post('location'),
-            'start_time'    =>  $this->input->post('event_start_time'),
-            'end_time'      =>  $this->input->post('event_end_time')
+            'start_time'    =>  $this->input->post('start_time'),
+            'end_time'      =>  $this->input->post('end_time')
         );
         
         $this->db->insert('events', $eventinfo);
@@ -278,14 +304,14 @@ class Team_m extends MY_Model {
         $this->db->insert('episodes', $episodesinfo); 
     }
     
-    public function edit_event()
+    public function edit_event($date)
     {
         $updateinfo = array(
             'name'          =>  $this->input->post('edited_eventname'),
             'description'   =>  $this->input->post('edited_eventdesc'),
             'location'      =>  $this->input->post('edited_location'),
-            'start_time'    =>  $this->input->post('edited_event_start_time'),
-            'end_time'      =>  $this->input->post('edited_event_end_time') 
+            'start_time'    =>  $this->input->post('edited_start_time'),
+            'end_time'      =>  $this->input->post('edited_end_time') 
         );
         
         $this->db->where('id', $this->uri->segment(3));
@@ -296,6 +322,34 @@ class Team_m extends MY_Model {
     {
         $this->db->where('id', $events);
         $this->db->delete('events');
+        
+        return $this->db->affected_rows() > 0;
+    }
+    
+    public function edit_episode($id, $date)
+    {
+        
+        $updateinfo = array(
+            'event_date'            =>  $date,
+            'altered_name'          =>  $this->input->post('edited_episodeName'),
+            'altered_description'   =>  $this->input->post('edited_episodeDesc'),
+            'altered_location'      =>  $this->input->post('edited_episodeLocation'),
+            'altered_start_time'    =>  $this->input->post('edited_episodeStartTime'),
+            'altered_end_time'      =>  $this->input->post('edited_episodeEndTime'),
+            'is_altered'            =>  1
+        );
+        
+        $this->db->join('events', 'episodes.event_id = events.id');
+        $this->db->where('id', $id);
+        $this->db->update('episodes', $updateinfo);
+
+        
+    }
+    
+    public function delete_episode($id) 
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('episodes');
         
         return $this->db->affected_rows() > 0;
     }

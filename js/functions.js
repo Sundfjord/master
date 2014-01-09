@@ -1,4 +1,8 @@
+globals = {};
+
 $(document).ready(function(){
+    
+    
 
     var counter = 1;
     var limit = 7;
@@ -14,38 +18,138 @@ $(document).ready(function(){
          }
     }
     
+    if(document.getElementById("single").checked){
+        $(".form-control").prop("disabled");
+    };
+    
     /*************************************
     **************************************
     * CALENDAR
     **************************************
     *************************************/
     
+    var filter_id = $('#filter_id').val();
+    
     $('#calendar').fullCalendar({
+        
         firstDay:'1',
         defaultView: 'basicWeek',
-        height: 500,
-        editable: true,
+        height: 400,
+        weekends: false,
+        timeFormat: 'H(:mm)',
+        allDayDefault: false,
         header: 
         {
             left: '',
             center: '',
-            right: 'prev,next, basicWeek,basicDay'
+            right: 'prev,next, month,basicWeek'
         },
         columnFormat: 'ddd d/M',
-        allDayDefault: false,
-        events: 'http://localhost/master/index.php/team/json'
-                
-        });
+        events: function(start,end, callback) 
+        {
+            $.getJSON('http://localhost/master/index.php/team/json', function(data)
+            {
+                var eventsToShow = [];
+                for(var i=0; i<data.length; i++)
+                {
+                    if(data[i].team === filter_id)
+                    {
+                        eventsToShow.push(data[i]);
+                    }
+                }
+                callback(eventsToShow);
+            });
+        },        
+       //eventRender determines what should be shown in the calendar
+      /*  eventRender: function(event, element, view) {
+            if (view.name === "agendaDay") 
+                {
+                element.find(".fc-event-content")
+                    content: event.description;
+                }
+        } */
+        
+        eventClick: function(calEvent) 
+        {
+            /*var json = JSON.stringify(calEvent);
+            $.ajax({        
+                type: "POST",
+                url: "http://localhost/master/index.php/team/get_episode_data",
+                data: 
+                { 
+                    eventData: json 
+                }
+                });
+            console.log(json); */
+            
+            var stDate = $.fullCalendar.formatDate(calEvent.start, 'dd-MM-yyyy');
+            globals['textDate'] = $.fullCalendar.formatDate(calEvent.start, 'dddd the dS MMMM yyyy');
+            globals['textTitle'] = calEvent.title;
+            globals['textId'] = calEvent.id;
+            
+            if( $('#event-info').is(':visible') ) 
+            {
+                $('#event-info').empty();
+            } 
+            $('#event-info').append("<form id='edit_episode'action=''><button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button><button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button><label for='title'>Title:</label><input id='title' class='readonly' type='text' name='title' value='" + calEvent.title + "' readonly><label for='date'>Date:</label><input id='date' class='readonly' type='text' name='date' value='" + stDate + "' readonly><label for='location'>Location:</label><input id='location' class='readonly' type='text' name='location' value='" + calEvent.location + "' readonly><label for='start-time'>Start time:</label><input id='start-time' class='readonly' type='text' name='start-time' value='" + calEvent.start_time + "' readonly><label for='end_time'>End time:</label><input id='end-time' class='readonly' type='text' name='end-time' value='" + calEvent.end_time + "' readonly><label for='description'>Description:</label><input id='description' class='readonly' type='text' name='description' value='" + calEvent.description + "' readonly><input id='episode-id' class='readonly' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly></form>");
+            $('#event-info').show();
+        }
+        
+    });
     
     /*************************************
     **************************************
     * BLABLA
     **************************************
     *************************************/
-   
-    if(document.getElementById("single").checked){
-        $(".disabled form-control").prop("disabled");
-    };
+    
+    
+    
+    $('#event-info').on("click", "#edit_episode_button", function() {
+        var title = $('#title').val();
+        var date = $('#date').val();
+        var location = $('#location').val();
+        var startTime = $('#start-time').val();
+        var endTime = $('#end-time').val();
+        var description = $('#description').val();
+        var episodeId = $('#episode-id').val();
+
+        console.log(episodeId);
+
+        var base_url = '<?php echo base_url(); ?>';
+
+        $.ajax({  
+            type: 'POST',  
+            url: base_url+'index.php/team/edit_episode',  
+            data: 
+            { 
+                episodeId: 'episodeId', 
+                eventId: 'eventId' 
+            },
+            success: function()
+            {                   
+                $('#edit_episode_modal').modal();
+                    $("#edited_episodeName").val(title);
+                    $("#edited_episodeDate").val(date);
+                    $("#edited_episodeDesc").val(description);
+                    $("#edited_episodeStartTime").val(startTime);
+                    $("#edited_episodeEndTime").val(endTime);
+                    $("#edited_episodeLocation").val(location);
+                    $("#edited_episodeId").val(episodeId);
+            }
+        });
+      });
+      
+      $('#event-info').on("click", "#delete_episode_button", function () {
+          
+          $('#delete_episode_modal .modal-body').append("<p>Are you sure you want to delete the event " + globals.textTitle + " on " + globals.textDate + " ?</p>");
+            $("#delete_episodeId").val(globals.textId);
+            $('#delete_episode_modal').modal('show');         
+      });
+      
+      $('#delete_episode_modal').on('hidden.bs.modal', function (e) {
+        $('#delete_episode_modal .modal-body').empty();
+        });  
     
     /*************************************
     **************************************
@@ -146,20 +250,21 @@ $(document).ready(function(){
     **************************************
     *************************************/
     
-    $('#team_tabs a').click(function (e) {
-            e.preventDefault();
+    $('.nav a').click(function() {
+            preventDefault();
             $(this).tab('show');
+            $('#calendar').fullCalendar('render');
         });
-
+        
+        // on load of the page: switch to the currently selected tab
+        var hash = window.location.hash;
+        $('.nav a[href="' + hash + '"]').tab('show');
+        
         // store the currently selected tab in the hash value
         $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
             var id = $(e.target).attr("href").substr(1);
             window.location.hash = id;
         });
-
-        // on load of the page: switch to the currently selected tab
-        var hash = window.location.hash;
-        $('#team_tabs a[href="' + hash + '"]').tab('show');
     
     $("#add_event_modal").on('shown', function() {
     $(this).find("[autofocus]:first").focus();
@@ -378,23 +483,7 @@ $(document).ready(function(){
 						$(this).addClass("highlight"); 
 						}							  
 												  });
-	   });
-           
-           
-        $('#team_tabs a').click(function (e) {
-            e.preventDefault()
-            $(this).tab('show')
-        });
-
-        // store the currently selected tab in the hash value
-        $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
-            var id = $(e.target).attr("href").substr(1);
-            window.location.hash = id;
-        });
-
-        // on load of the page: switch to the currently selected tab
-        var hash = window.location.hash;
-        $('#team_tabs a[href="' + hash + '"]').tab('show');
+       });
     
         $('#team_table').dataTable();           
         });

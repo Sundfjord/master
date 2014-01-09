@@ -2,12 +2,13 @@
 
 class Team extends MY_Controller
 {
-
+    
     function __construct() {
         
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->library('When');
+
     }
     
     public function index()
@@ -71,6 +72,17 @@ class Team extends MY_Controller
 
         redirect($this->input->post('redirect'));
         }    
+    }
+    
+    public function schedule($year = null, $month = null) 
+    {
+        $pref = array (
+            'show_next_prev'    =>  'true',
+            'next_prev_url'     => base_url().'index.php/team/schedule'
+        );
+        
+        $this->load->library('calendar', $pref);
+        echo $this->calendar->generate($year, $month);
     }
     
     public function remove_player() 
@@ -147,7 +159,7 @@ class Team extends MY_Controller
         $this->index();
     }
     
-    public function json()
+    public function json()//$team_id='' )
     {
         echo $this->team_m->jsonEvents();
     }
@@ -157,13 +169,13 @@ class Team extends MY_Controller
         $this->form_validation->set_rules('eventname', 'Event Name', 'required|max_length[25]|min_length[6]');
         $this->form_validation->set_rules('eventdesc', 'Event Description', 'max_length[140]');
         $this->form_validation->set_rules('frequency', 'Event Description', 'required');
-        $this->form_validation->set_rules('event_start_date', 'Start Date', 'required');
+        $this->form_validation->set_rules('start_date', 'Start Date', 'required');
         if($this->input->post('frequency') !== 'single') 
         {
-            $this->form_validation->set_rules('event_end_date', 'End Date', 'required');
+            $this->form_validation->set_rules('end_date', 'End Date', 'required');
         }
-        $this->form_validation->set_rules('event_start_time', 'Start Time', 'required');
-        $this->form_validation->set_rules('event_end_time', 'End Time', 'required');
+        $this->form_validation->set_rules('start_time', 'Start Time', 'required');
+        $this->form_validation->set_rules('end_time', 'End Time', 'required');
         $this->form_validation->set_rules('location', 'Location', 'required');
         
         
@@ -172,11 +184,11 @@ class Team extends MY_Controller
             
         }
         else { //on success
-            $start_date = $this->input->post('event_start_date');
+            $start_date = $this->input->post('start_date');
             //convert to valid MYSQL date format
             $start = date("Y-m-d", strtotime($start_date));
             
-            $this->input->post('event_end_time');
+            $this->input->post('end_time');
             
             //Insert event information into Events table
             $this->team_m->add_event();
@@ -199,7 +211,7 @@ class Team extends MY_Controller
             }
             else 
             {
-                $end_date = $this->input->post('event_end_date');
+                $end_date = $this->input->post('end_date');
                 //convert to valid MYSQL date format
                 $end = date("Y-m-d", strtotime($end_date));
 
@@ -261,11 +273,43 @@ class Team extends MY_Controller
     
     public function edit_episode()
     {
+        // PUT THE EPISODE ID IN A HIDDEN INPUT FIELD INSTEAD OF SENDING WITH AJAX POST AND IDENTIFY THROUGH 3RD URL SEGMENT
         
+        //$episodeId = $_REQUEST['episodeId'];
+        //$eventId = $_POST['eventId'];
+        
+        $id = $this->input->post('edited_episodeId');
+        
+        $this->form_validation->set_rules('edited_episodeName', 'Episode Name', 'required|max_length[25]|min_length[6]');
+        $this->form_validation->set_rules('edited_episodeDesc', 'Episode Description', 'max_length[140]');
+        $this->form_validation->set_rules('edited_episodeDate', 'Episode Date', 'required');
+        $this->form_validation->set_rules('edited_episodeStartTime', 'Episode Start Time', 'required');
+        $this->form_validation->set_rules('edited_episodeEndTime', 'Episode End Time', 'required');
+        $this->form_validation->set_rules('edited_episodeLocation', 'Episode Location', 'required');
+        
+        if($this->form_validation->run() === FALSE) {
+            $this->load->view('fail_v');
+            
+        }
+        else 
+        { //on success
+            
+            $edited_date = $this->input->post('edited_episodeDate');
+            //convert to valid MYSQL date format
+            $date = date("Y-m-d", strtotime($edited_date));
+            
+            $this->team_m->edit_episode($id, $date);
+           
+            redirect('/');
+        }   
     }
     
     public function delete_episode()
     {
+        $id = $this->input->post('delete_episodeId');
         
+        $this->team_m->delete_episode($id);
+        
+        redirect('/');
     }
 }
