@@ -48,8 +48,22 @@ ul {
 
 .datepicker {z-index: 1151 !important;}
 
+#calendar {
+    float: left;
+}
+
 .fc {
     margin-top: -30px;
+    width: 50%;
+    float: left;
+    /*height: 50px !important;*/
+}
+
+#event-info{
+    float: left;
+    display:none;
+    width: 200px;
+    padding: 20px;
 }
 
 .bootstrap-timepicker-widget {
@@ -161,6 +175,81 @@ ul {
     width:40%;
 }
 
+#profile {
+    float: left;
+    width: 100%;
+    color: #6b6b6b;
+    min-height: 400px;
+}
+
+#profile h3 {
+    margin-top: 10px;
+}
+
+#profile h5 {
+    text-align: left;
+}
+
+#profile h2 {
+    text-align: left;
+    margin-left: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#profile img {
+    max-width: 150px; 
+    height: auto;
+}
+
+#profile_image {
+    float: left;
+    padding: 10px 10px 50px 10px;
+    margin: 10px 20px 20px 20px;
+    background: #ddd;
+    border-radius: 5px;
+}
+
+#profile_image a {
+    position: absolute;
+    left: 263px;
+    top: 271px;
+    width: 150px;
+}
+
+#profile_personalia {
+    margin: 10px 0 10px 10px;
+    float: left;
+    width: 60%;
+}
+
+#profile_personalia .nav-tabs {
+    border: none;
+}
+
+#profile ul {
+    list-style: none;
+    padding-left: 15px;
+}
+
+#profile ul > li {
+    margin-bottom: 10px;
+}
+
+#password .form-horizontal .control-label {
+    text-align: left;
+    width: 230px;
+}
+
+#personal .form-horizontal .control-label {
+    text-align: left;
+    width: 125px;
+}
+
+#info-content {
+    padding: 20px;
+}
+
 #search {
     margin: 20px 0 30px 0;
 }
@@ -169,7 +258,7 @@ ul {
     margin-bottom: 10px;
 }
 
-.team_menu {
+ul.team_menu {
     text-align: center;
     margin: 40px 0 30px 0;
     list-style-type: none;
