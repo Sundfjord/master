@@ -6,6 +6,7 @@
     
     <input id="filter_id" type="hidden" name="filter_id" value="<?php echo $this->uri->segment(2); ?>">
     
+    
     <ul id="team_tabs" class="nav nav-tabs">
         <li><a href="#schedule" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span>Schedule</a></li>
         <li><a href="#stats" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span>Statistics</a></li>
@@ -29,10 +30,24 @@
             <div id="calendar">
                 
             </div>
-            
+                    
             <div id="event-info">
-                
+                    
+                <div id="attendance_tables" class="tablespan">
+                    <form class="after" id="set_attendance_form" action="<?php echo base_url('index.php/team/set_attendance'); ?>" method="post">
+                    <div class="hidden_id"></div>
+                    <p>Will you attend?</p>
+                    <label for="choice1">Yes</label>
+                    <input type="radio" value="1" name="attendance_choice" id="choice1">
+                    <label for="choice2">No</label>
+                    <input type="radio" value="2" name="attendance_choice" id="choice2">
+                    <button class="btn" type="submit">Change attendance status</button>
+                    </form>
+                    <br>
+                </div>
             </div>
+            
+            
             
         </div>
         
@@ -54,7 +69,6 @@
                 <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp"><span class="glyphicon glyphicon-plus-sign"></span>Add more players</button>
                 
             </div>
-            
             <?php } else {?>
             
             <form id="remove_player" action="<?php echo base_url('index.php/team/remove_player/'. $teaminfo->id); ?>" method="post">
@@ -84,7 +98,6 @@
             </div>
             
             </form>
-            
             <?php } ?>
             
             <div id="add_player_accordion" class="collapse">
@@ -651,7 +664,7 @@
                         
                         <div class="form-group">
                             <label class="sr-only">Date</label>
-                                <div class="input-group date" id="edit-date">
+                                <div class="input-group date" id="edit-episode-date">
                                     <input id="edited_episodeDate" value="" class="form-control" name="edited_episodeDate" placeholder="Date" type="text" class="form-control">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
@@ -660,7 +673,7 @@
                         <div class="form-group row">
                             <div class="col-xs-6">
                                 <label class="sr-only">Start time</label>
-                                <div class="input-group date" id="edit-start-time">
+                                <div class="input-group date" id="edit-episode-start-time">
                                     <input id="edited_episodeStartTime" value="" class="form-control" name="edited_episodeStartTime" placeholder="Start time" type="text" class="form-control">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>
@@ -668,7 +681,7 @@
 
                             <div class="col-xs-6">
                                 <label class="sr-only">End time</label>
-                                <div class="input-group date" id="edit-end-time">
+                                <div class="input-group date" id="edit-episode-end-time">
                                     <input id="edited_episodeEndTime" value="" class="form-control" name="edited_episodeEndTime" placeholder="End time" type="text" class="form-control">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>

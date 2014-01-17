@@ -48,24 +48,6 @@ ul {
 
 .datepicker {z-index: 1151 !important;}
 
-#calendar {
-    float: left;
-}
-
-.fc {
-    margin-top: -30px;
-    width: 50%;
-    float: left;
-    /*height: 50px !important;*/
-}
-
-#event-info{
-    float: left;
-    display:none;
-    width: 200px;
-    padding: 20px;
-}
-
 .bootstrap-timepicker-widget {
     z-index: 1151 !important;
 }
@@ -137,6 +119,14 @@ ul {
 
 .table {
     
+}
+
+.datetimepicker thead tr:first-child th:hover, .datetimepicker tfoot tr:first-child th:hover {
+    background: none;
+}
+
+.datetimepicker thead tr:first-child th, .datetimepicker tfoot tr:first-child th {
+    cursor: default;
 }
 
 #team_tabs > li > a {
@@ -288,6 +278,47 @@ ul.team_menu {
 #edit {
     margin: 0 auto;
     width: 40%;
+}
+
+#calendar {
+    float: left;
+}
+
+.fc {
+    margin-top: -30px;
+    width: 50%;
+    float: left;
+    /*height: 50px !important;*/
+}
+
+#event-info{
+    float: left;
+    width: 750px;
+    display:none;
+    padding: 20px;
+}
+
+.tablespan {
+    width: 700px;
+    height: 500px;
+    overflow: hidden;
+}
+    
+#attendance_test_tables > table {
+    width: 200px;
+    float: left;
+}
+
+#event-details {
+    width: 300px;
+}
+
+.noshow {
+    display: hidden!important;
+}
+
+.event panel-body  {
+    padding: 5px;
 }
 
 /* FOOTER */

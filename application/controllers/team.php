@@ -8,7 +8,6 @@ class Team extends MY_Controller
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->library('When');
-
     }
     
     public function index()
@@ -68,21 +67,10 @@ class Team extends MY_Controller
                     {
                         continue;
                     }
+                    
             }
-
         redirect($this->input->post('redirect'));
         }    
-    }
-    
-    public function schedule($year = null, $month = null) 
-    {
-        $pref = array (
-            'show_next_prev'    =>  'true',
-            'next_prev_url'     => base_url().'index.php/team/schedule'
-        );
-        
-        $this->load->library('calendar', $pref);
-        echo $this->calendar->generate($year, $month);
     }
     
     public function remove_player() 
@@ -128,7 +116,6 @@ class Team extends MY_Controller
         
         if ($this->form_validation->run()) 
         {
-            
             if ($this->input->post('delete') === $this->input->post('must_match_teamname')) 
             {
                 $deleted = $this->team_m->delete_team();
@@ -136,27 +123,25 @@ class Team extends MY_Controller
             } 
             else 
             {
-                $this->load->view('fail_v');
-                
+                $this->load->view('fail_v');     
             }
         }
         else 
         {
             redirect($this->input->post('redirect'));
         }
-    
     }
     
     public function join_team()
     {
-        $data = $this->input->post('team'); //this returns an array so use foreach to extract data
+        $data = $this->input->post('team'); //this returns an array of teams so use foreach to extract data
 
         foreach( $data as $key => $value)
         {
             $this->team_m->join_team($value);
         }
         
-        $this->index();
+        redirect('/');
     }
     
     public function json()//$team_id='' )
@@ -166,9 +151,9 @@ class Team extends MY_Controller
     
     public function add_event()
     {
-        $this->form_validation->set_rules('eventname', 'Event Name', 'required|max_length[25]|min_length[6]');
+        $this->form_validation->set_rules('eventname', 'Event Name', 'required|max_length[25]|min_length[3]');
         $this->form_validation->set_rules('eventdesc', 'Event Description', 'max_length[140]');
-        $this->form_validation->set_rules('frequency', 'Event Description', 'required');
+        $this->form_validation->set_rules('frequency', 'Frequency', 'required');
         $this->form_validation->set_rules('start_date', 'Start Date', 'required');
         if($this->input->post('frequency') !== 'single') 
         {
@@ -195,6 +180,8 @@ class Team extends MY_Controller
             
             $eventid = $this->db->insert_id();
             
+            $teamid = $this->uri->segment(3);
+            
             if($this->input->post('frequency') === 'single') 
             { 
                 $r  = new When();
@@ -204,13 +191,14 @@ class Team extends MY_Controller
                 
                 while($result = $r->next())
                     {
-                        $this->team_m->add_episodes($eventid, $result);
+                        $this->team_m->add_episodes($eventid, $result, $teamid);
                     }
                     
                     redirect('/');
             }
             else 
-            {
+            {   
+                $teamid = $this->uri->segment(3);
                 $end_date = $this->input->post('end_date');
                 //convert to valid MYSQL date format
                 $end = date("Y-m-d", strtotime($end_date));
@@ -222,7 +210,7 @@ class Team extends MY_Controller
                     
                     while($result = $r->next())
                     {
-                        $this->team_m->add_episodes($eventid, $result);
+                        $this->team_m->add_episodes($eventid, $result, $teamid);
                     }
                     
                     redirect('/');
@@ -273,11 +261,6 @@ class Team extends MY_Controller
     
     public function edit_episode()
     {
-        // PUT THE EPISODE ID IN A HIDDEN INPUT FIELD INSTEAD OF SENDING WITH AJAX POST AND IDENTIFY THROUGH 3RD URL SEGMENT
-        
-        //$episodeId = $_REQUEST['episodeId'];
-        //$eventId = $_POST['eventId'];
-        
         $id = $this->input->post('edited_episodeId');
         
         $this->form_validation->set_rules('edited_episodeName', 'Episode Name', 'required|max_length[25]|min_length[6]');
@@ -311,5 +294,88 @@ class Team extends MY_Controller
         $this->team_m->delete_episode($id);
         
         redirect('/');
+    }
+    
+    public function get_attendance() 
+    {
+        $epId = $this->input->post('epId');
+        
+        $attending = $this->team_m->get_attending($epId);
+        
+        if($attending->num_rows() > 0) 
+        {
+            $attending_output = "<table id='attending_table'class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='attending' scope='col'>Attending</th></tr></thead><tbody>\n";
+            foreach ($attending->result_array() as $row) 
+            {
+                $attending_output .= "<tr><td class='middle'><div class='username'>{$row['username']}</div></td></tr>\n";
+            }
+            $attending_output .= "</tbody></table>\n";
+        }
+        else 
+        {
+            $attending_output = "<table id='attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='attending' scope='col'>Attending</th></tr></thead><tbody>\n";
+            $attending_output .= "<tr><td class='middle'><div class='username'>None</div></td></tr>\n";
+            $attending_output .= "</tbody></table>\n";
+        }
+        
+        $notattending = $this->team_m->get_not_attending($epId);
+        
+        if($notattending->num_rows() > 0) 
+        {
+            $notattending_output = "<table id='not_attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_attending' scope='col'>Not Attending</th></tr></thead><tbody>\n";
+            foreach ($notattending->result_array() as $row) 
+            {
+                $notattending_output .= "<tr><td class='middle'><div class='username'>{$row['username']}</div></td></tr>\n";
+            }
+            $notattending_output .= "</tbody></table>\n";
+        }
+        else 
+        {
+            $notattending_output = "<table id='not_attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_attending' scope='col'>Not Attending</th></tr></thead><tbody>\n";
+            $notattending_output .= "<tr><td class='middle'><div class='username'>None</div></td></tr>\n";
+            $notattending_output .= "</tbody></table>\n";
+        }
+        
+        $notresponding = $this->team_m->get_not_responding($epId);
+        
+        if($notresponding->num_rows() > 0) 
+        {
+            $notresponding_output = "<table id='not_responded_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_responded' scope='col'>Has Not Responded</th></tr></thead><tbody>\n";
+            foreach ($notresponding->result_array() as $row) 
+            {
+                $notresponding_output .= "<tr><td class='middle'><div class='username'>{$row['username']}</div></td></tr>\n";
+            }
+            $notresponding_output .= "</tbody></table>\n";
+        }
+        else 
+        {
+            $notresponding_output = "<table id='not_responded_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_responded' scope='col'>Has Not Responded</th></tr></thead><tbody>\n";
+            $notresponding_output .= "<tr><td class='middle'><div class='username'>None</div></td></tr>\n";
+            $notresponding_output .= "</tbody></table>\n";
+        }
+        
+        $attendance_result = $attending_output . $notattending_output . $notresponding_output; 
+        
+        echo $attendance_result;
+    }
+    
+    public function set_attendance() 
+    {   
+        $this->form_validation->set_rules('attendance_choice', '', 'required|greater_than[0]');
+        
+        if($this->form_validation->run() === FALSE) 
+        {
+            $this->load->view('fail_v');
+        } 
+        
+        else 
+        {
+            $ep_id = $this->input->post('ep-id');
+            $status = $this->input->post('attendance_choice');
+        
+            $this->team_m->set_attendance($ep_id, $status);
+        
+            redirect('/');
+        }
     }
 }
