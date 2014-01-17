@@ -1584,9 +1584,9 @@
 			'</thead>',
 		headTemplateV3:   '<thead>' +
 							  '<tr>' +
-							  '<th class="prev"><i class="glyphicon glyphicon-arrow-left"></i> </th>' +
+							  '<th class="prev"></i> </th>' +
 							  '<th colspan="5" class="switch"></th>' +
-							  '<th class="next"><i class="glyphicon glyphicon-arrow-right"></i> </th>' +
+							  '<th class="next"></i> </th>' +
 							  '</tr>' +
 			'</thead>',
 		contTemplate:     '<tbody><tr><td colspan="7"></td></tr></tbody>',
