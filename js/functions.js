@@ -2,8 +2,6 @@ globals = {};
 
 $(document).ready(function(){
     
-    
-
     var counter = 1;
     var limit = 7;
     function addInput(divName){
@@ -71,31 +69,91 @@ $(document).ready(function(){
         
         eventClick: function(calEvent) 
         {
-            /*var json = JSON.stringify(calEvent);
-            $.ajax({        
-                type: "POST",
-                url: "http://localhost/master/index.php/team/get_episode_data",
-                data: 
-                { 
-                    eventData: json 
-                }
-                });
-            console.log(json); */
-            
             var stDate = $.fullCalendar.formatDate(calEvent.start, 'dd-MM-yyyy');
-            globals['textDate'] = $.fullCalendar.formatDate(calEvent.start, 'dddd the dS MMMM yyyy');
+            var stime = calEvent.start_time;
+            var startTime = stime.slice(0, -3);
+            var etime = calEvent.end_time;
+            var endTime = etime.slice(0, -3);
+            
+            globals['textDate'] = $.fullCalendar.formatDate(calEvent.start, 'dddd dS MMMM yyyy');
             globals['textTitle'] = calEvent.title;
             globals['textId'] = calEvent.id;
             
+            var base_url = "http://localhost/master";
+            
+            $.ajax({
+                type: "POST",
+                url: base_url+"/index.php/team/get_attendance", 
+                data: { epId : calEvent.id },
+                dataType: "text",  
+                cache: false,
+                success: 
+                    function(result){
+                        $('#attendance_tables').append(result);
+                    }
+                });
+                          
             if( $('#event-info').is(':visible') ) 
             {
-                $('#event-info').empty();
+                //$('#event-info').empty();
             } 
-            $('#event-info').append("<form id='edit_episode'action=''><button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button><button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button><label for='title'>Title:</label><input id='title' class='readonly' type='text' name='title' value='" + calEvent.title + "' readonly><label for='date'>Date:</label><input id='date' class='readonly' type='text' name='date' value='" + stDate + "' readonly><label for='location'>Location:</label><input id='location' class='readonly' type='text' name='location' value='" + calEvent.location + "' readonly><label for='start-time'>Start time:</label><input id='start-time' class='readonly' type='text' name='start-time' value='" + calEvent.start_time + "' readonly><label for='end_time'>End time:</label><input id='end-time' class='readonly' type='text' name='end-time' value='" + calEvent.end_time + "' readonly><label for='description'>Description:</label><input id='description' class='readonly' type='text' name='description' value='" + calEvent.description + "' readonly><input id='episode-id' class='readonly' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly></form>");
+            $('.hidden_id').prepend("<input id='episode-id' class='noshow' type='hidden' name='ep-id' value='" + calEvent.id + "' readonly>");
+            $('#event-info').prepend("\
+                <div id=event-details>\n\
+                <button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button>\n\
+                <button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button>\n\
+                    <br>\n\
+                    <div class='panel panel-default'>\n\
+                        <div class='panel-heading event'>Name:</div>\n\
+                        <div class='panel-body event'>\n\
+                            <p id='title' name='title'>" + calEvent.title + "</p>\n\
+                        </div>\n\
+                    </div>\n\
+                    \n\
+                    <div class='panel panel-default'>\n\
+                        <div class='panel-heading'>Date:</div>\n\
+                        <div class='panel-body'>\n\
+                            <p id='date' name='date'>" + stDate + "</p>\n\
+                        </div>\n\
+                    </div>\n\
+                    \n\
+                    <div class='panel panel-default'>\n\
+                        <div class='panel-heading'>Location</div>\n\
+                        <div class='panel-body'>\n\
+                            <p id='location' type='text' name='location'>" + calEvent.location + "</p>\n\
+                        </div>\n\
+                    </div>\n\
+                    \n\
+                    <div class='panel panel-default'>\n\
+                        <div class='panel-heading'>Start time</div>\n\
+                        <div class='panel-body'>\n\
+                            <p id='start-time' type='text' name='start-time'>" + startTime + "</p>\n\
+                        </div>\n\
+                    </div>\n\
+                    \n\
+                    <div class='panel panel-default'>\n\
+                        <div class='panel-heading'>End time</div>\n\
+                        <div class='panel-body'>\n\
+                            <p id='end-time' type='text' name='end-time'>" + endTime + "</p>\n\
+                        </div>\n\
+                    </div>\n\
+                    \n\
+                    <div class='panel panel-default'>\n\
+                        <div class='panel-heading'>Description</div>\n\
+                        <div class='panel-body'>\n\
+                            <p id='description' type='text' name='description'>" + calEvent.description + "</p>\n\
+                        </div>\n\
+                    </div>\n\
+                    \n\
+                    <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
+                    </div>\n\
+                    "); 
             $('#event-info').show();
         }
         
     });
+    
+    
     
     /*************************************
     **************************************
@@ -103,29 +161,24 @@ $(document).ready(function(){
     **************************************
     *************************************/
     
-    
-    
     $('#event-info').on("click", "#edit_episode_button", function() {
-        var title = $('#title').val();
-        var date = $('#date').val();
-        var location = $('#location').val();
-        var startTime = $('#start-time').val();
-        var endTime = $('#end-time').val();
-        var description = $('#description').val();
+        
+        var title = $("#event-details").find("#title").text();
+        var date = $("#event-details").find("#date").text();
+        var location = $("#event-details").find("#location").text();
+        var startTime = $("#event-details").find("#start-time").text();
+        var endTime = $("#event-details").find("#end-time").text();
+        var description = $("#event-details").find("#description").text();
         var episodeId = $('#episode-id').val();
 
         console.log(episodeId);
 
-        var base_url = '<?php echo base_url(); ?>';
+        var base_url = 'http://localhost/master'; //try to make this dynamic 
 
         $.ajax({  
-            type: 'POST',  
-            url: base_url+'index.php/team/edit_episode',  
-            data: 
-            { 
-                episodeId: 'episodeId', 
-                eventId: 'eventId' 
-            },
+            type: "POST",  
+            url: base_url+"/index.php/team/edit_episode",  
+            data: { episodeId: episodeId },
             success: function()
             {                   
                 $('#edit_episode_modal').modal();
@@ -161,6 +214,7 @@ $(document).ready(function(){
         format: "dd-mm-yyyy",
         weekStart: 1,
         startDate: "today",
+        todayHighlight: true,
         autoclose: true
     }); 
     
@@ -169,49 +223,93 @@ $(document).ready(function(){
         weekStart: 1,
         startDate: "+1d",
         endDate: "+1y",
-        showMeridian: false,
+        autoclose: true
+    });
+    
+    $('#edit-episode-date').datepicker({
+        format: "dd-mm-yyyy",
+        weekStart: 1,
+        startDate: "+1d",
+        endDate: "+1y",
+        todayHighlight: true,
         autoclose: true
     });
     
     $('#start-time').datetimepicker({
+        formatViewType:"time",
         format: "hh:ii",
         weekStart: 1,
         startDate: "today",
         autoclose: true,
         minuteStep: 15,
         startView: 1,
-        todayHighlight: true
+        todayHighlight: true,
+        viewSelect: "day"
         
     });
     
     $('#end-time').datetimepicker({
+        formatViewType:"time",
         format: "hh:ii",
         weekStart: 1,
         endDate: "+1y",
         autoclose: true,
         minuteStep: 15,
-        startView: 1
+        startView: 1,
+        todayHighlight: true,
+        viewSelect: "day"
     });
     
     $('#edit-start-time').datetimepicker({
+        formatViewType:"time",
         format: "hh:ii",
         weekStart: 1,
         startDate: "today",
         autoclose: true,
         minuteStep: 15,
         startView: 1,
-        todayHighlight: true
+        todayHighlight: true,
+        viewSelect: "day"
         
     });
     
     $('#edit-end-time').datetimepicker({
+        formatViewType:"time",
         format: "hh:ii",
         weekStart: 1,
         endDate: "+1y",
         autoclose: true,
         minuteStep: 15,
-        startView: 1
+        startView: 1,
+        todayHighlight: true,
+        viewSelect: "day"
     });
+    
+    $('#edit-episode-start-time').datetimepicker({
+        formatViewType:"time",
+        format: "hh:ii",
+        weekStart: 1,
+        startDate: "today",
+        autoclose: true,
+        minuteStep: 15,
+        startView: 1,
+        todayHighlight: true,
+        viewSelect: "day"
+    });
+    
+    $('#edit-episode-end-time').datetimepicker({
+        formatViewType:"time",
+        format: "hh:ii",
+        weekStart: 1,
+        endDate: "+1y",
+        autoclose: true,
+        minuteStep: 15,
+        startView: 1,
+        todayHighlight: true,
+        viewSelect: "day"
+    });
+    
+    
     
     /*************************************
     **************************************
