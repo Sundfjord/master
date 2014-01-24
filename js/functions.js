@@ -2,24 +2,6 @@ globals = {};
 
 $(document).ready(function(){
     
-    var counter = 1;
-    var limit = 7;
-    function addInput(divName){
-         if (counter === limit)  {
-              alert("You have reached the limit of adding " + counter + " inputs");
-         }
-         else {
-              var newdiv = document.createElement('div');
-              newdiv.innerHTML = "Entry " + (counter + 1) + " <br><input type='text' name='myInputs[]'>";
-              document.getElementById(divName).appendChild(newdiv);
-              counter++;
-         }
-    }
-    
-    if(document.getElementById("single").checked){
-        $(".form-control").prop("disabled");
-    };
-    
     /*************************************
     **************************************
     * CALENDAR
@@ -98,11 +80,11 @@ $(document).ready(function(){
                 //$('#event-info').empty();
             } 
             $('.hidden_id').prepend("<input id='episode-id' class='noshow' type='hidden' name='ep-id' value='" + calEvent.id + "' readonly>");
-            $('#event-info').prepend("\
-                <div id=event-details>\n\
-                <button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button>\n\
-                <button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button>\n\
-                    <br>\n\
+            $('#coach-only').prepend("\
+                            <button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button>\n\
+                            <button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button>\n\
+                            ");
+            $('#event-details').prepend("\
                     <div class='panel panel-default'>\n\
                         <div class='panel-heading event'>Name:</div>\n\
                         <div class='panel-body event'>\n\
@@ -147,7 +129,7 @@ $(document).ready(function(){
                     \n\
                     <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
                     </div>\n\
-                    "); 
+                    ");    
             $('#event-info').show();
         }
         
@@ -206,7 +188,7 @@ $(document).ready(function(){
     
     /*************************************
     **************************************
-    * DATES AND TIMES
+    * FORMS
     **************************************
     *************************************/
     
@@ -309,7 +291,9 @@ $(document).ready(function(){
         viewSelect: "day"
     });
     
-    
+    if(document.getElementById("single").checked){
+        $(".form-control").prop("disabled");
+    };
     
     /*************************************
     **************************************
@@ -374,7 +358,6 @@ $(document).ready(function(){
     **************************************
     *************************************/
     
-
     $("#search_player").keyup(function(e)
     {
     	// Sletter innhold i feltet dersom man trykker esc

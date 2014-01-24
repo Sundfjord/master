@@ -378,4 +378,35 @@ class Team extends MY_Controller
             redirect('/');
         }
     }
+    
+    public function stat() 
+    {
+        echo $this->team_m->archive_attendance();
+        
+    }
+    
+    public function dummy()
+    {
+        //$now = date('Y-m-d');
+        //echo $now;
+        
+        $this->db->select('id, event_date');
+        $this->db->order_by('event_date', 'asc');
+        $eps = $this->db->get('episodes');
+        
+        foreach ($eps->result() as $row)
+        {
+            $eventdate = date('Y-m-d', strtotime($row->event_date));
+            $validstat = date('Y-m-d', strtotime($eventdate. ' + 1 day'));
+            echo $validstat;
+            echo '<br>';
+            
+            //echo date('Y-m-d', strtotime($Date. ' + 2 days'));
+        }
+    }
+    
+    public function get_statistics() 
+    {
+        
+    }
 }

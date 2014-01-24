@@ -165,33 +165,39 @@ class Team_m extends MY_Model {
         $this->db->where('team_id', $this->uri->segment(3));
         $eventids = $this->db->get();
         
-        $eventarray = array();
-        foreach ($eventids->result_array() as $id) 
+        if ($eventids->num_rows() > 0) {
+            $eventarray = array();
+            foreach ($eventids->result_array() as $id) 
+                {
+                    $eventarray[] = $id['id'];
+                }
+
+            $eventarray['num_rows'] = count($eventarray['id']);
+
+            $this->db->select('id');
+            $this->db->from('episodes');
+            $this->db->where_in('event_id', $eventarray);
+            $episodes = $this->db->get();
+
+            if ($episodes->num_rows() > 0) 
             {
-                $eventarray[] = $id['id'];
+
+            foreach ($episodes->result_array() as $row) 
+                {
+                    $attendanceinsert = array(
+                        'user_id'       =>  $players,
+                        'episode_id'    =>  $row['id'],
+                        'is_attending'  =>  0
+                        );
+
+                        $this->db->insert('attendance_status', $attendanceinsert);
+                }
+
+            return $this->db->affected_rows() > 0;
             }
+        }
         
-        $this->db->select('id');
-        $this->db->from('episodes');
-        $this->db->where_in('event_id', $eventarray);
-        $episodes = $this->db->get();
-
-        if ($episodes->num_rows() > 0)
-
-        foreach ($episodes->result_array() as $row) 
-            {
-                $attendanceinsert = array(
-                    'user_id'       =>  $players,
-                    'episode_id'    =>  $row['id'],
-                    'is_attending'  =>  0
-                    );
-
-                    $this->db->insert('attendance_status', $attendanceinsert);
-            }
-
-        return $this->db->affected_rows() > 0;
-        
-     }
+    }
    
     public function remove_player($players)
     {
@@ -205,25 +211,32 @@ class Team_m extends MY_Model {
         $this->db->where('team_id', $this->uri->segment(3));
         $eventids = $this->db->get();
         
-        $eventarray = array();
-        foreach ($eventids->result_array() as $id) 
+        if ($eventids->num_rows() > 0) {
+        
+            $eventarray = array();
+            foreach ($eventids->result_array() as $id) 
+                {
+                    $eventarray[] = $id['id'];
+                }
+
+            $this->db->select('id');
+            $this->db->from('episodes');
+            $this->db->where_in('event_id', $eventarray);
+            $episodes = $this->db->get();
+
+            if ($episodes->num_rows() > 0) 
             {
-                $eventarray[] = $id['id'];
+
+            foreach ($episodes->result_array() as $row) 
+                {
+                    $this->db->where('episode_id' , $row['id']);
+                    $this->db->where('user_id', $players);
+                    $this->db->delete('attendance_status');
+                }
+
+            return $this->db->affected_rows() > 0;
             }
-        
-        $this->db->select('id');
-        $this->db->from('episodes');
-        $this->db->where_in('event_id', $eventarray);
-        $episodes = $this->db->get();
-        
-        foreach ($episodes->result_array() as $row) 
-            {
-                $this->db->where('episode_id' , $row['id']);
-                $this->db->where('user_id', $players);
-                $this->db->delete('attendance_status');
-            }
-        
-        return $this->db->affected_rows() > 0;
+        }
     }
     
     public function get_team_by_coach()
@@ -436,6 +449,8 @@ class Team_m extends MY_Model {
         
         $this->db->where('id', $this->uri->segment(3));
         $this->db->update('events', $updateinfo);
+        
+        return $this->db->affected_rows() > 0;
     }
     
     public function delete_event($events)
@@ -448,7 +463,6 @@ class Team_m extends MY_Model {
     
     public function edit_episode($id, $date)
     {
-        
         $updateinfo = array(
             'event_date'            =>  $date,
             'altered_name'          =>  $this->input->post('edited_episodeName'),
@@ -463,7 +477,7 @@ class Team_m extends MY_Model {
         $this->db->where('id', $id);
         $this->db->update('episodes', $updateinfo);
 
-        
+        return $this->db->affected_rows() > 0;
     }
     
     public function delete_episode($id) 
@@ -537,6 +551,91 @@ class Team_m extends MY_Model {
         $notresponding = $this->db->get('attendance_status');
         
         return $notresponding;
+    }
+    
+    public function get_statistics()
+    {
+        $this->archive_attendance(); //remove when page go live, as this method will be executed through a cron job
+        
+        $this->db->select('id');
+        $this->db->from('events');
+        $this->db->where('team_id', $this->uri->segment(3));
+        $eventids = $this->db->get();
+        
+        if ($eventids->num_rows() > 0) 
+        {
+            $eventarray = array();
+            foreach ($eventids->result_array() as $id) 
+            {
+                $eventarray[] = $id['id'];
+            }
+
+            $this->db->select('id, event_date');
+            $this->db->from('episodes');
+            $this->db->where_in('event_id', $eventarray);
+            //Fetches all episodes for a specific team
+            $episodes = $this->db->get();
+
+            if ($episodes->num_rows() > 0) 
+            {
+
+                foreach ($episodes->result_array() as $row) 
+                {
+                    $this->db->select('user_id, count(user_id) AS num_of_events, username');
+                    $this->db->join('users', 'attendance_statistics.user_id = users.id');
+                    $this->db->where('episode_id', $row['id']);  
+                    $this->db->group_by('user_id');
+                    $this->db->order_by('num_of_events', 'desc');
+                    $statistics = $this->db->get('attendance_statistics');
+
+                    print_r($statistics);
+                }
+            }
+        }
+    }
+    
+    public function archive_attendance() 
+    {
+        $this->db->select('id, event_date');
+        $this->db->from('episodes');
+        $this->db->order_by('event_date', 'asc');
+        $episodes = $this->db->get();
+
+        if ($episodes->num_rows() > 0) 
+        {
+            foreach ($episodes->result_array() as $row) 
+            {
+                //checks if the episode is more than 24 hours (1day) old relative to current date
+                $now = date('Y-m-d');
+                $eventdate = date('Y-m-d', strtotime($row['event_date']));
+                $validstat = date('Y-m-d', strtotime($eventdate. ' + 1 day'));
+  
+                if ($now > $validstat) 
+                {   
+                    $this->db->select('user_id, episode_id');
+                    $this->db->where('is_attending', 1);
+                    $this->db->where('episode_id', $row['id']);
+                    //$stats is rows where user id attended episode with episode id and should be added to statistics
+                    $stats = $this->db->get('attendance_status');
+                    
+                    foreach ($stats->result_array() as $stat) 
+                    {
+                        $statinfo = array(
+                                'user_id'       =>  $stat['user_id'],
+                                'episode_id'    =>  $stat['episode_id']
+                            );
+                        $this->db->on_duplicate('attendance_statistics', $statinfo);
+                    }        
+                }
+                
+                return $this->db->affected_rows();
+            }
+        }
+        else 
+        { 
+            echo 'cunt'; 
+        }
+    
     }
     
 }

@@ -28,12 +28,12 @@
     <li><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-list"></span>My Teams</a></li>
         <ul id="submenu" class="nav">
             <?php if (empty($plr_result)) {?>
-            <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?>
+            <?php echo '<li><a data-toggle="modal" id="join_team" data-backdrop="true" href="#join_team_modal" href="base_url(index.php/team/join_team)"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';?>
             <?php } else {?>
             <?php foreach ($plr_result as $row): ?>
             <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
-                if(count($result) <= 2) 
+                if(count($plr_result) <= 2) 
                 {
                     echo '<li><a data-toggle="modal" id="join_team" data-backdrop="true" href="#join_team_modal" href="base_url(index.php/team/join_team)"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';
                 }
