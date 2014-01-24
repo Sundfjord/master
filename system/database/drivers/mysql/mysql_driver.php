@@ -427,7 +427,27 @@ class CI_DB_mysql_driver extends CI_DB {
 	{
 		return "SHOW COLUMNS FROM ".$this->_protect_identifiers($table, TRUE, NULL, FALSE);
 	}
+        
+        // --------------------------------------------------------------------
 
+	/**
+	 * Escape tables
+	 *
+	 * This function adds backticks if the table name has a period in it. 
+         * Some DBs will get cranky unless periods are escaped private
+	 *
+	 * @param	string	the table name
+	 * @return	resource
+	 */
+        function _escape_table($table)
+        {
+                 if (strpos($table, '.') !== FALSE)
+                 {
+                         $table = '`' . str_replace('.', '`.`', $table) . '`';
+                 }
+                 
+                 return $table;
+         }
 	// --------------------------------------------------------------------
 
 	/**
@@ -624,10 +644,44 @@ class CI_DB_mysql_driver extends CI_DB {
 
 		return $sql;
 	}
+        
+        // --------------------------------------------------------------------
+        
+	/**
+        * ON DUPLICATE UPDATE statement
+        *
+        * Generates a platform-specific on duplicate key update string from the supplied data
+        *
+        * @author    Chris Miller <chrismill03@hotmail.com>
+        * @since     1.6.2
+        * @access    public
+        * @param     string   the table name
+        * @param     array    the update/insert data
+        * @return    string
+        */
+        function _duplicate_insert($table, $values)
+        {
+            $updatestr = array();
+            $keystr    = array();
+            $valstr    = array();
 
-	// --------------------------------------------------------------------
+            foreach($values as $key => $val)
+            {
+                $updatestr[] = $key." = ".$val;
+                $keystr[]    = $key;
+                $valstr[]    = $val;
+            }
 
+            $sql  = "INSERT INTO ".$this->_escape_table($table)." (".implode(', ',$keystr).") ";
+            $sql .= "VALUES (".implode(', ',$valstr).") ";
+            $sql .= "ON DUPLICATE KEY UPDATE ".implode(', ',$updatestr);
 
+            return $sql;
+        }
+
+        // --------------------------------------------------------------------
+
+        
 	/**
 	 * Update_Batch statement
 	 *
