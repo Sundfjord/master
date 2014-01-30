@@ -9,6 +9,7 @@ $(document).ready(function(){
     *************************************/
     
     var filter_id = $('#filter_id').val();
+    var base_url = 'http://localhost/master';
     
     $('#calendar').fullCalendar({
         
@@ -41,13 +42,13 @@ $(document).ready(function(){
             });
         },        
        //eventRender determines what should be shown in the calendar
-      /*  eventRender: function(event, element, view) {
-            if (view.name === "agendaDay") 
+        eventRender: function(event, element, view) {
+            if (view.name === "agendaWeek") 
                 {
-                element.find(".fc-event-content")
+                element.find(".fc-event-content");
                     content: event.description;
                 }
-        } */
+        },
         
         eventClick: function(calEvent) 
         {
@@ -60,8 +61,6 @@ $(document).ready(function(){
             globals['textDate'] = $.fullCalendar.formatDate(calEvent.start, 'dddd dS MMMM yyyy');
             globals['textTitle'] = calEvent.title;
             globals['textId'] = calEvent.id;
-            
-            var base_url = "http://localhost/master";
             
             $.ajax({
                 type: "POST",
@@ -85,48 +84,31 @@ $(document).ready(function(){
                             <button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button>\n\
                             ");
             $('#event-details').prepend("\
-                    <div class='panel panel-default'>\n\
-                        <div class='panel-heading event'>Name:</div>\n\
-                        <div class='panel-body event'>\n\
-                            <p id='title' name='title'>" + calEvent.title + "</p>\n\
-                        </div>\n\
-                    </div>\n\
-                    \n\
-                    <div class='panel panel-default'>\n\
-                        <div class='panel-heading'>Date:</div>\n\
-                        <div class='panel-body'>\n\
-                            <p id='date' name='date'>" + stDate + "</p>\n\
-                        </div>\n\
-                    </div>\n\
-                    \n\
-                    <div class='panel panel-default'>\n\
-                        <div class='panel-heading'>Location</div>\n\
+                    <div id='boxes-inline'>\n\
+                    <div class='loc panel panel-default'>\n\
+                        <div class='panel-heading'><span class='glyphicon glyphicon-map-marker'></span>Location</div>\n\
                         <div class='panel-body'>\n\
                             <p id='location' type='text' name='location'>" + calEvent.location + "</p>\n\
                         </div>\n\
                     </div>\n\
                     \n\
-                    <div class='panel panel-default'>\n\
-                        <div class='panel-heading'>Start time</div>\n\
+                    <div class='time panel panel-default'>\n\
+                        <div class='panel-heading'><span class='glyphicon glyphicon-time'></span>Time</div>\n\
                         <div class='panel-body'>\n\
-                            <p id='start-time' type='text' name='start-time'>" + startTime + "</p>\n\
+                            <p id='time' type='text' name='time'>" + startTime + " - " + endTime + "</p>\n\
                         </div>\n\
                     </div>\n\
-                    \n\
-                    <div class='panel panel-default'>\n\
-                        <div class='panel-heading'>End time</div>\n\
-                        <div class='panel-body'>\n\
-                            <p id='end-time' type='text' name='end-time'>" + endTime + "</p>\n\
-                        </div>\n\
                     </div>\n\
-                    \n\
-                    <div class='panel panel-default'>\n\
-                        <div class='panel-heading'>Description</div>\n\
+                    <div class='desc panel panel-default'>\n\
+                        <div class='panel-heading'><span class='glyphicon glyphicon-info-sign'></span>Description</div>\n\
                         <div class='panel-body'>\n\
                             <p id='description' type='text' name='description'>" + calEvent.description + "</p>\n\
                         </div>\n\
                     </div>\n\
-                    \n\
+                    <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
+                    <input id='date' class='noshow' type='hidden' name='date' value='" + stDate + "' readonly>\n\
+                    <input id='start-time' class='noshow' type='hidden' name='start-time' value='" + startTime + "' readonly>\n\
+                    <input id='end-time' class='noshow' type='hidden' name='end-time' value='" + endTime + "' readonly>\n\
                     <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
                     </div>\n\
                     ");    
@@ -135,22 +117,22 @@ $(document).ready(function(){
         
     });
     
-    
-    
     /*************************************
     **************************************
     * BLABLA
     **************************************
     *************************************/
     
+    
+    
     $('#event-info').on("click", "#edit_episode_button", function() {
         
-        var title = $("#event-details").find("#title").text();
-        var date = $("#event-details").find("#date").text();
-        var location = $("#event-details").find("#location").text();
-        var startTime = $("#event-details").find("#start-time").text();
-        var endTime = $("#event-details").find("#end-time").text();
         var description = $("#event-details").find("#description").text();
+        var location = $("#event-details").find("#location").text();
+        var title = $('#title').val();
+        var date = $('#date').val();
+        var startTime = $('#start-time').val();
+        var endTime = $('#end-time').val();
         var episodeId = $('#episode-id').val();
 
         console.log(episodeId);
@@ -292,7 +274,7 @@ $(document).ready(function(){
     });
     
     if(document.getElementById("single").checked){
-        $(".form-control").prop("disabled");
+        $(".form-control end").prop("disabled");
     };
     
     /*************************************
@@ -322,10 +304,31 @@ $(document).ready(function(){
     $('#gay').popover({
         placement: top,
         title: "Just a heads-up",
-        content: "This date can be no more than 1 year from the start date."
-        
+        content: "This date can be no more than 1 year from the start date." 
     });
     
+    /*$(document).ready(function(){
+    alert(window.location.pathname);
+    $("#menu ul li a").each(function(){
+        if($(this).attr("href") === window.location.pathname)
+            $(this).addClass("active");
+        });
+    });
+    
+    $(function(){
+
+    var url = window.location.pathname, 
+        urlRegExp = new RegExp(url.replace(/\/$/,'') + "$"); // create regexp to match current url pathname and remove trailing slash if present as it could collide with the link in navigation in case trailing slash wasn't present there
+        // now grab every link from the navigation
+        $('#menu a').each(function(){
+            // and test its normalized href against the url pathname regexp
+            if(urlRegExp.test(this.href.replace(/\/$/,''))){
+                $(this).addClass('active');
+            }
+        });
+
+    });*/
+
     /*************************************
     **************************************
     * TABS
@@ -352,6 +355,111 @@ $(document).ready(function(){
     $(this).find("[autofocus]:first").focus();
     });
     
+    /*************************************
+    **************************************
+    * STATISTICS TABLE
+    **************************************
+    *************************************/
+    
+    var startmoment = moment().subtract('days', 29);
+    var startend = moment();
+    
+    var initialstart = startmoment.format('YYYY-MM-DD');
+    var initialend = startend.format('YYYY-MM-DD');
+    
+    $.ajax({
+        type: "POST",
+        url: base_url+"/index.php/team/get_statistics", 
+        data: 
+            { 
+                team_id : filter_id,
+                startrange : initialstart,
+                endrange : initialend
+            },
+        dataType: "json",  
+        cache: false,
+        success: 
+            function(data) 
+            {
+                $.each(data, function(index, data) 
+                {
+                    $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.count + '</td></tr>');
+                    //remember to empty this if updated
+                });            
+            }
+    });
+                
+    var cb = function(start, end) 
+    {
+        $('#daterange .text').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+        var startrange = start.format('YYYY-MM-DD');
+        var endrange = end.format('YYYY-MM-DD');
+                    
+        $.ajax({
+            type: "POST",
+            url: base_url+"/index.php/team/get_statistics", 
+            data: 
+                { 
+                    team_id : filter_id,
+                    startrange: startrange,
+                    endrange: endrange
+                },
+            dataType: "json",  
+            cache: false,
+            success: 
+                function(data) 
+                {
+                    if (data === null) 
+                    {
+                        $("#statistics_table > tbody").empty();
+                    }
+                    else
+                    {
+                        $("#statistics_table > tbody").empty();
+                        $.each(data, function(index, data) 
+                        {
+                            $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.count + '</td></tr>');
+                        });
+                    }
+                }
+        });
+    };
+
+    var optionSet1 = 
+    {
+        startDate: moment().subtract('days', 29),
+        endDate: moment(),
+        minDate: moment().subtract('year', 1),
+        maxDate: moment(),
+        showDropdowns: true,
+        showWeekNumbers: true,
+        ranges: 
+        {
+           'Last 7 Days': [moment().subtract('days', 6), moment()],
+           'Last 30 Days': [moment().subtract('days', 29), moment()],
+           'Last Year': [moment().subtract('year', 1), moment()]
+        },
+        opens: 'left',
+        buttonClasses: ['btn btn-default'],
+        applyClass: 'btn-small btn-primary',
+        cancelClass: 'btn-small',
+        format: 'DD/MM/YYYY',
+        separator: ' to ',
+        locale: 
+        {
+            applyLabel: 'Submit',
+            cancelLabel: 'Clear',
+            fromLabel: 'From',
+            toLabel: 'To',
+            customRangeLabel: 'Custom Range',
+            daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+            monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            firstDay: 1
+        }
+    };
+
+    $('#daterange').daterangepicker(optionSet1, cb);
+                  
     /*************************************
     **************************************
     * SEARCH PLAYER

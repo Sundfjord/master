@@ -27,7 +27,6 @@
                 <button type="button" id="add_event" class="btn btn-info" href="#add_event_modal"> <span class="glyphicon glyphicon-plus-sign"></span>Add event</button>
                 <button type="button" id="edit_event" class="btn btn-default" href="#edit_event_modal"> <span class="glyphicon glyphicon-edit"></span>Edit events</button>
                 <button type="button" id="delete_event" class=" btn btn-danger" href="#delete_event_modal"> <span class="glyphicon glyphicon-trash"></span>Delete event</button>
-                &nbsp;<a href="<?php echo base_url('index.php/team/get_statistics');?>">TEST STATS</a>
             </div>
             
             <div id="calendar">
@@ -62,7 +61,24 @@
         </div>
         
         <div class="tab-pane fade" id="stats">
-            <p>More content</p>
+            <div id="daterange" class="pull-right">
+                <span class="glyphicon glyphicon-calendar"></span><span class="text"><?php echo date("F j, Y", strtotime('-30 day')); ?> - <?php echo date("F j, Y"); ?></span> <b class="caret"></b>
+            </div>
+            <br>
+            <br>
+            <div id="stats_table">
+                <table id="statistics_table" class="table table-striped table-bordered dataTable" style='width: 500px;'>
+                    <thead>
+                        <tr class="tabellheader">
+                            <th class="name" scope="col">Player Name</th>
+                            <th class="number" scope="col">#</th>
+                        </tr>  
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
         </div>
         
         <div class="tab-pane fade" id="manage_squad" class="dataTables_wrapper">
@@ -274,7 +290,7 @@
                             <div class="col-xs-6">
                                 <label class="sr-only">End date</label>
                                 <div class="input-group date" id="end-date">
-                                    <input class="form-control" name="end_date" placeholder="End date" type="text">
+                                    <input class="form-control end" name="end_date" placeholder="End date" type="text">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
                             </div>
