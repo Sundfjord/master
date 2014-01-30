@@ -40,7 +40,7 @@ class Auth extends CI_Controller
 					$this->config->item('use_username', 'tank_auth'));
 			$data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
 
-			$this->form_validation->set_rules('login', 'Login', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('login', 'Login', 'trim|required|xss_clean|valid_email');
 			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
 			$this->form_validation->set_rules('remember', 'Remember me', 'integer');
 
@@ -130,7 +130,8 @@ class Auth extends CI_Controller
 				$this->form_validation->set_rules('username', 'Full Name', 'trim|required|xss_clean|min_length['.$this->config->item('username_min_length', 'tank_auth').']|max_length['.$this->config->item('username_max_length', 'tank_auth').']');
 			}
 			$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email');
-                        $this->form_validation->set_rules('group_id', 'Role', 'required');
+                        $this->form_validation->set_rules('group_id', 'Role', 'required|is_natural_no_zero');
+                        $this->form_validation->set_message('is_natural_no_zero', 'Please choose a role');
                         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'tank_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
 			$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|xss_clean|matches[password]');
 
@@ -193,7 +194,7 @@ class Auth extends CI_Controller
 			$this->load->view('auth/register_form', $data);
 		}
 	}
-
+        
 	/**
 	 * Send activation email again, to the same or new email address
 	 *
@@ -581,7 +582,6 @@ class Auth extends CI_Controller
 		}
 		return TRUE;
 	}
-
 }
 
 /* End of file auth.php */
