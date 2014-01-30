@@ -20,7 +20,7 @@ $email = array(
 );
 
 $group_id = array(
-        ''          => 'Select role',
+        '0'         => 'Select a role',
         '300'       => 'Player',
         '100'       => 'Coach'
 );
@@ -82,8 +82,8 @@ $captcha = array(
     <div class="control-group">
         <p> Role <!-- echo form_label('Role', $group_id['group_id'], array('class' =>'control-label')); ? --></p>                                  
         <div class="controls">
-            <?php echo form_error('role'); ?>
-            <?php echo form_dropdown('group_id', $group_id, 'role'); ?> <br />
+            <?php echo form_error('group_id'); ?>
+            <?php echo form_dropdown('group_id', $group_id, '0'); ?> <br />
         </div>
     </div>                                    
                                         
@@ -121,7 +121,7 @@ $captcha = array(
     </div>
 	<?php endif; ?>
 </table>
-<?php echo form_submit('register', 'Register', 'class="btn btn-primary"'); ?>
+<?php echo form_submit('register', 'Register', 'class="register btn btn-primary"'); ?>
 <?php echo form_close(); ?>
 </center>
 </div>
