@@ -1,14 +1,16 @@
 <?php
 
 // Errors
-$lang['auth_incorrect_password'] = 'Incorrect password';
-$lang['auth_incorrect_login'] = 'Incorrect login';
-$lang['auth_incorrect_email_or_username'] = 'Login or email doesn\'t exist';
-$lang['auth_email_in_use'] = 'Email is already used by another user. Please choose another email.';
-$lang['auth_username_in_use'] = 'Username already exists. Please choose another username.';
-$lang['auth_current_email'] = 'This is your current email';
-$lang['auth_incorrect_captcha'] = 'Your confirmation code does not match the one in the image.';
-$lang['auth_captcha_expired'] = 'Your confirmation code has expired. Please try again.';
+$lang['auth_incorrect_password'] =          "<div class='alert alert-error'><p>Incorrect password.</p></div>";
+$lang['auth_incorrect_login'] =             "<div class='alert alert-error'><p>Incorrect email.</p></div>";
+$lang['auth_incorrect_email_or_username'] = "<div class='alert alert-error'><p>Email doesn\'t exist.</p></div>";
+$lang['auth_email_in_use'] =                "<div class='alert alert-error'><p>Email is already used by another user. Please choose another email.</p></div>";
+$lang['auth_username_in_use'] =             "<div class='alert alert-error'><p>Username already exists. Please choose another username.</p></div>";
+$lang['auth_invalid_role'] =                "<div class='alert alert-error'><p>Please choose a role.</p></div>";
+$lang['auth_current_email'] =               "<div class='alert alert-error'><p>This is your current email.</p></div>";
+$lang['auth_incorrect_captcha'] =           "<div class='alert alert-error'><p>Your confirmation code does not match the one in the image.</p></div>";
+$lang['auth_captcha_expired'] =             "<div class='alert alert-error'><p>Your confirmation code has expired. Please try again.</p></div>";
+$lang['auth_login_attempts_exceeded'] =     "You have tried to log in too many times. Try again later.";
 
 // Notifications
 $lang['auth_message_logged_out'] = 'You have been successfully logged out.';
@@ -20,7 +22,7 @@ $lang['auth_message_activation_completed'] = 'Your account has been successfully
 $lang['auth_message_activation_failed'] = 'The activation code you entered is incorrect or expired.';
 $lang['auth_message_password_changed'] = 'Your password has been successfully changed.';
 $lang['auth_message_new_password_sent'] = 'An email with instructions for creating a new password has been sent to you.';
-$lang['auth_message_new_password_activated'] = 'You have successfully reset your password';
+$lang['auth_message_new_password_activated'] = 'You have successfully reset your password.';
 $lang['auth_message_new_password_failed'] = 'Your activation key is incorrect or expired. Please check your email again and follow the instructions.';
 $lang['auth_message_new_email_sent'] = 'A confirmation email has been sent to %s. Follow the instructions in the email to complete this change of email address.';
 $lang['auth_message_new_email_activated'] = 'You have successfully changed your email';
