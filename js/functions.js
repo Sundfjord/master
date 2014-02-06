@@ -2,14 +2,133 @@ globals = {};
 
 $(document).ready(function(){
     
+    var filter_id = $('#filter_id').val();
+    var base_url = 'http://localhost/master';
+    
+    /*************************************
+    **************************************
+    * ERROR HANDLING
+    **************************************
+    *************************************/
+    
+    $('#addeventsubmit').click(function()
+    {
+        var eventname       = $("#event_name").val();
+        var eventdesc       = $("#event_desc").val();
+        var frequency       = $("[name='frequency']:checked").val();
+        var start_date      = $("#start_date").val();
+        var end_date        = $("#end_date").val();
+        var start_time      = $("#start_time").val();
+        var end_time        = $("#end_time").val();
+        var eventlocation   = $("#eventlocation").val();
+        
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: base_url+"/index.php/team/add_event/"+filter_id,
+            data: 
+            {
+                eventname: eventname,
+                eventdesc: eventdesc,
+                frequency: frequency,
+                start_date: start_date,
+                end_date: end_date,
+                start_time: start_time,
+                end_time: end_time,
+                eventlocation: eventlocation 
+            },
+            success:
+                    function(data)
+            {       
+                    if(data.count > 0)
+                    {   
+                        $('#add_event_modal').modal('hide');
+                        window.location = "?addeventsuccess";
+                        return true;
+                    }
+                    
+                    if (data.nameerror)
+                    {
+                        $('#error').addClass('has-error');
+                        $('#errorinline').text(data.nameerror);
+                    }
+                    else
+                    {
+                        $('#error').removeClass('has-error');
+                        $('#errorinline').text('');
+                    }
+
+                    if (data.descerror)
+                    {
+                        $('#error2').addClass('has-error');
+                        $('#error2inline').text(data.descerror);
+                    }
+                    else
+                    {
+                        $('#error2').removeClass('has-error');
+                        $('#error2inline').text('');
+                    }
+                    
+                    if (data.stdateerror)
+                    {
+                        $('#error4').addClass('has-error');
+                        $('#error4inline').text(data.stdateerror);
+                    }
+                    else
+                    {
+                        $('#error4').removeClass('has-error');
+                        $('#error4inline').text('');
+                    }
+                    if (data.enddateerror)
+                    {
+                        $('#error5').addClass('has-error');
+                        $('#error5inline').text(data.enddateerror);
+                    }
+                    else
+                    {
+                        $('#error5').removeClass('has-error');
+                        $('#error5inline').text('');
+                    }
+                    if (data.sttimeerror)
+                    {
+                        $('#error6').addClass('has-error');
+                        $('#error6inline').text(data.sttimeerror);
+                    }
+                    else
+                    {
+                        $('#error6').removeClass('has-error');
+                        $('#error6inline').text('');
+                    }
+                    if (data.endtimeerror)
+                    {
+                        $('#error7').addClass('has-error');
+                        $('#error7inline').text(data.endtimeerror);
+                    }
+                    else
+                    {
+                        $('#error7').removeClass('has-error');
+                        $('#error7inline').text('');
+                    }
+                    if (data.locerror)
+                    {
+                        $('#error8').addClass('has-error');
+                        $('#error8inline').text(data.locerror);
+                    }
+                    else
+                    {
+                        $('#error8').removeClass('has-error');
+                        $('#error8inline').text('');
+                    }
+            }
+            
+        });
+    });
+    
     /*************************************
     **************************************
     * CALENDAR
     **************************************
     *************************************/
-    
-    var filter_id = $('#filter_id').val();
-    var base_url = 'http://localhost/master';
     
     $('#calendar').fullCalendar({
         
@@ -658,8 +777,7 @@ $(document).ready(function(){
 	    }
 	});
         
-        $(document).ready(function(){
- 		  var str=location.href.toLowerCase();
+var str=location.href.toLowerCase();
         $('.navigation li a').each(function() {
                 if (str.indexOf(this.href.toLowerCase()) > -1) {
 						$("li.highlight").removeClass("highlight");
@@ -671,8 +789,49 @@ $(document).ready(function(){
 					if ($(this).is('li')){
 						$(this).addClass("highlight"); 
 						}							  
-												  });
-       });
+		});
+       
     
         $('#team_table').dataTable();           
-        });
+       
+        
+        
+    
+        /**
+	 *
+	 * Gir brukeren beskjed om at ulike operasjoner var vellykket
+	 * 
+	 */
+    var hash = window.location.search.substring(1);
+    if ( hash === "addeventsuccess")
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Events were added to calendar </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'eventaltered')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event changes were saved </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'eventdeleted')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Events were deleted </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'epedited')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event changes were saved </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'epdeleted')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event was deleted </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    
+    });
