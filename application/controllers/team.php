@@ -161,13 +161,31 @@ class Team extends MY_Controller
         }
         $this->form_validation->set_rules('start_time', 'Start Time', 'required');
         $this->form_validation->set_rules('end_time', 'End Time', 'required');
-        $this->form_validation->set_rules('location', 'Location', 'required');
-        
+        $this->form_validation->set_rules('eventlocation', 'Location', 'trim|required');
+        $this->form_validation->set_error_delimiters('', '');
         
         if($this->form_validation->run() === FALSE) {
-            $this->load->view('fail_v');
-            
+
+            if($this->input->is_ajax_request()) {
+                echo json_encode( 
+                array (
+                    "nameerror"     =>  form_error('eventname'),
+                    "descerror"     =>  form_error('eventdesc'),
+                    "freqerror"     =>  form_error('frequency'),
+                    "stdateerror"   =>  form_error('start_date'),
+                    "enddateerror"  =>  form_error('end_date'),
+                    "sttimeerror"   =>  form_error('start_time'),
+                    "endtimeerror"  =>  form_error('end_time'),
+                    "locerror"      =>  form_error('eventlocation')
+                    )
+                );
+            }
+            else
+            {
+                echo 'fuck';
+            }
         }
+        
         else { //on success
             $start_date = $this->input->post('start_date');
             //convert to valid MYSQL date format
@@ -175,12 +193,11 @@ class Team extends MY_Controller
             
             $this->input->post('end_time');
             
+            $teamid = $this->uri->segment(3);
             //Insert event information into Events table
-            $this->team_m->add_event();
+            $this->team_m->add_event($teamid);
             
             $eventid = $this->db->insert_id();
-            
-            $teamid = $this->uri->segment(3);
             
             if($this->input->post('frequency') === 'single') 
             { 
@@ -194,7 +211,10 @@ class Team extends MY_Controller
                         $this->team_m->add_episodes($eventid, $result, $teamid);
                     }
                     
-                    redirect('/');
+                    $count = count($r);
+                    echo json_encode(array(
+                        "count" => $count
+                    ));
             }
             else 
             {   
@@ -213,7 +233,10 @@ class Team extends MY_Controller
                         $this->team_m->add_episodes($eventid, $result, $teamid);
                     }
                     
-                    redirect('/');
+                    $count = count($r);
+                    echo json_encode(array(
+                        "count" => $count
+                    ));
             }
         } 
     }
