@@ -6,13 +6,17 @@
         Purpose of the stylesheet follows.
 */
 
-@import url("//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
+      
 
 body {
     margin: 0 auto;
 }
 
-/* GENERAL */
+/*************************************
+**************************************
+* HEADER
+**************************************
+*************************************/
 
 #header { 
     background-color: #3b5999;
@@ -28,11 +32,29 @@ body {
     width: 180px;
 }   
 
+/*************************************
+**************************************
+* LOGIN
+**************************************
+*************************************/
+
+
+
+/*************************************
+**************************************
+* GENERAL
+**************************************
+*************************************/
+
 .glyphicon {
     margin-right: 5px;
 }
 
-/* SIDEBAR ACTION */
+/*************************************
+**************************************
+* SIDEBAR
+**************************************
+*************************************/
 
 #sidebar {
 	float:left;
@@ -46,48 +68,7 @@ ul {
     margin-bottom: 0 !important;
 }
 
-.datepicker {z-index: 1151 !important;}
 
-.bootstrap-timepicker-widget {
-    z-index: 1151 !important;
-}
-
-#add_event_form {
-    padding: 10px;
-}
-
-.input-group-addon > .glyphicon {
-    top: -1px;
-    left: 2px;
-}
-
-.radio-inline {
-    margin-right: 5px;
-    margin-bottom: 15px;
-}
-
-.event_field {
-    width: 95%;
-}
-
-.event_field_half {
-    width: 45%;
-    float: left;
-    margin: 0 25px 15px 0;
-
-}
-
-.bfh-datepicker {
-    position: relative;
-    width: 45%;
-    display: inline-block;
-}
-
-.form-inline p {
-    display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;
-}
 #menu li {
     border-top: 1px solid #ddd;
     margin-top: -1px;   
@@ -121,23 +102,40 @@ ul {
     margin-left: 20px;
 }
 
-/* CONTENT */
+/*************************************
+**************************************
+* HOME
+**************************************
+*************************************/
 
-.table {
+ul.team_menu {
+    text-align: center;
+    margin: 40px 0 30px 0;
+    list-style-type: none;
+}
+
+.team_menu > li {
+    display: inline;
+    padding: 20px;
+    background-color: #ddd;
+    border-radius: 10px;
     
+} 
+
+.team_menu > li:hover {
+    background-color: #cacaca;
 }
 
-.datetimepicker thead tr:first-child th:hover, .datetimepicker tfoot tr:first-child th:hover {
-    background: none;
+.team_menu > li > a:hover {
+    text-decoration: none;
+    color: #428bca;
 }
 
-.datetimepicker thead tr:first-child th, .datetimepicker tfoot tr:first-child th {
-    cursor: default;
-}
-
-#team_tabs > li > a {
-    color: #000;
-}
+/*************************************
+**************************************
+* TEAM
+**************************************
+*************************************/
 
 #content {
     float:left;
@@ -154,11 +152,13 @@ ul {
     text-align: center;
 }
 
-
-
 #team_tabs {
     margin: 0 auto;
     width: 40%;
+}
+
+#team_tabs > li > a {
+    color: #000;
 }
 
 #team_content {
@@ -170,6 +170,62 @@ ul {
     margin: 0 auto;
     width:40%;
 }
+
+#edit {
+    margin: 0 auto;
+    width: 40%;
+}
+
+#add_event_form {
+    padding: 10px;
+}
+
+.input-group-addon > .glyphicon {
+    top: 2px;
+    left: 2px;
+}
+
+.radio-inline {
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+
+.event_field {
+    width: 95%;
+}
+
+.event_field_half {
+    width: 45%;
+    float: left;
+    margin: 0 25px 15px 0;
+
+}
+
+.bfh-datepicker {
+    position: relative;
+    width: 45%;
+    display: inline-block;
+}
+
+.form-inline p {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.datetimepicker thead tr:first-child th:hover, .datetimepicker tfoot tr:first-child th:hover {
+    background: none;
+}
+
+.datetimepicker thead tr:first-child th, .datetimepicker tfoot tr:first-child th {
+    cursor: default;
+}
+
+/*************************************
+**************************************
+* PROFILE
+**************************************
+*************************************/
 
 #profile {
     float: left;
@@ -204,13 +260,13 @@ ul {
     margin: 10px 20px 20px 20px;
     background: #ddd;
     border-radius: 5px;
+    width: 17%;
+    max-height: 210px;
 }
 
 #profile_image a {
-    position: absolute;
-    left: 263px;
-    top: 271px;
     width: 150px;
+    margin-top: 4px;
 }
 
 #profile_personalia {
@@ -243,7 +299,7 @@ ul {
 }
 
 #info-content {
-    padding: 20px;
+    padding: 5px 0 0 20px;
 }
 
 #search {
@@ -254,37 +310,13 @@ ul {
     margin-bottom: 10px;
 }
 
-ul.team_menu {
-    text-align: center;
-    margin: 40px 0 30px 0;
-    list-style-type: none;
-}
 
-.team_menu > li {
-    display: inline;
-    padding: 20px;
-    background-color: #ddd;
-    border-radius: 10px;
-    
-} 
 
-.team_menu > li:hover {
-    background-color: #cacaca;
-}
-
-.team_menu > li > a:hover {
-    text-decoration: none;
-    color: #428bca;
-}
-
-#input_form {
-    width: 220px;
-}
-
-#edit {
-    margin: 0 auto;
-    width: 40%;
-}
+/*************************************
+**************************************
+* CALENDAR
+**************************************
+*************************************/
 
 #calendar {
     float: left;
@@ -301,7 +333,6 @@ ul.team_menu {
     float: left;
     width: 750px;
     display:none;
-    padding: 20px;
 }
 
 .tablespan {
@@ -316,9 +347,30 @@ ul.team_menu {
 }
 
 #event-details {
-    width: 300px;
+    width: 400px;
 }
 
+#boxes-inline {
+    width: 400px;
+    
+}
+.time {
+    width: 120px;
+    float: left;
+    margin: 5px 10px 10px 0;
+}
+
+.loc {
+    width: 250px;
+    margin: 5px 10px 10px 0;
+    float: left;
+}
+
+.desc {
+    width: 380px;
+    margin-right: 0;
+    float: left;
+}
 .noshow {
     display: hidden!important;
 }
@@ -327,7 +379,98 @@ ul.team_menu {
     padding: 5px;
 }
 
-/* FOOTER */
+
+.panel-heading {
+    padding: 5px 15px;
+}
+
+.panel-body {
+    padding: 5px 15px;
+}
+
+#event-details p {
+    margin: 0;
+}    
+
+/*************************************
+**************************************
+* STATISTICS
+**************************************
+*************************************/
+
+#stats {
+    width: 500px;
+}
+
+#daterange {
+    background: #ffffff;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
+    color: #333333;
+    padding: 8px;
+    line-height: 18px;
+    cursor: pointer;
+    border-top: 1px solid #ddd;
+}
+
+/*************************************
+**************************************
+* ERROR HANDLING
+**************************************
+*************************************/
+
+.alert-error {
+    float: left;
+    line-height: 12px;
+    margin: 0 0 0 10px;
+}
+.controls {
+    height: 30px;
+}
+.controls > input {
+    float: left;
+}
+
+.alert-error > p {
+    margin: 0;
+}
+
+#role {
+    float: left;
+}
+
+.help-inline {
+    float: left;
+}
+
+#success {
+        display: none;
+        color: #468847;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+        position: absolute;
+        top: 50px;
+        padding: 5px;
+        left: 50%;  
+        border-radius: 15px;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+}
+
+#success > p {
+    margin: 10px;
+    font-weight: bold;
+}
+
+#success .glyphicon {
+    margin-right: 10px;
+}
+/*************************************
+**************************************
+* FOOTER
+**************************************
+*************************************/
 
 #footer {
     background-color: #3b5999;
