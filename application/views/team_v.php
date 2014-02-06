@@ -4,6 +4,11 @@
     
     <input id="filter_id" type="hidden" name="filter_id" value="<?php echo $this->uri->segment(2); ?>">
     
+    <div id="success">
+        
+    </div>
+    
+    
     <?php if ( $coach === TRUE ) : ?>
     <ul id="team_tabs" class="nav nav-tabs">
         <li><a href="#schedule" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span>Schedule</a></li>
@@ -254,77 +259,87 @@
 
                 <div class="modal-body">
                     
-                        <form id="add_event_form" action="<?php echo base_url('index.php/team/add_event/'.$teaminfo->id); ?>" method="post">
-                        <div class="form-group">
+                        <form id="add_event_form" action="" method="post">
+                        <div class="form-group" id="error">
                             <label class="sr-only">Event name</label>
                             <input placeholder="Event name" id="event_name" name="eventname" class="form-control" type="text">
+                            <span class='help-inline' id='errorinline'></span>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" id="error2">
                             <label class="sr-only">Event description</label>
-                            <input placeholder="Event description (optional)" name="eventdesc" class="form-control" type="text">
+                            <input placeholder="Event description (optional)" id="event_desc" name="eventdesc" class="form-control" type="text">
+                            <span class='help-inline' id='error2inline'></span>
                         </div>
                         
-                        <label class="radio-inline">
-                            <input type="radio" name="frequency" id="single" value="single"> Single session
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="frequency" id="daily" value="daily"> Daily
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="frequency" id="weekly" value="weekly" checked> Weekly
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="frequency" id="monthly" value="monthly"> Monthly
-                        </label>
+                        <div id="error3">
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="single" value="single"> Single session
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="daily" value="daily"> Daily
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="weekly" value="weekly" checked> Weekly
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="frequency" id="monthly" value="monthly"> Monthly
+                            </label>
+                            <span class='help-inline' id='error3inline'></span>
+                        </div>
                             
                         <div class="form-group row">
-                            <div class="col-xs-6">
+                            <div class="col-xs-6" id="error4">
                                 <label class="sr-only">Start date</label>
                                 <div class="input-group date" id="start-date">
-                                    <input class="form-control" name="start_date" placeholder="Start date" type="text">
+                                    <input class="form-control" name="start_date" id="start_date" placeholder="Start date" type="text">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
+                                    <span class='help-inline' id='error4inline'></span>
                             </div>
-                        
-                            <div class="col-xs-6">
+                            
+                            <div class="col-xs-6" id="error5">
                                 <label class="sr-only">End date</label>
                                 <div class="input-group date" id="end-date">
-                                    <input class="form-control end" name="end_date" placeholder="End date" type="text">
+                                    <input class="form-control end" name="end_date" id="end_date" placeholder="End date" type="text">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <span class='help-inline' id='error5inline'></span>
                                 </div>
                             </div>
                         </div>
                             
                         <div class="form-group row">
-                            <div class="col-xs-6">
+                            <div class="col-xs-6" id="error6">
                                 <label class="sr-only">Start time</label>
                                 <div class="input-group date" id="start-time">
-                                    <input class="form-control" name="start_time" placeholder="Start time" type="text">
+                                    <input class="form-control" name="start_time" id="start_time" placeholder="Start time" type="text">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                    <span class='help-inline' id='error6inline'></span>
                                 </div>
                             </div>
                         
 
                         
-                            <div class="col-xs-6">
+                            <div class="col-xs-6" id="error7">
                                 <label class="sr-only">End time</label>
                                 <div class="input-group date" id="end-time">
-                                    <input class="form-control" name="end_time" placeholder="End time" type="text">
+                                    <input class="form-control" name="end_time" id="end_time" placeholder="End time" type="text">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                    <span class='help-inline' id='error7inline'></span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="form-group" id="error8">
                             <label class="sr-only">Location</label>
-                            <input class="form-control" placeholder="Location" name="location" type="text">
+                            <input class="form-control" placeholder="Location" name="eventlocation" id="eventlocation" type="text">
+                            <span class='help-inline' id='error8inline'></span>
                         </div>
                             
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn btn-lg btn-info" type="submit">Add event</button>
+                    <button class="btn btn-lg btn-info" id="addeventsubmit" type="button">Add event</button>
                 </div>
                 
                 </form>
