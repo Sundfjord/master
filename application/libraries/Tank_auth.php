@@ -167,8 +167,10 @@ class Tank_auth
 
 		} elseif (!$this->ci->users->is_email_available($email)) {
 			$this->error = array('email' => 'auth_email_in_use');
-
-		} else {
+                        
+		} 
+                
+                else {
 			// Hash password using phpass
 			$hasher = new PasswordHash(
 					$this->ci->config->item('phpass_hash_strength', 'tank_auth'),
@@ -195,8 +197,8 @@ class Tank_auth
 		}
 		return NULL;
 	}
-
-	/**
+        
+        /**
 	 * Check if username available for registering.
 	 * Can be called for instant form validation.
 	 *
