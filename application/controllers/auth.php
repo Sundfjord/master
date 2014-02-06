@@ -41,9 +41,10 @@ class Auth extends CI_Controller
 			$data['login_by_email'] = $this->config->item('login_by_email', 'tank_auth');
 
 			$this->form_validation->set_rules('login', 'Login', 'trim|required|xss_clean|valid_email');
-			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|min_length[5]');
 			$this->form_validation->set_rules('remember', 'Remember me', 'integer');
-
+                        $this->form_validation->set_error_delimiters('', '');
+                        
 			// Get login for counting attempts to login
 			if ($this->config->item('login_count_attempts', 'tank_auth') AND
 					($login = $this->input->post('login'))) {
@@ -77,8 +78,10 @@ class Auth extends CI_Controller
 
 					} elseif (isset($errors['not_activated'])) {				// not activated user
 						redirect('/auth/send_again/');
-
-					} else {													// fail
+                                                    
+					} elseif ($this->tank_auth->is_max_login_attempts_exceeded($login)) {
+                                                $this->_show_message($this->lang->line('auth_login_attempts_exceeded'));
+                                        } else {													// fail
 						foreach ($errors as $k => $v)	$data['errors'][$k] = $this->lang->line($v);
 					}
 				}
@@ -129,11 +132,12 @@ class Auth extends CI_Controller
 			if ($use_username) {
 				$this->form_validation->set_rules('username', 'Full Name', 'trim|required|xss_clean|min_length['.$this->config->item('username_min_length', 'tank_auth').']|max_length['.$this->config->item('username_max_length', 'tank_auth').']');
 			}
-			$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email');
+			$this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean|valid_email|is_unique[users.email]');
                         $this->form_validation->set_rules('group_id', 'Role', 'required|is_natural_no_zero');
                         $this->form_validation->set_message('is_natural_no_zero', 'Please choose a role');
                         $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'tank_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
 			$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|xss_clean|matches[password]');
+                        $this->form_validation->set_error_delimiters('', '');
 
 			$captcha_registration	= $this->config->item('captcha_registration', 'tank_auth');
 			$use_recaptcha			= $this->config->item('use_recaptcha', 'tank_auth');
