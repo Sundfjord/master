@@ -360,13 +360,13 @@ class Team_m extends MY_Model {
         return json_encode($jsonevents); 
     }
     
-    public function add_event()
+    public function add_event($teamid)
     {
         $eventinfo = array(
-            'team_id'       =>  $this->uri->segment(3),
+            'team_id'       =>  $teamid,
             'name'          =>  $this->input->post('eventname'),
             'description'   =>  $this->input->post('eventdesc'),
-            'location'      =>  $this->input->post('location'),
+            'location'      =>  $this->input->post('eventlocation'),
             'start_time'    =>  $this->input->post('start_time'),
             'end_time'      =>  $this->input->post('end_time')
         );
