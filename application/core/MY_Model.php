@@ -11,19 +11,21 @@ class MY_Model extends CI_Model {
     public function add_team() {
         
         $teamdata = array(
-            'teamname'  => $this->input->post('teamname'),
-            'sport'     => $this->input->post('sport')
+            'teamname'  => $this->input->post('create_teamname'),
+            'sport'     => $this->input->post('create_sport')
                 );
         $this->db->insert('teams', $teamdata);
         
-        if ($this->db->affected_rows() === 1) {
-            
+        $insertsuccess = $this->db->affected_rows();
+        
+        if ($this->db->affected_rows() === 1) 
+        {
             $insert_id = $this->db->insert_id();
             $this->db->set('user_id', $this->session->userdata('user_id'));
             $this->db->set('team_id', $insert_id);
-            $success = $this->db->insert('is_coach_of');
-            return $success;
+            $this->db->insert('is_coach_of');
             
+            return $insertsuccess;
         }
     }
     
