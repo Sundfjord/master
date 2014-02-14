@@ -6,8 +6,6 @@
         Purpose of the stylesheet follows.
 */
 
-      
-
 body {
     margin: 0 auto;
 }
@@ -272,7 +270,7 @@ ul.team_menu {
 #profile_personalia {
     margin: 10px 0 10px 10px;
     float: left;
-    width: 60%;
+    width: 30%;
 }
 
 #profile_personalia .nav-tabs {
@@ -346,6 +344,17 @@ ul.team_menu {
     float: left;
 }
 
+.overlay {
+    position: fixed;
+    z-index: 10;
+    background: black;
+    display: block;
+    opacity: .75;
+    filter: alpha(opacity=75);
+    width: 100%;
+    height: 100%;
+}
+
 #event-details {
     width: 400px;
 }
@@ -386,11 +395,7 @@ ul.team_menu {
 
 .panel-body {
     padding: 5px 15px;
-}
-
-#event-details p {
-    margin: 0;
-}    
+}  
 
 /*************************************
 **************************************
@@ -444,7 +449,7 @@ ul.team_menu {
     float: left;
 }
 
-#success {
+.success {
         display: none;
         color: #468847;
         background-color: #dff0d8;
@@ -456,16 +461,27 @@ ul.team_menu {
         border-radius: 15px;
         -webkit-border-radius: 15px;
         -moz-border-radius: 15px;
+        z-index: 1050;
 }
 
-#success > p {
+.success > p {
     margin: 10px;
     font-weight: bold;
 }
 
+
 #success .glyphicon {
     margin-right: 10px;
 }
+
+p.nomargin {
+    margin: 0;
+}
+
+#editeventsubmit {
+    width: 116px;
+}
+
 /*************************************
 **************************************
 * FOOTER
