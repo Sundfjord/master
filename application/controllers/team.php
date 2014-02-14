@@ -2,7 +2,6 @@
 
 class Team extends MY_Controller
 {
-    
     function __construct() {
         
         parent::__construct();
@@ -26,12 +25,7 @@ class Team extends MY_Controller
     
     public function get_squad() 
     {
-        $datas = array(
-        'coach'     => $this->tank_auth->is_admin(),
-        'result'    => $this->team_m->get_squad()
-                );
-         
-        $this->load->view('team_v', $datas);
+       redirect($this->input->post('squad_redirect'));
     }
     
     public function getTeamEvents()
@@ -43,105 +37,138 @@ class Team extends MY_Controller
     
     public function add_player()
     {
-        $this->form_validation->set_rules('players', 'Players', 'required'); 
-
-        if ($this->form_validation->run() == FALSE) 
-        {
-            $this->load->view('fail_v');
-        }
-        else //success
-        {
-            $data = $this->input->post('players'); //this returns an array so use foreach to extract data
+        $data = $this->input->post('players'); //this returns an array so use foreach to extract data
             
-            foreach($data as $key => $players)
-            {
-                $this->db->where('user_id', $players);
-                $exists = $this->db->get_where('plays_for', array(
-                    'team_id' => $this->uri->segment(3)) 
-                        );
-                    if($exists->num_rows() === 0)
-                    {
-                        $this->team_m->add_player($players);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                    
-            }
-        redirect($this->input->post('redirect'));
+        foreach($data as $key => $players)
+        {
+            $this->db->where('user_id', $players);
+            $exists = $this->db->get_where('plays_for', array(
+                'team_id' => $this->uri->segment(3)) 
+                    );
+                if($exists->num_rows() === 0)
+                {
+                    $this->team_m->add_player($players);
+                }
+                else
+                {
+                    continue;
+                }
+
+            $count = count($data);
+            echo json_encode(array(
+                "count" => $count     
+            ));
         }    
     }
     
     public function remove_player() 
     {
-        $this->form_validation->set_rules('squad', 'Squad', 'required'); 
+        $data = $this->input->post('squad'); //this returns an array so use foreach to extract data
 
-        if ($this->form_validation->run() == FALSE) 
+        foreach($data as $key => $players)
         {
-            $this->load->view('fail_v');
+            $this->team_m->remove_player($players);
         }
-        else //success
-        {
-            $data = $this->input->post('squad'); //this returns an array so use foreach to extract data
-            
-            foreach($data as $key => $players)
-            {
-                $this->team_m->remove_player($players);
-            }
 
-        redirect($this->input->post('redirect'));
-        }    
+        $count = count($data);
+        echo json_encode(array(
+            "count" => $count
+        ));
+            
     }
     
     public function update_team()
     {
-        $this->form_validation->set_rules('teamname', 'Team Name', 'trim|required|min_length[4]|max_length[50]|xss_clean|is_unique[teams.teamname]');
-        $this->form_validation->set_rules('sport', 'Sport', 'required');
+        $this->form_validation->set_rules('teamname', 'Team Name', 'trim|min_length[4]|max_length[50]|xss_clean|required');
+        $this->form_validation->set_rules('sport', 'Sport', 'trim|callback_check_default');
+        $this->form_validation->set_message('check_default', 'Please choose a sport.');
+        $this->form_validation->set_error_delimiters('', '');
         
-        if ($this->form_validation->run()) 
-        {
-            $update = $this->team_m->update_team();
-            redirect($this->input->post('redirect'));
-            return $update;
+        if($this->form_validation->run() === FALSE) {
+            if($this->input->is_ajax_request()) {
+                echo json_encode( 
+                array (
+                    "teamnameError" =>  form_error('teamname'),
+                    "sportError"    =>  form_error('sport')
+                ));
+            }
+            else
+            {
+                echo 'fuck';
+            }
+            
         }
-        else {
-            $this->load->view('fail_v');
+        else 
+        {
+            $count = $this->team_m->update_team();
+            echo json_encode(array(
+                "count" => $count
+            ));
+        }
+    }
+    
+    public function check_default($sportstring)
+    {
+        if ($sportstring === '0')
+        {
+            return false;
         }
     }
     
     public function delete_team()
     {
-        $this->form_validation->set_rules('delete', 'Delete', 'required|trim');
+        $this->form_validation->set_rules('deletion', 'Delete', 'required|trim');
+        $this->form_validation->set_error_delimiters('', '');
         
-        if ($this->form_validation->run()) 
+        if ($this->form_validation->run() === FALSE) 
         {
-            if ($this->input->post('delete') === $this->input->post('must_match_teamname')) 
-            {
-                $deleted = $this->team_m->delete_team();
-                redirect('/');
-            } 
-            else 
-            {
-                $this->load->view('fail_v');     
-            }
+            echo json_encode(array(
+                "deleteError"   => form_error('deletion')
+            ));
+            
         }
-        else 
-        {
-            redirect($this->input->post('redirect'));
+        else //on success
+            {
+                if ($this->input->post('deletion') === $this->input->post('match')) 
+                {
+                    $count = $this->team_m->delete_team();
+                    echo json_encode(array(
+                        "count" => $count
+                    ));
+                } 
+                else 
+                {
+                    echo json_encode(array(
+                       "matchError" => 'Your input did not match team name. Try again.' 
+                    ));   
+                }
         }
+        
     }
     
     public function join_team()
     {
-        $data = $this->input->post('team'); //this returns an array of teams so use foreach to extract data
+        $data = $this->input->post('teams'); //this returns an array of teams so use foreach to extract data
 
         foreach( $data as $key => $value)
         {
             $this->team_m->join_team($value);
         }
         
-        redirect('/');
+        $count = count($data);
+        
+        echo json_encode(array(
+           "count"  =>  $count 
+        ));
+    }
+    
+    public function leave_team()
+    {
+        $count = $this->team_m->leave_team();
+        
+        echo json_encode(array(
+            "count" => $count
+        ));
     }
     
     public function json()//$team_id='' )
@@ -157,10 +184,10 @@ class Team extends MY_Controller
         $this->form_validation->set_rules('start_date', 'Start Date', 'required');
         if($this->input->post('frequency') !== 'single') 
         {
-            $this->form_validation->set_rules('end_date', 'End Date', 'required');
+            $this->form_validation->set_rules('end_date', 'End Date', 'required|callback_compareDates');
         }
-        $this->form_validation->set_rules('start_time', 'Start Time', 'required');
-        $this->form_validation->set_rules('end_time', 'End Time', 'required');
+        $this->form_validation->set_rules('start_time', 'Start Time', 'required|callback_compareToNow');
+        $this->form_validation->set_rules('end_time', 'End Time', 'required|callback_compareTimes');
         $this->form_validation->set_rules('eventlocation', 'Location', 'trim|required');
         $this->form_validation->set_error_delimiters('', '');
         
@@ -169,6 +196,7 @@ class Team extends MY_Controller
             if($this->input->is_ajax_request()) {
                 echo json_encode( 
                 array (
+                    "times"         => $this->compareTimes(),
                     "nameerror"     =>  form_error('eventname'),
                     "descerror"     =>  form_error('eventdesc'),
                     "freqerror"     =>  form_error('frequency'),
@@ -241,72 +269,184 @@ class Team extends MY_Controller
         } 
     }
     
+    public function compareDates()
+    {
+        $start = strtotime($this->input->post('start_date'));
+        $end = strtotime($this->input->post('end_date'));
+        
+        if($start > $end)
+        {
+            $this->form_validation->set_message('compareDates', 'Your end date must be after your start date');
+            return false;
+        }
+        else 
+        {
+            return true;
+        }
+    }
+    
+    public function compareTimes()
+    {
+        $start = strtotime($this->input->post('start_time'));
+        $end = strtotime($this->input->post('end_time'));
+        
+        if($start > $end)
+        {
+            $this->form_validation->set_message('compareTimes', 'Your end time must be after your start time');
+            
+            return false;
+        }
+        else
+        {
+            return true;
+        } 
+    }
+    
+    public function compareEditedTimes()
+    {
+        $start = strtotime($this->input->post('edited_start_time'));
+        $end = strtotime($this->input->post('edited_end_time'));
+        
+        if($start > $end)
+        {
+            $this->form_validation->set_message('compareEditedTimes', 'Your end time must be after your start time');
+            
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
+    public function compareToNow()
+    {
+        $now = date('Y-m-d H:i');
+        //need to make sure $comparison matches $now
+        $comparison = $this->input->post('start_date') . $this->input->post('start_time');
+        
+        if ($now > $comparison)
+        {
+            $this->form_validation->set_message('compareToNow', 'Your start time must be later than the current time');
+            return false;
+        }
+    }
+    
     public function edit_event()
     {
         $this->form_validation->set_rules('edited_eventname', 'Event Name', 'required|max_length[25]|min_length[6]');
         $this->form_validation->set_rules('edited_eventdesc', 'Event Description', 'max_length[140]');
         $this->form_validation->set_rules('edited_start_time', 'Start Time', 'required');
-        $this->form_validation->set_rules('edited_end_time', 'End Time', 'required');
+        $this->form_validation->set_rules('edited_end_time', 'End Time', 'required|compareEditedTimes');
         $this->form_validation->set_rules('edited_location', 'Location', 'required');
+        $this->form_validation->set_error_delimiters('', '');
         
         if($this->form_validation->run() === FALSE) {
-            $this->load->view('fail_v');
+            if($this->input->is_ajax_request()) {
+                echo json_encode( 
+                array (
+                    "edit_nameerror"     =>  form_error('edited_eventname'),
+                    "edit_descerror"     =>  form_error('edited_eventdesc'),
+                    "edit_stTimeError"   =>  form_error('edited_start_time'),
+                    "edit_endTimeError"  =>  form_error('edited_end_time'),
+                    "edit_locerror"      =>  form_error('edited_location')
+                    ));
+            }
+            else
+            {
+                echo 'fuck';
+            }
             
         }
         else 
         { //on success
-           $this->team_m->edit_event();
+            $count = $this->team_m->edit_event();
+            
+            echo json_encode(array(
+                "count" => $count
+            ));
         }
         
-        redirect('/');
     }
     
     public function delete_event()
     {
         $this->form_validation->set_rules('events', 'Events', 'required'); 
-
-        if ($this->form_validation->run() == FALSE) 
+        $this->form_validation->set_message('required', 'You have to check an event');
+        $this->form_validation->set_error_delimiters('', '');
+        
+        if ($this->form_validation->run() === FALSE) 
         {
-            $this->load->view('fail_v');
+            if($this->input->is_ajax_request()) 
+            {
+                echo json_encode(array(
+                   "counterror"  => form_error('events') 
+                ));
+            }
+            else
+            {
+                echo 'fuck';
+            }
+            
         }
         else //success
         {
             $data = $this->input->post('events'); //this returns an array so use foreach to extract data
-            
+
             foreach($data as $key => $events)
             {
                 $this->team_m->delete_event($events);
             }
 
-        redirect('/');
+            $count = count($data);
+            
+            echo json_encode(array(
+                "count" =>  $count
+            ));
         }   
     }
     
     public function edit_episode()
     {
-        $id = $this->input->post('edited_episodeId');
-        
         $this->form_validation->set_rules('edited_episodeName', 'Episode Name', 'required|max_length[25]|min_length[6]');
         $this->form_validation->set_rules('edited_episodeDesc', 'Episode Description', 'max_length[140]');
         $this->form_validation->set_rules('edited_episodeDate', 'Episode Date', 'required');
         $this->form_validation->set_rules('edited_episodeStartTime', 'Episode Start Time', 'required');
         $this->form_validation->set_rules('edited_episodeEndTime', 'Episode End Time', 'required');
         $this->form_validation->set_rules('edited_episodeLocation', 'Episode Location', 'required');
+        $this->form_validation->set_error_delimiters('', '');
         
         if($this->form_validation->run() === FALSE) {
-            $this->load->view('fail_v');
+            if($this->input->is_ajax_request()) {
+                echo json_encode( 
+                array (
+                    "episodeNameError"      =>  form_error('edited_episodeName'),
+                    "episodeDescError"      =>  form_error('edited_episodeDesc'),
+                    "episodeDateError"      =>  form_error('edited_episodeDate'),
+                    "episodeStartTimeError" =>  form_error('edited_episodeStartTime'),
+                    "episodeEndTimeError"   =>  form_error('edited_episodeEndTime'),
+                    "episodeLocationError"  =>  form_error('edited_episodeLocation')
+                    )
+                );
+            }
+            else
+            {
+                echo 'fuck';
+            }
             
         }
         else 
         { //on success
-            
+            $id = $this->uri->segment(3);
             $edited_date = $this->input->post('edited_episodeDate');
             //convert to valid MYSQL date format
             $date = date("Y-m-d", strtotime($edited_date));
             
-            $this->team_m->edit_episode($id, $date);
+            $count = $this->team_m->edit_episode($id, $date);
            
-            redirect('/');
+            echo json_encode(array(
+                "count" => $count 
+            ));
         }   
     }
     
@@ -314,14 +454,16 @@ class Team extends MY_Controller
     {
         $id = $this->input->post('delete_episodeId');
         
-        $this->team_m->delete_episode($id);
+        $count = $this->team_m->delete_episode($id);
         
-        redirect('/');
+        echo json_encode(array(
+            "count" => $count
+        ));
     }
     
     public function get_attendance() 
     {
-        $epId = $this->input->post('epId');
+        $epId = $this->input->post('episode_id');
         
         $attending = $this->team_m->get_attending($epId);
         
@@ -384,22 +526,14 @@ class Team extends MY_Controller
     
     public function set_attendance() 
     {   
-        $this->form_validation->set_rules('attendance_choice', '', 'required|greater_than[0]');
-        
-        if($this->form_validation->run() === FALSE) 
-        {
-            $this->load->view('fail_v');
-        } 
-        
-        else 
-        {
-            $ep_id = $this->input->post('ep-id');
-            $status = $this->input->post('attendance_choice');
-        
-            $this->team_m->set_attendance($ep_id, $status);
-        
-            redirect('/');
-        }
+        $ep_id = $this->input->post('episode_id');
+        $status = $this->input->post('attendance_choice');
+
+        $count= $this->team_m->set_attendance($ep_id, $status);
+
+        echo json_encode(array(
+           "count"  =>  $count
+        ));
     }
     
     public function get_statistics() 
@@ -418,4 +552,5 @@ class Team extends MY_Controller
     {
         $result = $this->team_m->archive_attendance();
     }
+    
 }
