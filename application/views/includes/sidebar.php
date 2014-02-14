@@ -1,23 +1,22 @@
 <div id="sidebar">
-
+    
 <?php if ( $coach === TRUE ) : ?>
 
 <ul id="menu" class="nav nav-pills nav-stacked">
     <li><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-list"></span>My Teams</a></li>
         <ul id="submenu" class="nav">
             <?php if (empty($coachteam)) {?>
-            <?php echo '<li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="base_url(index.php/team/create_team)"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li>'; ?>
+            <?php echo '<li><a id="home_create_team" href="#create_team_modal"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li>'; ?>
             <?php } else {?>
             <?php foreach ($coachteam as $row): ?>
             <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' . $row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
                 if(count($coachteam) <= 2) 
                 {
-                    echo '<li><a data-toggle="modal" id="create_team" data-backdrop="true" href="#create_team_modal" href="base_url(index.php/team/create_team)"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li>';
+                    echo '<li><a id="home_create_team" href="#create_team_modal"><span class="glyphicon glyphicon-plus"></span>Create a team</a></li>';
                 }
               } ?>
         </ul>
-    <!-- <li><a href="<?php echo base_url(); ?>index.php/message"><span class="glyphicon glyphicon-envelope"></span>Messages</a></li> -->
     <li><a href="<?php echo base_url(); ?>index.php/profile"><span class="glyphicon glyphicon-user"></span>My Profile</a></li>
     <li><a href="<?php echo base_url(); ?>index.php/auth/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
 </ul> 
@@ -27,18 +26,17 @@
     <li><a href="<?php echo base_url(); ?>"><span class="glyphicon glyphicon-list"></span>My Teams</a></li>
         <ul id="submenu" class="nav">
             <?php if (empty($playerteam)) {?>
-            <?php echo '<li><a data-toggle="modal" id="join_team" data-backdrop="true" href="#join_team_modal" href="base_url(index.php/team/join_team)"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';?>
+            <?php echo '<li><a id="home_join_team" href="#join_team_modal"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';?>
             <?php } else {?>
             <?php foreach ($playerteam as $row): ?>
             <?php echo '<li><a href="http://localhost/master/index.php/team/' . $row['id'] . '">' .$row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
                 if(count($playerteam) <= 2) 
                 {
-                    echo '<li><a data-toggle="modal" id="join_team" data-backdrop="true" href="#join_team_modal" href="base_url(index.php/team/join_team)"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';
+                    echo '<li><a id="home_join_team" href="#join_team_modal"><span class="glyphicon glyphicon-plus"></span>Join a team</a></li>';
                 }
               } ?>
         </ul>
-    <!-- <li><a href="<?php echo base_url(); ?>index.php/message"><span class="glyphicon glyphicon-envelope"></span>Messages</a></li> -->
     <li><a href="<?php echo base_url(); ?>index.php/profile"><span class="glyphicon glyphicon-user"></span>My Profile</a></li>
     <li><a href="<?php echo base_url(); ?>index.php/auth/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
 </ul>
@@ -53,14 +51,16 @@
             </div>
             <div class="modal-body">
                 
-                <form id="input_form" action="<?php echo base_url('index.php/team/create_team'); ?>" method="POST">
-                    <div class="form-group">
-                        <label for="teamname">Team Name</label>
-                        <input type="text" class="form-control" value="<?php echo set_value('teamname'); ?>" name="teamname" placeholder="Team name" autofocus />
-                        <?php echo form_error('teamname'); ?>
+                <form id="input_form" action="" method="POST">
+                    <div class="form-group" id="error_createteam">
+                        <label for="teamname">Team Name:</label>
+                        <input type="text" class="form-control" id="create_teamname" value="<?php echo set_value('teamname'); ?>" name="teamname" placeholder="Team name" autofocus />
+                        <span class='help-inline' id='errorinline_createteam'></span>
+                    </div>
                         
-                        <label for="sport">Sport</label>
-                        <select class ="form-control" name="sport" id="sport" value="">
+                    <div class="form-group" id="error2_createteam">
+                        <label for="sport">Sport:</label>
+                        <select class ="form-control" name="sport" id="create_sport" value="">
                             <option value="0" name="choose" selected>Choose sport</option>
                             <option value="Football" name="Football">Football</option>
                             <option value="Badminton" name="Badminton">Badminton</option>
@@ -79,12 +79,14 @@
                             <option value="Volleyball" name="Volleyball">Volleyball</option>
                             <option value="Water polo" name="Water polo">Water polo</option>
                         </select>
-                        <?php echo form_error('sport'); ?>
+                        <span class='help-inline' id='error2inline_createteam'></span>
                     </div>
-            </div>
+                        
+                </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Create team</button>
+                <button type="button" id="createteamsubmit" class="btn btn-primary">Create team</button>
             </div>
             
             </form>
@@ -101,9 +103,6 @@
             </div>
             <div class="modal-body">
                 
-                <input type="text" class="input-medium search-query" id="search_team" autocomplete="off" placeholder="Søk eller legg til..." onfocus="if
-                (this.value===this.defaultValue) this.value='';">
-    
                 <table id="team_table" class="table">
                     <thead>
                         <tr class="tabellheader"> 
@@ -117,7 +116,7 @@
             
                     <?php foreach ($teams as $team):?>
                         <tr>
-                            <td class="left"><input form="team" type="checkbox" name="team[]" id="air" value="<?php echo $team['id'];?>" > </td>
+                            <td class="left"><input form="team" type="checkbox" name="team[]" id="teamids" value="<?php echo $team['id'];?>" > </td>
                             <td class="middle_l"><div class="teamname"><?php echo $team['teamname'];?></div></td>
                             <td class="middle_r"><div class="sport"><?php echo $team['sport'];?></div></td>
                             <td class="middle_r"><div class="sport"><?php echo $team['coach'];?></div></td>
@@ -129,7 +128,7 @@
             </div>
             <div class="modal-footer">
                 <form id="team" action="<?php echo base_url(); ?>index.php/team/join_team" method="post">
-                    <button class="btn btn-info" type="submit">Join team</button>
+                    <button class="btn btn-info" id="jointeamsubmit" type="button" disabled>Join team</button>
                 </form>
             </div>
             
