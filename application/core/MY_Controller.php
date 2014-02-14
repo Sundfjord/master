@@ -20,8 +20,8 @@ class MY_Controller extends CI_Controller
             $data['username'] = $this->tank_auth->get_username();
             $data['userdata'] = $this->profile_m->get_userdata();
             $data['coach'] = $this->tank_auth->is_admin();
-            $data['result'] = $this->team_m->get_team_by_coach();
-            $data['plr_result'] = $this->team_m->get_team_by_player();
+            $data['coachteam'] = $this->team_m->get_team_by_coach();
+            $data['playerteam'] = $this->team_m->get_team_by_player();
             $this->load->vars($data);
             
         }
@@ -32,26 +32,44 @@ class MY_Controller extends CI_Controller
         
     }
     
-    
     public function create_team() {
         
-        $this->form_validation->set_rules('teamname', 'Team Name', 'trim|required|min_length[4]|max_length[50]|xss_clean'); //|is_unique[teams.teamname]
-        $this->form_validation->set_rules('sport', 'Sport', 'required');
+        $this->form_validation->set_rules('create_teamname', 'Team Name', 'trim|required|min_length[4]|max_length[50]|xss_clean'); //|is_unique[teams.teamname]
+        $this->form_validation->set_rules('create_sport', 'Sport', 'trim|callback_check_default');
+        $this->form_validation->set_message('check_default', 'Please choose a sport');
+        $this->form_validation->set_error_delimiters('', '');
         
-        
-        if ($this->form_validation->run() === FALSE) {
+        if ($this->form_validation->run() === FALSE) 
+        {
+            if($this->input->is_ajax_request()) 
+            {
+                echo json_encode( 
+                array (
+                    "createteamnameError" =>  form_error('create_teamname'),
+                    "createsportError"    =>  form_error('create_sport')
+                ));
+            }
+            else
+            {
+                echo 'fuck';
+            } 
+        }
+        else 
+        {
+            $count = $this->team_m->add_team();
             
-            redirect('/');
+            echo json_encode(array(
+               "count"  => $count 
+            ));
         }
         
-        else {
-            
-            $result = $this->team_m->add_team();
-            
-            if ($result) {
-                redirect('/');
-                //show success message
-            }
+    }
+    
+    public function check_default($sportstring)
+    {
+        if ($sportstring === '0')
+        {
+            return false;
         }
     }
     
