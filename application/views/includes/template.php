@@ -29,14 +29,14 @@
     
     <body>
         
-            
-        <?php   $this->load->view('includes/header'); 
+        <?php   $this->load->view('includes/header'); ?>
 
-                $this->load->view('includes/sidebar'); ?>
+        <?php   $this->load->view('includes/sidebar'); ?>
 
                 <div id="content">
                     <?php $this->load->view($main_content); ?>
                 </div>
+                
                 <?php $this->load->view('includes/footer'); ?>
 
     </body>
