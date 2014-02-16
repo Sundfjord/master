@@ -5,6 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="robots" content="noindex">
+        <meta name="viewport" content="width=device-width", initial-scale=1.0">
         <title><?php echo $title; ?></title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" />
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" type="text/css" media="screen" />
@@ -29,21 +30,19 @@
     
     <body>
         
-        <?php   $this->load->view('includes/header'); ?>
+        <?php $this->load->view('includes/header'); ?>
+        <?php $this->load->view('includes/navbar'); ?>
+        <?php //$this->load->view('includes/sidebar'); ?>
 
-        <?php   $this->load->view('includes/sidebar'); ?>
+        <div id="content">
+            <?php $this->load->view($main_content); ?>
+        </div>
 
-                <div id="content">
-                    <?php $this->load->view($main_content); ?>
-                </div>
-                
-                <?php $this->load->view('includes/footer'); ?>
+        <?php $this->load->view('includes/footer'); ?>
 
-    </body>
-    
+      
 </html>
         
-   
 
 
 
