@@ -16,23 +16,17 @@ body {
 **************************************
 *************************************/
 
-#header { 
+.header { 
     background-color: #3b5999;
     border-bottom: 1px solid black;
     color: white;
-    width: 100%;
+    display: none;
 }
-
-#header h3 {
-    margin: 0 0 0 25px;
-    padding: 3px 0 3px 0;
-    border-right: 1px solid black;
-    width: 180px;
-}   
+  
 
 /*************************************
 **************************************
-* LOGIN
+* LOGIN AND REGISTRATION
 **************************************
 *************************************/
 
@@ -50,55 +44,10 @@ body {
 
 /*************************************
 **************************************
-* SIDEBAR
+* NAVIGATION
 **************************************
 *************************************/
 
-#sidebar {
-	float:left;
-	margin:0;
-	width: 15%;
-        border-right: 1px solid #ddd;
-        min-height: 700px;
-}
-
-ul {
-    margin-bottom: 0 !important;
-}
-
-
-#menu li {
-    border-top: 1px solid #ddd;
-    margin-top: -1px;   
-}
-#menu li:first-child {
-    margin-top: 0;
-    border-bottom: 1px solid #ddd;
-}
-
-#menu li:last-child {
-    border-bottom: 1px solid #ddd;
-}
-
-#submenu li:first-child {
-    border-bottom: none;
-}
-
-.nav-pills > li > a {
-    color: #000;
-}
-
-#submenu > li > a {
-    color: #000;
-}
-
-#submenu {
-}
-
-#submenu li {
-    border: none;
-    margin-left: 20px;
-}
 
 /*************************************
 **************************************
@@ -106,54 +55,12 @@ ul {
 **************************************
 *************************************/
 
-ul.team_menu {
-    text-align: center;
-    margin: 40px 0 30px 0;
-    list-style-type: none;
-}
-
-.team_menu > li {
-    display: inline;
-    padding: 20px;
-    background-color: #ddd;
-    border-radius: 10px;
-    
-} 
-
-.team_menu > li:hover {
-    background-color: #cacaca;
-}
-
-.team_menu > li > a:hover {
-    text-decoration: none;
-    color: #428bca;
-}
 
 /*************************************
 **************************************
 * TEAM
 **************************************
 *************************************/
-
-#content {
-    float:left;
-    width: 85%;
-    padding-left: 30px;
-    min-height: 500px;
-}
-
-#content h2 {
-    text-align: center;
-}
-
-#content h4 {
-    text-align: center;
-}
-
-#team_tabs {
-    margin: 0 auto;
-    width: 40%;
-}
 
 #team_tabs > li > a {
     color: #000;
@@ -162,16 +69,6 @@ ul.team_menu {
 #team_content {
     margin: 0 auto;
     width: 100%;
-}
-
-#manage_squad {
-    margin: 0 auto;
-    width:40%;
-}
-
-#edit {
-    margin: 0 auto;
-    width: 40%;
 }
 
 #add_event_form {
@@ -219,95 +116,15 @@ ul.team_menu {
     cursor: default;
 }
 
+.btn .caret {
+    margin-left: 5px;
+}
+
 /*************************************
 **************************************
 * PROFILE
 **************************************
 *************************************/
-
-#profile {
-    float: left;
-    width: 100%;
-    color: #6b6b6b;
-    min-height: 400px;
-}
-
-#profile h3 {
-    margin-top: 10px;
-}
-
-#profile h5 {
-    text-align: left;
-}
-
-#profile h2 {
-    text-align: left;
-    margin-left: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-#profile img {
-    max-width: 150px; 
-    height: auto;
-}
-
-#profile_image {
-    float: left;
-    padding: 10px 10px 50px 10px;
-    margin: 10px 20px 20px 20px;
-    background: #ddd;
-    border-radius: 5px;
-    width: 17%;
-    max-height: 210px;
-}
-
-#profile_image a {
-    width: 150px;
-    margin-top: 4px;
-}
-
-#profile_personalia {
-    margin: 10px 0 10px 10px;
-    float: left;
-    width: 30%;
-}
-
-#profile_personalia .nav-tabs {
-    border: none;
-}
-
-#profile ul {
-    list-style: none;
-    padding-left: 15px;
-}
-
-#profile ul > li {
-    margin-bottom: 10px;
-}
-
-#password .form-horizontal .control-label {
-    text-align: left;
-    width: 230px;
-}
-
-#personal .form-horizontal .control-label {
-    text-align: left;
-    width: 125px;
-}
-
-#info-content {
-    padding: 5px 0 0 20px;
-}
-
-#search {
-    margin: 20px 0 30px 0;
-}
-
-#search_player {
-    margin-bottom: 10px;
-}
-
 
 
 /*************************************
@@ -316,70 +133,6 @@ ul.team_menu {
 **************************************
 *************************************/
 
-#calendar {
-    float: left;
-}
-
-.fc {
-    margin-top: -30px;
-    width: 50%;
-    float: left;
-    /*height: 50px !important;*/
-}
-
-#event-info{
-    float: left;
-    width: 750px;
-    display:none;
-}
-
-.tablespan {
-    width: 700px;
-    height: 500px;
-    overflow: hidden;
-}
-    
-#attendance_test_tables > table {
-    width: 200px;
-    float: left;
-}
-
-.overlay {
-    position: fixed;
-    z-index: 10;
-    background: black;
-    display: block;
-    opacity: .75;
-    filter: alpha(opacity=75);
-    width: 100%;
-    height: 100%;
-}
-
-#event-details {
-    width: 400px;
-}
-
-#boxes-inline {
-    width: 400px;
-    
-}
-.time {
-    width: 120px;
-    float: left;
-    margin: 5px 10px 10px 0;
-}
-
-.loc {
-    width: 250px;
-    margin: 5px 10px 10px 0;
-    float: left;
-}
-
-.desc {
-    width: 380px;
-    margin-right: 0;
-    float: left;
-}
 .noshow {
     display: hidden!important;
 }
@@ -402,10 +155,6 @@ ul.team_menu {
 * STATISTICS
 **************************************
 *************************************/
-
-#stats {
-    width: 500px;
-}
 
 #daterange {
     background: #ffffff;
@@ -478,7 +227,7 @@ p.nomargin {
     margin: 0;
 }
 
-#editeventsubmit {
+.editeventsubmit {
     width: 116px;
 }
 
@@ -491,7 +240,6 @@ p.nomargin {
 #footer {
     background-color: #3b5999;
     text-align: center;
-    width: 100%;
     float: left;
     padding: 20px;
 }
