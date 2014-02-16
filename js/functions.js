@@ -23,7 +23,7 @@ $(document).ready(function(){
         {
             left: '',
             center: '',
-            right: 'prev,next, month,basicWeek'
+            right: 'prev,next, month,basicWeek,basicDay'
         },
         columnFormat: 'ddd d/M',
         events: function(start,end, callback) 
@@ -69,37 +69,39 @@ $(document).ready(function(){
                 dataType: "text",  
                 cache: false,
                 success: 
-                    function(result){
+                    function(result)
+                    {
+                        if($('#event-info').css("display") === 'block')
+                        {
+                            $("#event-info").css("display", "none");
+                            $("#coach-only").empty();
+                            $("#location").empty();
+                            $("#time").empty();
+                            $("#description").empty();
+                            $("#attendance_tables").empty();
+                        }
+                        
                         $('#attendance_tables').append(result);
+                        $('.hidden_id').prepend("<input id='episode-id' class='noshow' type='hidden' name='ep-id' value='" + calEvent.id + "' readonly>");
+                        $('#coach-only').prepend("\
+                            <button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button>\n\
+                            <button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button>\n\
+                            ");
+                        $('#location').append(calEvent.location);
+                        $('#time').append(startTime + " - " + endTime);
+                        $('#description').append(calEvent.description);
+                        $('#event-details').append("\
+                            <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
+                            <input id='date' class='noshow' type='hidden' name='date' value='" + stDate + "' readonly>\n\
+                            <input id='start-time' class='noshow' type='hidden' name='start-time' value='" + startTime + "' readonly>\n\
+                            <input id='end-time' class='noshow' type='hidden' name='end-time' value='" + endTime + "' readonly>\n\
+                            <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
+                        ");    
+                        $('#event-info').show();
                     }
-                });
-                          
-            if( $('#event-info').is(':visible') ) 
-            {
-                //$('#event-info').empty();
-            } 
-            $('.hidden_id').prepend("<input id='episode-id' class='noshow' type='hidden' name='ep-id' value='" + calEvent.id + "' readonly>");
-            $('#coach-only').prepend("\
-                <button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button>\n\
-                <button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button>\n\
-                ");
-            
-            $('#location').append(calEvent.location);
-            $('#time').append(startTime + " - " + endTime);
-            $('#description').append(calEvent.description);
-            $('#event-details').append("\
-                <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
-                <input id='date' class='noshow' type='hidden' name='date' value='" + stDate + "' readonly>\n\
-                <input id='start-time' class='noshow' type='hidden' name='start-time' value='" + startTime + "' readonly>\n\
-                <input id='end-time' class='noshow' type='hidden' name='end-time' value='" + endTime + "' readonly>\n\
-                <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
-            ");    
-            $('#event-info').show();
-            
-            
+            });
             
         }
-        
     });
     
     /*************************************
