@@ -177,7 +177,7 @@
             </table>
             
             <div id="knapp_bar">
-                <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp_bar"><span class="glyphicon glyphicon-plus-sign"></span>Add more players</button>
+                <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp_bar"><span class="glyphicon glyphicon-plus-sign"></span>Add more players<span class="caret"></span></button>
                 <button class="btn btn-danger" id="removeplayersubmit" type="button" disabled><span class="glyphicon glyphicon-trash"></span>Remove Player</button>
             </div>
             
@@ -644,7 +644,7 @@
                 </div>
                
                 <div class="modal-footer">
-                    <button class="btn btn-default" type="button">Nah, cancel this shite</button>
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Nah, cancel this shite</button>
                     <button class="btn btn-info" id="deleteepisodesubmit" type="button">Yeah, let it burn!</button>
                 </div>
                     </form>
