@@ -20,18 +20,32 @@ class Team_m extends MY_Model {
     
     public function get_team_by_coach()
     {
-        $this->db->select('teamname, id');
+        $this->db->select('teams.teamname AS teamname, teams.sport AS sport, teams.id AS id');
+        $this->db->select('users.username AS username');
         $this->db->from('is_coach_of');
         $this->db->join('teams', 'is_coach_of.team_id = teams.id');
+        $this->db->join('users', 'is_coach_of.user_id = users.id');
         $this->db->where('is_coach_of.user_id', $this->session->userdata('user_id'));
         $this->db->order_by('teamname', 'asc');
         $coachteam = $this->db->get();
         
         if($coachteam->num_rows() > 0)
         {
-            foreach($coachteam->result_array() as $row)
+            foreach($coachteam->result() as $row)
             {
-                $data[] = $row;
+                $this->db->select('user_id');
+                $this->db->from('plays_for');
+                $this->db->where('team_id' , $row->id);
+                $query = $this->db->get();
+                $count = $query->num_rows();
+                
+                $data[] = array(
+                    'teamname'  => $row->teamname,
+                    'sport'     => $row->sport,
+                    'coach'     => $row->username,
+                    'team_id'   => $row->id,
+                    'count'     => $count
+                );
             }
             return $data;
         }
@@ -39,55 +53,69 @@ class Team_m extends MY_Model {
     
     public function get_team_by_player()
     {
-        $this->db->select('teamname, id');
+        $this->db->select('teams.teamname AS teamname, teams.sport AS sport, teams.id AS id');
+        $this->db->select('users.username AS username');
         $this->db->from('plays_for');
         $this->db->join('teams', 'plays_for.team_id = teams.id');
+        $this->db->join('users', 'plays_for.user_id = users.id');
         $this->db->where('plays_for.user_id', $this->session->userdata('user_id'));
         $this->db->order_by('teamname', 'asc');
         $playerteam = $this->db->get();
         
         if($playerteam->num_rows() > 0)
         {
-            foreach($playerteam->result_array() as $row)
+            foreach($playerteam->result() as $row)
             {
-                $data[] = $row;
+                $this->db->select('user_id');
+                $this->db->from('plays_for');
+                $this->db->where('team_id' , $row->id);
+                $query = $this->db->get();
+                $count = $query->num_rows();
+                
+                $this->db->select('username');
+                $this->db->from('is_coach_of');
+                $this->db->join('users', 'is_coach_of.user_id = users.id');
+                $this->db->where('team_id', $row->id);
+                $result = $this->db->get();
+                $coachrow = $result->row(1);
+                $coach = $coachrow->username;
+                
+                $data[] = array(
+                    'teamname'  => $row->teamname,
+                    'sport'     => $row->sport,
+                    'coach'     => $coach,
+                    'team_id'   => $row->id,
+                    'count'     => $count
+                );   
             }
             return $data;
+            
         }
-    }
-    
-    public function search_team($search_term='default')
-    {
-        $this->db->select('teamname, id, sport');
-        $this->db->from('teams');
-        $this->db->like('teamname', $search_term);
-
-        $query = $this->db->get();
-
-        return $query->result_array();
     }
     
     public function get_teams()
     {
         // Fetch all teams in the database
-        $this->db->select('teams.id AS id, 
-                           teams.teamname AS teamname, 
-                           teams.sport AS sport');
-        $this->db->select('users.username AS username');
-        $this->db->from('is_coach_of');
-        $this->db->join('teams', 'is_coach_of.team_id = teams.id');
-        $this->db->join('users', 'is_coach_of.user_id = users.id');
+        $this->db->select('id, teamname, sport');
+        $this->db->from('teams');
         $query = $this->db->get(); 
 
         $teams = array();
         foreach ($query->result_array() as $team)
         {	
-                $teams[] = array(
-                    'id'        =>  $team['id'],
-                    'teamname'  =>  $team['teamname'],
-                    'sport'     =>  $team['sport'],
-                    'coach'     =>  $team['username']
-                        );
+            $this->db->select('username');
+            $this->db->where('team_id', $team['id']);
+            $this->db->join('users', 'is_coach_of.user_id = users.id');
+            $coacharray = $this->db->get('is_coach_of');
+            $coach = $coacharray->row();
+            
+            $teams[] = array(
+                'id'        =>  $team['id'],
+                'teamname'  =>  $team['teamname'],
+                'sport'     =>  $team['sport'],
+                'coach'     =>  $coach->username
+                    );
+            
         }
 
         // Returns teams
@@ -116,7 +144,7 @@ class Team_m extends MY_Model {
     
     public function get_squad()
     {
-        $this->db->select('username, id, email');
+        $this->db->select('username, id, email, group_id');
         $this->db->from('plays_for');
         $this->db->join('users', 'plays_for.user_id = users.id');
         $this->db->where('plays_for.team_id', $this->uri->segment(2));
@@ -130,7 +158,32 @@ class Team_m extends MY_Model {
                 $data[] = array(
                     'id'        =>  $v['id'],
                     'username'  =>  $v['username'],
-                    'email'     =>  $v['email']
+                    'email'     =>  $v['email'],
+                    'role'      =>  $v['group_id']
+                    );
+            }
+            return $data;
+        }
+    }
+    
+    public function get_staff()
+    {
+        $this->db->select('username, id, email, group_id');
+        $this->db->from('is_coach_of');
+        $this->db->join('users', 'is_coach_of.user_id = users.id');
+        $this->db->where('is_coach_of.team_id', $this->uri->segment(2));
+        $this->db->order_by('username', 'asc');
+        $staff = $this->db->get();
+        
+        if($staff->num_rows() > 0)
+        {
+            foreach($staff->result_array() as $v)
+            {
+                $data[] = array(
+                    'id'        =>  $v['id'],
+                    'username'  =>  $v['username'],
+                    'email'     =>  $v['email'],
+                    'role'      =>  $v['group_id']
                     );
             }
             return $data;
@@ -166,16 +219,16 @@ class Team_m extends MY_Model {
     
     public function get_players()
     {		
-        // Fetch players from database
+        // Fetch all players from database
         $this->db->select('id, username, email');
         $this->db->from('users');
         $this->db->where('group_id', '300');
         $this->db->order_by('username asc');
-        $plrs = $this->db->get(); 
+        $allplrs = $this->db->get(); 
 
         // Store in array
         $players = array();
-        foreach ($plrs->result_array() as $v)
+        foreach ($allplrs->result_array() as $v)
         {	
                 $players[] = array(
                     'id'        =>  $v['id'],
@@ -186,6 +239,30 @@ class Team_m extends MY_Model {
 
         // Returns players
         return $players;
+    }
+    
+    public function get_coaches()
+    {		
+        // Fetch all players from database
+        $this->db->select('id, username, email');
+        $this->db->from('users');
+        $this->db->where('group_id', '100');
+        $this->db->order_by('username asc');
+        $allcoaches = $this->db->get(); 
+
+        // Store in array
+        $coaches = array();
+        foreach ($allcoaches->result_array() as $v)
+        {	
+                $coaches[] = array(
+                    'id'        =>  $v['id'],
+                    'username'  =>  $v['username'],
+                    'email'     =>  $v['email']
+                    );
+        }
+
+        // Returns players
+        return $coaches;
     }
     
     public function add_player($players)
@@ -225,10 +302,19 @@ class Team_m extends MY_Model {
                         $this->db->insert('attendance_status', $attendanceinsert);
                 }
 
-            return $this->db->affected_rows() > 0;
+            return $this->db->affected_rows();
             }
         }
         
+    }
+    
+    public function add_coach() 
+    {
+        $this->db->set('user_id', $coaches);
+        $this->db->set('team_id', $this->uri->segment(3));
+        $this->db->insert('is_coach_of');
+        
+        return $this->db->affected_rows();
     }
    
     public function remove_player($players)
@@ -269,6 +355,16 @@ class Team_m extends MY_Model {
             return $this->db->affected_rows() > 0;
             }
         }
+    }
+    
+    public function remove_coach($coaches)
+    {
+        $this->db->delete('is_coach_of', array(
+            'user_id'   =>  $coaches,
+            'team_id'   =>  $this->uri->segment(3)
+        ));
+        
+        return $this->db->affected_rows();
     }
     
     public function join_team($value)
@@ -629,7 +725,7 @@ class Team_m extends MY_Model {
                     $coachcheck[] = $c['user_id'];
                 }
                 
-                $this->db->select('user_id, username, episode_id,count(user_id) as num_of_eps');
+                $this->db->select('user_id, username, email, episode_id,count(user_id) as num_of_eps');
                 $this->db->join('users', 'attendance_statistics.user_id = users.id');
                 $this->db->join('episodes', 'attendance_statistics.episode_id = episodes.id');
                 $this->db->where('event_date >=', $startrange);
@@ -647,13 +743,15 @@ class Team_m extends MY_Model {
                         $statArray[] = array(
                             'user_id'   =>  $att['user_id'],
                             'username'  =>  $att['username'],
+                            'email'     =>  $att['email'],
                             'count'     =>  $att['num_of_eps']
                         );
+                        
                     }
                     
                 }
-                return $statArray;
                 
+                return $statArray;
                     
             }
             else
@@ -667,21 +765,6 @@ class Team_m extends MY_Model {
         }
         
     }
-    
-    /*
-     * method getThings () {
-    $things = array ();
-    if (get_things_we_are_interested_in ()) {
-        $things [] = something_else ();
-    } 
-    if (!empty ($things)) {
-        if (!process_things ($things)) {
-            throw new RuntimeExcpetion ('Things went wrong when I tried to process your things for the things!');
-        }
-    }
-    return $things;
-    }
-     */
     
     public function archive_attendance() 
     {
@@ -718,7 +801,7 @@ class Team_m extends MY_Model {
                     
                 }     
                 
-                return $this->db->affected_rows();
+                echo $this->db->affected_rows();
             }
         }
         else 
