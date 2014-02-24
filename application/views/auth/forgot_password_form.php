@@ -9,7 +9,7 @@ $login = array(
 	'size'	=> 30,
 );
 if ($this->config->item('use_username', 'tank_auth')) {
-	$login_label = 'Email or login';
+	$login_label = 'Email';
 } else {
 	$login_label = 'Email';
 }
@@ -18,27 +18,27 @@ if ($this->config->item('use_username', 'tank_auth')) {
 <html lang="en">
     <head>
         <link href="<?php echo $tankstrap["bootstrap_path"];?>" rel="stylesheet">
+        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
         <title><?php echo $tankstrap["forgot_page_title"];?></title>
     </head>
     <body>
-        <div class="container">
-            <div class="row">
-                <div class="span6 offset3">
-                    <div class="well">
-                        <center>
-			    <h2>Reset Password</h2>
-                            <?php echo form_open($this->uri->uri_string()); ?>
-                            <div class="control-group">
-                                <?php echo form_label($login_label, $login['id'], array('class' => 'control-label')); ?>
-                                <div class="controls">
-                                    <?php echo form_error('login'); ?>                                
-                                    <?php echo form_input($login); ?>
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
-                            <?php echo form_submit('reset', 'Get A New Password', 'class="btn btn-primary"'); ?>
-                            <?php echo form_close(); ?>
-                        </center>
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                    <div id="box" class="col-xs-10 col-sm-6 col-md-6 col-lg-4 col-xs-offset-1 col-sm-offset-3 col-lg-offset-4">
+                        <h3>Reset Password</h3>
+                        <?php echo form_open($this->uri->uri_string()); ?>
+                        <div class="form-group">
+                            <?php echo form_label($login_label, $login['id'], array('class' => 'control-label')); ?>
+
+                                <?php echo form_input($login, '', 'class="form-control"'); ?>
+                                <?php echo form_error('login', '<div class="alert alert-danger"><p>', '</p></div>'); ?>
+                                <p class="help-block"></p>
+
+                        </div>
+
+                        <?php echo form_submit('reset', 'Get A New Password', 'class="btn btn-block btn-info"'); ?>
+                        <?php echo form_close(); ?>
                     </div>
                 </div>
             </div>

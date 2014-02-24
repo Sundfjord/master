@@ -11,6 +11,7 @@ $password = array(
 <html lang="en">
     <head>
         <link href="<?php echo $tankstrap["bootstrap_path"];?>" rel="stylesheet">
+        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
         <title><?php echo $tankstrap["delete_page_title"];?></title>
     </head>
     <body>

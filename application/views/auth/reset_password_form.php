@@ -19,35 +19,35 @@ $confirm_new_password = array(
 <html lang="en">
     <head>
         <link href="<?php echo $tankstrap["bootstrap_path"];?>" rel="stylesheet">
+        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
         <title><?php echo $tankstrap["new_pw_page_title"];?></title>
     </head>
     <body>
-	<div class="container">
-            <div class="row">
-                <div class="span6 offset3">
-                    <div class="well">
-                        <center>
-                            <h2>New Password</h2>
-                                    <?php echo form_open($this->uri->uri_string()); ?>
-                            <div class="control-group">
-                                    <?php echo form_label('New Password', $new_password['id']); ?>
-                                <div class="controls">
-                                    <?php echo form_password($new_password); ?>
-                                    <?php echo form_error($new_password['name']); ?><?php echo isset($errors[$new_password['name']])?$errors[$new_password['name']]:''; ?>
-                                </div>
-                            </div>
+        <div id="content">
+            <div class="container">
+                <div class="row">
+                    <div id="box" class="col-xs-10 col-sm-6 col-md-6 col-lg-4 col-xs-offset-1 col-sm-offset-3 col-lg-offset-4">
+                        <h3>New Password</h3>
+                                <?php echo form_open($this->uri->uri_string()); ?>
+                        <div class="form-group">
+                                <?php echo form_label('New Password', $new_password['id']); ?>
                             
-                            <div class="control-group">
-                                    <?php echo form_label('Confirm New Password', $confirm_new_password['id']); ?>
-                                <div class="controls">        
-                                    <?php echo form_password($confirm_new_password); ?>
-                                    <?php echo form_error($confirm_new_password['name']); ?><?php echo isset($errors[$confirm_new_password['name']])?$errors[$confirm_new_password['name']]:''; ?>
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
-                            <?php echo form_submit('change', 'Change Password', 'class="btn btn-primary"'); ?>
-                            <?php echo form_close(); ?>
-                        </center>
+                                <?php echo form_password($new_password, '', 'class="form-control"'); ?>
+                                <?php echo form_error($new_password['name'], '<div class="alert alert-danger"><p>', '</p></div>'); ?><?php echo isset($errors[$new_password['name']])?$errors[$new_password['name']]:''; ?>
+                            
+                        </div>
+
+                        <div class="form-group">
+                                <?php echo form_label('Confirm New Password', $confirm_new_password['id']); ?>
+                                  
+                                <?php echo form_password($confirm_new_password, '', 'class="form-control"'); ?>
+                                <?php echo form_error($confirm_new_password['name'], '<div class="alert alert-danger"><p>', '</p></div>'); ?><?php echo isset($errors[$confirm_new_password['name']])?$errors[$confirm_new_password['name']]:''; ?>
+                                <p class="help-block"></p>
+                            
+                        </div>
+                        <?php echo form_submit('change', 'Change Password', 'class="btn btn-info"'); ?>
+                        <?php echo form_close(); ?>
+                    
                     </div>
                 </div>
             </div>
