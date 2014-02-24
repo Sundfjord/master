@@ -140,24 +140,28 @@
         
         <div class="tab-pane fade" id="stats">
             <div id="stats_table">
-                <div id="daterange" class="pull-right">
+                <div class='row'>
+                    <div class='col-sm-10 col-md-8 col-lg-6'>
+                    <div id="daterange" class="pull-right">
                         <span class="glyphicon glyphicon-calendar"></span><span class="text"><?php echo date("F j, Y", strtotime('-30 day')); ?> - <?php echo date("F j, Y"); ?></span> <b class="caret"></b>
+                    </div>
+                
+                    <h3>Statistics</h3>
+
+                    <table id="statistics_table" class="table table-striped table-bordered dataTable">
+                        <thead>
+                            <tr class="tabellheader">
+                                <th class="name" scope="col">Player Name</th>
+                                <th class="email" scope="col">Email</th>
+                                <th class="number" scope="col">#</th>
+                            </tr>  
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
                 </div>
-                
-                <h3>Statistics</h3>
-                
-                <table id="statistics_table" class="table table-striped table-bordered dataTable">
-                    <thead>
-                        <tr class="tabellheader">
-                            <th class="name" scope="col">Player Name</th>
-                            <th class="email" scope="col">Email</th>
-                            <th class="number" scope="col">#</th>
-                        </tr>  
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
+                </div>
             </div>
         </div>
         
@@ -401,7 +405,9 @@
         
         <div id="edit" class="tab-pane fade">
             <div id="edit_panels">
+                <h3>Edit</h3>
                 <div class="row">
+                    
                     <div class="col-sm-9 col-md-6 col-lg-5">
                         <div id="edit_team">
 
