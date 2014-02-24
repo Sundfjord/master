@@ -17,6 +17,8 @@ class Team extends MY_Controller
         $team_data['teaminfo'] = $this->team_m->get_page($id);
         $team_data['teams'] = $this->team_m->get_teams();
         $team_data['squad'] = $this->team_m->get_squad();
+        $team_data['staff'] = $this->team_m->get_staff();
+        $team_data['coaches'] = $this->team_m->get_coaches();
         $team_data['players'] = $this->team_m->get_players();
         $team_data['eventdata'] = $this->team_m->getTeamEvents();
         $this->load->vars($team_data);
@@ -54,11 +56,36 @@ class Team extends MY_Controller
                     continue;
                 }
 
-            $count = count($data);
-            echo json_encode(array(
-                "count" => $count     
-            ));
-        }    
+        }
+        $count = count($data);
+        echo json_encode(array(
+            "count" => $count     
+        ));
+    }
+    
+    public function add_coach()
+    {
+        $data = $this->input->post('coaches');
+        
+        foreach ($data as $key => $coaches)
+        {
+            $this->db->where('user_id', $coaches);
+            $exists = $this->db->get_where('is_coach_of', array(
+                'team_id'   => $this->uri->segment(3)
+                ));
+            if($exists->num_rows() === 0)
+            {
+                $this->team_m->add_coach($coaches);
+            }
+            else 
+            {
+                continue;
+            }
+        }
+        $count = count($data);
+        echo json_encode(array(
+            "count" => $count     
+        ));
     }
     
     public function remove_player() 
@@ -68,6 +95,22 @@ class Team extends MY_Controller
         foreach($data as $key => $players)
         {
             $this->team_m->remove_player($players);
+        }
+
+        $count = count($data);
+        echo json_encode(array(
+            "count" => $count
+        ));
+            
+    }
+    
+    public function remove_coach() 
+    {
+        $data = $this->input->post('staff'); //this returns an array so use foreach to extract data
+
+        foreach($data as $key => $coaches)
+        {
+            $this->team_m->remove_coach($coaches);
         }
 
         $count = count($data);
@@ -321,9 +364,10 @@ class Team extends MY_Controller
     
     public function compareToNow()
     {
-        $now = date('Y-m-d H:i');
+        $now = date('d-m-Y H:i');
+        $space = " ";
         //need to make sure $comparison matches $now
-        $comparison = $this->input->post('start_date') . $this->input->post('start_time');
+        $comparison = $this->input->post('start_date') . $space . $this->input->post('start_time');
         
         if ($now > $comparison)
         {
@@ -467,59 +511,63 @@ class Team extends MY_Controller
         
         $attending = $this->team_m->get_attending($epId);
         
+        //$prewrapping = "<div class='row'>";
+        
         if($attending->num_rows() > 0) 
         {
-            $attending_output = "<table id='attending_table'class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='attending' scope='col'>Attending</th></tr></thead><tbody>\n";
+            $attending_output = "<div class='col-xs-12 col-md-4'><table id='attending_table'class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='attending' scope='col'><span class='glyphicon glyphicon-thumbs-up'></span>Attending</th></tr></thead><tbody>\n";
             foreach ($attending->result_array() as $row) 
             {
                 $attending_output .= "<tr><td class='middle'><div class='username'>{$row['username']}</div></td></tr>\n";
             }
-            $attending_output .= "</tbody></table>\n";
+            $attending_output .= "</tbody></table></div>\n";
         }
         else 
         {
-            $attending_output = "<table id='attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='attending' scope='col'>Attending</th></tr></thead><tbody>\n";
+            $attending_output = "<div class='col-xs-12 col-md-4'><table id='attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='attending' scope='col'><span class='glyphicon glyphicon-thumbs-up'></span>Attending</th></tr></thead><tbody>\n";
             $attending_output .= "<tr><td class='middle'><div class='username'>None</div></td></tr>\n";
-            $attending_output .= "</tbody></table>\n";
+            $attending_output .= "</tbody></table></div>\n";
         }
         
         $notattending = $this->team_m->get_not_attending($epId);
         
         if($notattending->num_rows() > 0) 
         {
-            $notattending_output = "<table id='not_attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_attending' scope='col'>Not Attending</th></tr></thead><tbody>\n";
+            $notattending_output = "<div class='col-xs-12 col-md-4'><table id='not_attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_attending' scope='col'><span class='glyphicon glyphicon-thumbs-down'></span>Not Attending</th></tr></thead><tbody>\n";
             foreach ($notattending->result_array() as $row) 
             {
                 $notattending_output .= "<tr><td class='middle'><div class='username'>{$row['username']}</div></td></tr>\n";
             }
-            $notattending_output .= "</tbody></table>\n";
+            $notattending_output .= "</tbody></table></div>\n";
         }
         else 
         {
-            $notattending_output = "<table id='not_attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_attending' scope='col'>Not Attending</th></tr></thead><tbody>\n";
+            $notattending_output = "<div class='col-xs-12 col-md-4'><table id='not_attending_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_attending' scope='col'><span class='glyphicon glyphicon-thumbs-down'></span>Not Attending</th></tr></thead><tbody>\n";
             $notattending_output .= "<tr><td class='middle'><div class='username'>None</div></td></tr>\n";
-            $notattending_output .= "</tbody></table>\n";
+            $notattending_output .= "</tbody></table></div>\n";
         }
         
         $notresponding = $this->team_m->get_not_responding($epId);
         
         if($notresponding->num_rows() > 0) 
         {
-            $notresponding_output = "<table id='not_responded_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_responded' scope='col'>Has Not Responded</th></tr></thead><tbody>\n";
+            $notresponding_output = "<div class='col-xs-12 col-md-4'><table id='not_responded_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_responded' scope='col'><span class='glyphicon glyphicon-question-sign'></span>Has Not Responded</th></tr></thead><tbody>\n";
             foreach ($notresponding->result_array() as $row) 
             {
                 $notresponding_output .= "<tr><td class='middle'><div class='username'>{$row['username']}</div></td></tr>\n";
             }
-            $notresponding_output .= "</tbody></table>\n";
+            $notresponding_output .= "</tbody></table></div>\n";
         }
         else 
         {
-            $notresponding_output = "<table id='not_responded_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_responded' scope='col'>Has Not Responded</th></tr></thead><tbody>\n";
+            $notresponding_output = "<div class='col-xs-12 col-md-4'><table id='not_responded_table' class='table table-striped table-bordered dataTable'><thead><tr class='tabellheader'><th class='not_responded' scope='col'><span class='glyphicon glyphicon-question-sign'></span>Has Not Responded</th></tr></thead><tbody>\n";
             $notresponding_output .= "<tr><td class='middle'><div class='username'>None</div></td></tr>\n";
-            $notresponding_output .= "</tbody></table>\n";
+            $notresponding_output .= "</tbody></table></div>\n";
         }
         
-        $attendance_result = $attending_output . $notattending_output . $notresponding_output; 
+        //$postwrapping = "</div>";
+        
+        $attendance_result = /*$prewrapping .*/ $attending_output . $notattending_output . $notresponding_output /*. $postwrapping*/; 
         
         echo $attendance_result;
     }
