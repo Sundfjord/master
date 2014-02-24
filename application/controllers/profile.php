@@ -31,7 +31,7 @@ class Profile extends MY_Controller
     {
         $this->form_validation->set_rules('edit_username', 'Edit Username', 'trim|required|max_length[30]|min_length[4]');
         $this->form_validation->set_rules('edit_email', 'Edit Email', 'trim|required|xss_clean|valid_email');
-        $this->form_validation->set_error_delimiters('', '');
+        $this->form_validation->set_error_delimiters('<p class="bg-danger">', '</p>');
         
         if($this->form_validation->run() === FALSE) 
         {

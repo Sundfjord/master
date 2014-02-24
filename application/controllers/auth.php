@@ -270,7 +270,7 @@ class Auth extends CI_Controller
 			redirect('/auth/send_again/');
 
 		} else {
-			$this->form_validation->set_rules('login', 'Email or login', 'trim|required|xss_clean');
+			$this->form_validation->set_rules('login', 'Email', 'trim|required|xss_clean');
 
 			$data['errors'] = array();
 
