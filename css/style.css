@@ -6,9 +6,26 @@
         Purpose of the stylesheet follows.
 */
 
-body {
-    margin: 0 auto;
+html {
+    position: relative;
+    min-height: 100%;
+    background: url(../img/fabric_of_squares_gray.png);
 }
+
+body {
+    margin-bottom: 100px;
+    
+}
+
+#content {
+    padding-bottom: 50px;
+    background: url(../img/fabric_of_squares_gray.png);
+}
+
+@media(max-width:767px){}
+@media(min-width:768px){}
+@media(min-width:992px){}
+@media(min-width:1200px){}
 
 /*************************************
 **************************************
@@ -30,7 +47,20 @@ body {
 **************************************
 *************************************/
 
+#box {
+    background-color: #ffffff;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+}
 
+#box h3 {
+    margin: 0 0 20px 0;
+}
+#box .alert {
+    padding: 5px;
+    margin-bottom: 0;
+}
 
 /*************************************
 **************************************
@@ -42,19 +72,273 @@ body {
     margin-right: 5px;
 }
 
+ul, li {
+    list-style: none;
+}
+
+table {
+    background-color: #fff;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+}
+
+.btn-danger[disabled] {
+    background-color: #d9534f;
+}
+
+.btn-danger:hover, .btn-danger:active, .btn-danger:focus {
+    background-color: #ca4945;
+}
+
+a:hover {
+    color: #ddd;
+}
+
 /*************************************
 **************************************
 * NAVIGATION
 **************************************
 *************************************/
+.navbar {
+    margin-bottom: 0;
+    border: 0;
+    border-radius: 0;
+}
+.navbar-default {
+    background: url(../img/grey_wash_wall.png);
+    color: #fff;
+}
 
+.navbar-default .navbar-nav>li>a {
+    color: #fff;
+}
+.navbar-brand {
+    color: #fff !important;
+    margin-right: 50px;
+}
 
+.dropdown-menu .glyphicon {
+    margin-right: 10px;
+}
+
+.navbar-brand {
+    text-transform: none;
+}
 /*************************************
 **************************************
 * HOME
 **************************************
 *************************************/
 
+.jumbotron {
+    display: none;
+    padding: 30px;
+}
+
+.teams {
+    display: block;
+    padding: 0;
+    margin-top: 20px;
+    margin-left: 15px;
+}
+
+.teams >li {
+    display: inline-block;
+    float:left; 
+    
+}
+
+.teamlist {
+    padding-top: 10px;
+    margin: 5px 10px 50px 0;
+    border: 1px solid #DDD;
+    color: #333;
+    -webkit-box-shadow: 1px 1px 7px rgba(153, 153, 153, 0.2);
+    -moz-box-shadow: 1px 1px 7px rgba(153, 153, 153, 0.2);
+    box-shadow: 1px 1px 7px rgba(153, 153, 153, 0.2);
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    width: 138px;
+    height: 165px;
+    background: url(../img/listbg.gif);
+}
+
+.teamlist:last-child {
+    margin-right: 0;
+}
+
+.teamlist .glyphicon {
+    font-size: 4em;
+}
+
+.teamlist h5 {
+    font-size: 20px;
+    margin-top: 20px;   
+}
+
+.teamlist a {
+    text-decoration: none;
+}
+
+.teamlist h4 {
+    text-align: center;
+    border-bottom: 1px solid #dcdcdd;
+    color: #676767;
+    padding: 5px 0 12px ;
+    margin: 0 0 25px 0;
+    text-shadow: 0 1px 0 #fff;
+    font-size: 14px;
+}
+
+.teamdetails {
+    padding: 10px;
+    display: none;
+    
+}
+
+.teamdetails li {
+    margin: 0 0 10px 15px;
+    color: #676767;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 2px; 
+}
+
+.infolabel, .infovalue, .infosport, .infocoach {
+    display: none;
+}
+
+#gototeam {
+    width: 95px;
+}
+
+#gototeam a, a:hover {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+@media (min-width:768px) {
+        .jumbotron {
+        display: block;
+        padding: 30px;
+    }
+    
+    .jumbotron h1 {
+        margin-top: 10px;
+    }
+    
+    .teamlist {
+        width: 225px;
+        height: 250px;
+        padding: 10px;  
+    }
+    
+    .teamlist h4 {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+    }
+    
+    .teams > li {
+        margin-right: 20px;
+    }
+    
+    #gototeam {
+    width: 170px;
+    }
+    
+    .teamdetails {
+        display: inline-block;
+    }
+    
+    .teamdetails > li {
+        margin: 0 0 20px 5px;
+        width: 170px;
+    }
+    
+    .teamlist .glyphicon {
+        margin-top: 40px;
+    }
+    
+    .infovalue, .infosport, .infocoach {
+        display: inline;
+        margin-right: 10px;
+    }
+}
+
+@media all and (min-width:992px){
+    .teamlist {
+        width: 300px;
+        height: 275px;
+        padding: 10px;  
+    }
+    
+    .teamlist h4 {
+        font-size: 20px;
+    }
+    
+    .teams > li {
+        margin-right: 20px;
+    }
+    
+    #gototeam {
+    width: 250px;
+    }
+    
+    .teamdetails > li {
+        margin: 0 0 20px 5px;
+        width: 250px;
+    }
+    
+    .teamlist .glyphicon {
+        font-size: 6em;
+        margin-top: 85px;
+    }
+    
+    .teamlist h5 {
+        font-size: 25px;
+    }
+    
+    .infolabel, .infovalue, .infosport, .infocoach {
+        display: inline;
+        margin-right: 10px;
+    }
+    
+    .infolabel {
+        font-weight: bold;
+        margin-left: 5px;
+    }
+    
+    .infosport {
+        margin-left: 11px;
+    }
+    
+    .infocoach {
+        margin-left: 6px;
+    }
+    
+}
+
+@media(min-width:1200px){
+    .teamlist {
+        width: 365px;
+    }
+    
+    #gototeam {
+        width: 315px;
+    }
+    
+    .teamdetails > li {
+        margin: 0 0 20px 5px;
+        width: 315px;
+    }
+    
+    .teamlist .glyphicon {
+    font-size: 6em;
+    margin-top: 90px;
+    }
+}
 
 /*************************************
 **************************************
@@ -62,15 +346,137 @@ body {
 **************************************
 *************************************/
 
-#team_tabs > li > a {
-    color: #000;
+
+#top {
+    padding: 0;
+    background: #fff;
 }
 
-#team_content {
-    margin: 0 auto;
-    width: 100%;
+#top h2 {
+    font-size: 25px;
+    margin: 20px;
 }
 
+#top a {
+    color: #5b5b5b;
+}
+
+#top .nav > li > a:hover {
+    
+    background: url(../img/grey_wash_wall.png);
+    color: #fff;
+}
+
+.nav-tabs>li.active>a {
+    background: url(../img/fabric_of_squares_gray.png);
+}
+
+#team_tabs {
+    display: none;
+}
+
+#container {
+    margin-top: 15px;
+}
+
+#knapp_bar {
+   display: none;
+   margin-left: 180px;
+   z-index: 1;
+}
+
+#calendar {
+    margin-top: -30px;
+}
+
+.fc-header {
+    background: url(../img/fabric_of_squares_gray.png);
+}
+
+#event-info {
+    display: none;
+}
+
+#coach-only {
+    display: none;
+}
+
+#calendar {
+    margin-bottom: 20px;
+}
+
+#boxes-inline {
+    display: inline-block;
+}
+.panel {
+    margin-bottom: 15px;
+}
+.loc {
+    width: 305px;
+    float: left;
+    margin-right: 10px;
+}
+
+.attendance .panel-body {
+    padding: 0;
+}
+
+#attendance_tables table {
+    margin-top: 0 !important;
+}
+
+p#time {
+    text-align: center;
+}
+
+@media(min-width:768px){
+    #team_tabs {
+        display: block;
+        padding-left: 135px;
+    }
+
+    #knapp_bar {
+        display: block;
+    }
+    
+    #coach-only {
+        display: block;
+    }
+    
+    #top {
+    }
+    
+    #top h2 {
+        font-size: 32px;
+        
+    }
+    
+    .editbuttons {
+        margin-bottom: 10px;
+    }
+}
+
+@media(min-width:992px){
+    #knapp_bar {
+        margin-left: 295px;
+    }
+}
+
+@media(min-width:1200px){
+    #knapp_bar {
+        margin-left: 400px;
+    }
+    
+    #team_tabs {
+        padding-left: 410px;
+    }
+}
+
+/*************************************
+**************************************
+* TEAM FORMS
+**************************************
+*************************************/
 #add_event_form {
     padding: 10px;
 }
@@ -120,6 +526,12 @@ body {
     margin-left: 5px;
 }
 
+p.danger {
+    color: #eb6864;
+    margin-left: 5px;
+    margin-top: 3px;
+}
+
 /*************************************
 **************************************
 * PROFILE
@@ -132,6 +544,25 @@ body {
 * CALENDAR
 **************************************
 *************************************/
+
+.fc-content {
+    background: #fff;
+}
+
+.fc-past {
+    opacity: 0.2;
+    background-color: black;
+}
+
+.fc-today {
+    background-color: #458def;
+    opacity: 0.3;
+}
+
+.fc-event {
+    cursor: pointer;
+}
+
 
 .noshow {
     display: hidden!important;
@@ -148,7 +579,7 @@ body {
 
 .panel-body {
     padding: 5px 15px;
-}  
+}
 
 /*************************************
 **************************************
@@ -158,14 +589,97 @@ body {
 
 #daterange {
     background: #ffffff;
-    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
-    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 -1px 0 rgba(0,0,0,.1);
-    color: #333333;
-    padding: 8px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 0 0 rgba(0,0,0,.1);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 0 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 0 0 rgba(0,0,0,.1);
+    color: #777777;
+    padding: 10px;
     line-height: 18px;
     cursor: pointer;
     border-top: 1px solid #ddd;
+}
+
+#stats_table {
+    width: 90%;
+    margin-left: 30px;
+    float: left;
+}
+
+.number {
+    text-align: center;
+}
+
+@media(min-width:992px){
+    #stats_table {
+        width: 80%;
+    }
+}
+
+@media(min-width:1200px){
+    #stats_table {
+        width: 70%;
+    }
+}
+
+.dataTables_empty {
+    display:none;
+}
+
+/*************************************
+**************************************
+* MANAGE SQUAD
+**************************************
+*************************************/
+
+table.dataTable thead th.left {
+    text-align: center;
+}
+
+table.dataTable thead th {
+    padding: 8px;
+}
+
+td.left {
+    text-align: center;
+}
+
+#squad {
+    margin-bottom: 20px;
+}
+
+#squad_table_wrapper, #staff_table_wrapper {
+    margin-top: -35px !important; 
+}
+
+#playersearch {
+    margin-bottom: 20px;
+}
+
+#player_table .username {
+    margin-left: 5px;
+}
+
+/*************************************
+**************************************
+* EDIT
+**************************************
+*************************************/
+    
+#deleteteamsubmit {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#edit_team .panel-body {
+    padding: 25px;
+}
+
+#edit_team .form-group {
+    margin-bottom: 35px;
+}
+
+#delete_team .panel-body {
+    padding: 25px;
 }
 
 /*************************************
@@ -227,10 +741,13 @@ p.nomargin {
     margin: 0;
 }
 
+p.nopadding {
+    padding-left: 0;
+}
+
 .editeventsubmit {
     width: 116px;
 }
-
 /*************************************
 **************************************
 * FOOTER
@@ -238,10 +755,19 @@ p.nomargin {
 *************************************/
 
 #footer {
-    background-color: #3b5999;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px; 
+    color: #ffffff;
+    font-size: 20px;
+    background: url(../img/grey_wash_wall.png);
+}
+
+#footer p {
     text-align: center;
-    float: left;
-    padding: 20px;
+    margin-top: 40px;
+    color: #909090;
 }
 
 #footer li {
