@@ -1,15 +1,15 @@
 <?php
 
 // Errors
-$lang['auth_incorrect_password'] =          "<div class='alert alert-error'><p>Incorrect password.</p></div>";
-$lang['auth_incorrect_login'] =             "<div class='alert alert-error'><p>Incorrect email.</p></div>";
-$lang['auth_incorrect_email_or_username'] = "<div class='alert alert-error'><p>Email doesn\'t exist.</p></div>";
-$lang['auth_email_in_use'] =                "<div class='alert alert-error'><p>Email is already used by another user. Please choose another email.</p></div>";
-$lang['auth_username_in_use'] =             "<div class='alert alert-error'><p>Username already exists. Please choose another username.</p></div>";
-$lang['auth_invalid_role'] =                "<div class='alert alert-error'><p>Please choose a role.</p></div>";
-$lang['auth_current_email'] =               "<div class='alert alert-error'><p>This is your current email.</p></div>";
-$lang['auth_incorrect_captcha'] =           "<div class='alert alert-error'><p>Your confirmation code does not match the one in the image.</p></div>";
-$lang['auth_captcha_expired'] =             "<div class='alert alert-error'><p>Your confirmation code has expired. Please try again.</p></div>";
+$lang['auth_incorrect_password'] =          "<div class='alert alert-danger'><p>Incorrect password.</p></div>";
+$lang['auth_incorrect_login'] =             "<div class='alert alert-danger'><p>Incorrect email.</p></div>";
+$lang['auth_incorrect_email_or_username'] = "<div class='alert alert-danger'><p>Email doesn\'t exist.</p></div>";
+$lang['auth_email_in_use'] =                "<div class='alert alert-danger'><p>Email is already used by another user. Please choose another email.</p></div>";
+$lang['auth_username_in_use'] =             "<div class='alert alert-danger'><p>Username already exists. Please choose another username.</p></div>";
+$lang['auth_invalid_role'] =                "<div class='alert alert-danger'><p>Please choose a role.</p></div>";
+$lang['auth_current_email'] =               "<div class='alert alert-danger'><p>This is your current email.</p></div>";
+$lang['auth_incorrect_captcha'] =           "<div class='alert alert-danger'><p>Your confirmation code does not match the one in the image.</p></div>";
+$lang['auth_captcha_expired'] =             "<div class='alert alert-danger'><p>Your confirmation code has expired. Please try again.</p></div>";
 $lang['auth_login_attempts_exceeded'] =     "You have tried to log in too many times. Try again later.";
 
 // Notifications
