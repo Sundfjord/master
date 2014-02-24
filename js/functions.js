@@ -2,7 +2,13 @@ globals = {};
 
 $(document).ready(function(){    
     
+    if (window.location.search.substring(1) === "#create_team_modal")
+        {
+            $("li.team.active").removeClass('active');
+        }
+    
     var filter_id = $('#filter_id').val();
+    var user_id = $('#user').val();
     var base_url = 'http://localhost/master';
     
     /*************************************
@@ -15,15 +21,15 @@ $(document).ready(function(){
         
         firstDay:'1',
         defaultView: 'basicWeek',
-        height: 400,
-        weekends: false,
+        height: 200,
+        eventColor: "#eb6864",
         timeFormat: 'H(:mm)',
         allDayDefault: false,
         header: 
         {
-            left: '',
+            left: 'prev,next',
             center: '',
-            right: 'prev,next, month,basicWeek,basicDay'
+            right:  'basicWeek,basicDay'
         },
         columnFormat: 'ddd d/M',
         events: function(start,end, callback) 
@@ -41,9 +47,9 @@ $(document).ready(function(){
                 callback(eventsToShow);
             });
         },        
-       //eventRender determines what should be shown in the calendar
+       // determines what should be shown in the calendar
         eventRender: function(event, element, view) {
-            if (view.name === "agendaWeek") 
+            if (view.name === "basicWeek") 
                 {
                 element.find(".fc-event-content");
                     content: event.description;
@@ -84,20 +90,28 @@ $(document).ready(function(){
                         $('#attendance_tables').append(result);
                         $('.hidden_id').prepend("<input id='episode-id' class='noshow' type='hidden' name='ep-id' value='" + calEvent.id + "' readonly>");
                         $('#coach-only').prepend("\
-                            <button id='delete_episode_button'class='btn btn-danger btn-xs' type='button'><span class='glyphicon glyphicon-trash'></span></button>\n\
-                            <button id='edit_episode_button' class='btn btn-default btn-xs' type='button'><span class='glyphicon glyphicon-edit'></span></button>\n\
+                            <div class='editbuttons row'><div class='col-sm-6'><button id='delete_episode_button'class='btn btn-danger btn-block' type='button'><span class='glyphicon glyphicon-trash'></span>Delete episode</button></div>\n\
+                            <div class='col-sm-6'><button id='edit_episode_button' class='btn btn-default btn-block' type='button'><span class='glyphicon glyphicon-edit'></span>Edit episode details</button></div></div>\n\
                             ");
                         $('#location').append(calEvent.location);
                         $('#time').append(startTime + " - " + endTime);
-                        $('#description').append(calEvent.description);
+                        if (calEvent.description !== '')
+                        {
+                            $('#description').append(calEvent.description);
+                        }
+                        else {
+                            $('#description').append('No description');
+                        }
+                        
                         $('#event-details').append("\
                             <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
                             <input id='date' class='noshow' type='hidden' name='date' value='" + stDate + "' readonly>\n\
                             <input id='start-time' class='noshow' type='hidden' name='start-time' value='" + startTime + "' readonly>\n\
                             <input id='end-time' class='noshow' type='hidden' name='end-time' value='" + endTime + "' readonly>\n\
                             <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
-                        ");    
-                        $('#event-info').show();
+                        ");
+                        $('#event-info').fadeIn(500); //css("display", "block");
+                        
                     }
             });
             
@@ -118,6 +132,8 @@ $(document).ready(function(){
             $("#end_date").attr("placeholder","");
             $("#end-date .input-group-addon").css("cursor", "not-allowed");
             $("#end-date .input-group-addon i").css("cursor", "not-allowed");
+            $('#error5').removeClass('has-error');
+            $('#error5inline p').text('');
          }
          else
          {
@@ -278,39 +294,6 @@ $(document).ready(function(){
         $('#delete_event_modal').modal();
     });
     
-    /*************************************
-    **************************************
-    * POPOVERS
-    **************************************
-    *************************************/
-    
-    $('#gay').popover({
-        placement: top,
-        title: "Just a heads-up",
-        content: "This date can be no more than 1 year from the start date." 
-    });
-    
-    /*$(document).ready(function(){
-    alert(window.location.pathname);
-    $("#menu ul li a").each(function(){
-        if($(this).attr("href") === window.location.pathname)
-            $(this).addClass("active");
-        });
-    });
-    
-    $(function(){
-
-    var url = window.location.pathname, 
-        urlRegExp = new RegExp(url.replace(/\/$/,'') + "$"); // create regexp to match current url pathname and remove trailing slash if present as it could collide with the link in navigation in case trailing slash wasn't present there
-        // now grab every link from the navigation
-        $('#menu a').each(function(){
-            // and test its normalized href against the url pathname regexp
-            if(urlRegExp.test(this.href.replace(/\/$/,''))){
-                $(this).addClass('active');
-            }
-        });
-
-    });*/
 
     /*************************************
     **************************************
@@ -327,6 +310,10 @@ $(document).ready(function(){
         // on load of the page: switch to the currently selected tab
         var hash = window.location.hash;
         $('.nav a[href="' + hash + '"]').tab('show');
+        
+        //except when the modal hashes are active
+        
+        
         
         // store the currently selected tab in the hash value
         $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
@@ -366,7 +353,7 @@ $(document).ready(function(){
             {
                 $.each(data, function(index, data) 
                 {
-                    $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.count + '</td></tr>');
+                    $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.email + '</td><td class="number">' + data.count + '</td></tr>');
                     //remember to empty this if updated
                 });            
             }
@@ -401,7 +388,7 @@ $(document).ready(function(){
                         $("#statistics_table > tbody").empty();
                         $.each(data, function(index, data) 
                         {
-                            $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.count + '</td></tr>');
+                            $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.email + '</td><td class="number">' + data.count + '</td></tr>');
                         });
                     }
                 }
@@ -475,7 +462,9 @@ $(document).ready(function(){
                             url: base_url+"/index.php/team/get_attendance",
                             success: function(result)
                             {
-                              $("#attendance_tables").append(result);
+                                $("#attendance_tables").hide();
+                                $("#attendance_tables").append(result);
+                                $("#attendance_tables").fadeIn(500);
                             }
                         });
                     }
@@ -490,7 +479,7 @@ $(document).ready(function(){
         addplayer.attr("disabled", !checkboxes.is(":checked"));
     });
     
-    $('#addplayersubmit').click(function()
+    $(addplayer).click(function()
     {
         var players = new Array();
         $("input[name='players[]']:checked").each(function() {
@@ -513,6 +502,42 @@ $(document).ready(function(){
                 if(data.count > 0)
                 {   
                     window.location = "?addplayersuccess";
+                    return true;
+                }
+            }
+        });
+    });
+    
+    var coachboxes = $("input[id='coachtest']"),
+    addcoach = $("#addcoachsubmit");
+
+    coachboxes.click(function() {
+        addcoach.attr("disabled", !coachboxes.is(":checked"));
+    });
+    
+    $(addcoach).click(function()
+    {
+        var coaches = new Array();
+        $("input[name='coaches[]']:checked").each(function() {
+                coaches.push($(this).val());
+                });
+        console.log(coaches);
+        
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: base_url+"/index.php/team/add_coach/"+filter_id,
+            data: 
+            { 
+                coaches:coaches 
+            },
+            success:
+                function(data)
+            {
+                
+                if(data.count > 0)
+                {   
+                    window.location = "?addcoachsuccess";
                     return true;
                 }
             }
@@ -549,6 +574,42 @@ $(document).ready(function(){
                 if(data.count > 0)
                 {   
                     window.location = "?removeplayersuccess";
+                    return true;
+                }
+            }
+        });
+    });
+    
+    var staffcheckboxes = $("input[id='staffchecktest']"),
+    removecoach = $("#removecoachsubmit");
+
+    staffcheckboxes.click(function() {
+        removecoach.attr("disabled", !staffcheckboxes.is(":checked"));
+    });
+    
+    $('#removecoachsubmit').click(function()
+    {
+        var staff = new Array();
+        $("input[name='staff[]']:checked").each(function() {
+                staff.push($(this).val());
+                });
+        console.log(staff);
+        
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: base_url+"/index.php/team/remove_coach/"+filter_id,
+            data: 
+            { 
+                staff:staff 
+            },
+            success:
+                function(data)
+            {
+                
+                if(data.count > 0)
+                {   
+                    window.location = "?removecoachsuccess";
                     return true;
                 }
             }
@@ -683,23 +744,23 @@ $(document).ready(function(){
                     if (data.teamnameError)
                     {
                         $('#error_teaminfo').addClass('has-error');
-                        $('#errorinline_teaminfo').text(data.teamnameError);
+                        $('#errorinline_teaminfo p').text(data.teamnameError);
                     }
                     else
                     {
                         $('#error_teaminfo').removeClass('has-error');
-                        $('#errorinline_teaminfo').text('');
+                        $('#errorinline_teaminfo p').text('');
                     }
 
                     if (data.sportError)
                     {
                         $('#error2_teaminfo').addClass('has-error');
-                        $('#error2inline_teaminfo').text(data.sportError);
+                        $('#error2inline_teaminfo p').text(data.sportError);
                     }
                     else
                     {
                         $('#error2_teaminfo').removeClass('has-error');
-                        $('#error2inline_teaminfo').text('');
+                        $('#error2inline_teaminfo p').text('');
                     }
             }
         });
@@ -730,18 +791,18 @@ $(document).ready(function(){
                  if (data.matchError)
                     {
                         $('#error_deleteteam').addClass('has-error');
-                        $('#errorinline_deleteteam').text(data.matchError);
+                        $('#errorinline_deleteteam p').text(data.matchError);
                     }
                     
                     else if (data.deleteError)
                     {
                         $('#error_deleteteam').addClass('has-error');
-                        $('#errorinline_deleteteam').text(data.deleteError);
+                        $('#errorinline_deleteteam p').text(data.deleteError);
                     }
                     else
                     {
                         $('#error_deleteteam').removeClass('has-error');
-                        $('#errorinline_deleteteam').text('');
+                        $('#errorinline_deleteteam p').text('');
                     }
 
                    
@@ -785,7 +846,8 @@ $(document).ready(function(){
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/edit_episode/"+episodeId,  
-            data: { 
+            data: 
+            { 
                 edited_episodeName:edited_episodeName,
                 edited_episodeDesc:edited_episodeDesc,
                 edited_episodeDate:edited_episodeDate,
@@ -793,96 +855,93 @@ $(document).ready(function(){
                 edited_episodeEndTime:edited_episodeEndTime,
                 edited_episodeLocation:edited_episodeLocation
                 
-                 },
+            },
             success:                   
-                function(data)
+            function(data)
             {       
-                    if(data.count > 0)
-                    {   
-                        $('#edit_episode_modal').modal('hide');
-                        window.location = "?editepisodesuccess";
-                        return true;
-                    }
-                    
-                    if (data.episodeNameError)
-                    {
-                        $('#error_editEp').addClass('has-error');
-                        $('#errorinline_editEp').text(data.episodeNameError);
-                    }
-                    else
-                    {
-                        $('#error_editEp').removeClass('has-error');
-                        $('#errorinline_editEp').text('');
-                    }
+                if(data.count > 0)
+                {   
+                    $('#edit_episode_modal').modal('hide');
+                    window.location = "?editepisodesuccess";
+                    return true;
+                }
 
-                    if (data.episodeDescError)
-                    {
-                        $('#error2_editEp').addClass('has-error');
-                        $('#error2inline_editEp').text(data.episodeDescError);
-                    }
-                    else
-                    {
-                        $('#error2_editEp').removeClass('has-error');
-                        $('#error2inline_editEp').text('');
-                    }
-                    
-                    if (data.episodeDateError)
-                    {
-                        $('#error3_editEp').addClass('has-error');
-                        $('#error3inline_editEp').text(data.episodeDateError);
-                    }
-                    else
-                    {
-                        $('#error3_editEp').removeClass('has-error');
-                        $('#error3inline_editEp').text('');
-                    }
-                    
-                    if (data.episodeStartTimeError)
-                    {
-                        $('#error4_editEp').addClass('has-error');
-                        $('#error4inline_editEp').text(data.episodeStartTimeError);
-                    }
-                    else
-                    {
-                        $('#error4_editEp').removeClass('has-error');
-                        $('#error4inline_editEp').text('');
-                    }
-                    if (data.episodeEndTimeError)
-                    {
-                        $('#error5_editEp').addClass('has-error');
-                        $('#error5inline_editEp').text(data.episodeEndTimeError);
-                    }
-                    else
-                    {
-                        $('#error5_editEp').removeClass('has-error');
-                        $('#error5inline_editEp').text('');
-                    }
-                    if (data.episodeLocationError)
-                    {
-                        $('#error6_editEp').addClass('has-error');
-                        $('#error6inline_editEp').text(data.episodeLocationError);
-                    }
-                    else
-                    {
-                        $('#error6_editEp').removeClass('has-error');
-                        $('#error6inline_editEp').text('');
-                    }
-            }
-            
-        });
-        
-      });
-      
-      $('#event-info').on("click", "#delete_episode_button", function () {
-          
-          $('#delete_episode_modal .modal-body').append("<p>Are you sure you want to delete the event " + globals.textTitle + " on " + globals.textDate + " ?</p>");
-            $("#delete_episodeId").val(globals.textId);
-            $('#delete_episode_modal').modal('show');         
-      });
-      
-      $('#delete_episode_modal').on('hidden.bs.modal', function (e) {
-        $('#delete_episode_modal .modal-body').empty();
+                if (data.episodeNameError)
+                {
+                    $('#error_editEp').addClass('has-error');
+                    $('#errorinline_editEp').text(data.episodeNameError);
+                }
+                else
+                {
+                    $('#error_editEp').removeClass('has-error');
+                    $('#errorinline_editEp').text('');
+                }
+
+                if (data.episodeDescError)
+                {
+                    $('#error2_editEp').addClass('has-error');
+                    $('#error2inline_editEp').text(data.episodeDescError);
+                }
+                else
+                {
+                    $('#error2_editEp').removeClass('has-error');
+                    $('#error2inline_editEp').text('');
+                }
+
+                if (data.episodeDateError)
+                {
+                    $('#error3_editEp').addClass('has-error');
+                    $('#error3inline_editEp').text(data.episodeDateError);
+                }
+                else
+                {
+                    $('#error3_editEp').removeClass('has-error');
+                    $('#error3inline_editEp').text('');
+                }
+
+                if (data.episodeStartTimeError)
+                {
+                    $('#error4_editEp').addClass('has-error');
+                    $('#error4inline_editEp').text(data.episodeStartTimeError);
+                }
+                else
+                {
+                    $('#error4_editEp').removeClass('has-error');
+                    $('#error4inline_editEp').text('');
+                }
+                if (data.episodeEndTimeError)
+                {
+                    $('#error5_editEp').addClass('has-error');
+                    $('#error5inline_editEp').text(data.episodeEndTimeError);
+                }
+                else
+                {
+                    $('#error5_editEp').removeClass('has-error');
+                    $('#error5inline_editEp').text('');
+                }
+                if (data.episodeLocationError)
+                {
+                    $('#error6_editEp').addClass('has-error');
+                    $('#error6inline_editEp').text(data.episodeLocationError);
+                }
+                else
+                {
+                    $('#error6_editEp').removeClass('has-error');
+                    $('#error6inline_editEp').text('');
+                }
+            } 
         }); 
+    });
+      
+    $('#event-info').on("click", "#delete_episode_button", function () {
+        $('#delete_episode_modal .modal-body').append("<p>Are you sure you want to delete the event " + globals.textTitle + " on " + globals.textDate + " ?</p>");
+        $("#delete_episodeId").val(globals.textId);
+        $('#delete_episode_modal').modal('show');         
+    });
+      
+    $('#delete_episode_modal').on('hidden.bs.modal', function (e) {
+        $('#delete_episode_modal .modal-body').empty();
+    }); 
     
     $('#addeventsubmit').click(function()
     {
@@ -911,7 +970,7 @@ $(document).ready(function(){
                 eventlocation: eventlocation 
             },
             success:
-                    function(data)
+            function(data)
             {       
                     if(data.count > 0)
                     {   
@@ -923,74 +982,74 @@ $(document).ready(function(){
                     if (data.nameerror)
                     {
                         $('#error').addClass('has-error');
-                        $('#errorinline').text(data.nameerror);
+                        $('#errorinline p').text(data.nameerror);
                     }
                     else
                     {
                         $('#error').removeClass('has-error');
-                        $('#errorinline').text('');
+                        $('#errorinline p').text('');
                     }
 
                     if (data.descerror)
                     {
                         $('#error2').addClass('has-error');
-                        $('#error2inline').text(data.descerror);
+                        $('#error2inline p').text(data.descerror);
                     }
                     else
                     {
                         $('#error2').removeClass('has-error');
-                        $('#error2inline').text('');
+                        $('#error2inline p').text('');
                     }
                     
                     if (data.stdateerror)
                     {
                         $('#error4').addClass('has-error');
-                        $('#error4inline').text(data.stdateerror);
+                        $('#error4inline p').text(data.stdateerror);
                     }
                     else
                     {
                         $('#error4').removeClass('has-error');
-                        $('#error4inline').text('');
+                        $('#error4inline p').text('');
                     }
                     if (data.enddateerror)
                     {
                         $('#error5').addClass('has-error');
-                        $('#error5inline').text(data.enddateerror);
+                        $('#error5inline p').text(data.enddateerror);
                     }
                     else
                     {
                         $('#error5').removeClass('has-error');
-                        $('#error5inline').text('');
+                        $('#error5inline p').text('');
                     }
                     if (data.sttimeerror)
                     {
                         $('#error6').addClass('has-error');
-                        $('#error6inline').text(data.sttimeerror);
+                        $('#error6inline p').text(data.sttimeerror);
                     }
                     else
                     {
                         $('#error6').removeClass('has-error');
-                        $('#error6inline').text('');
+                        $('#error6inline p').text('');
                     }
                     if (data.endtimeerror)
                     {
                         $('#error7').addClass('has-error');
-                        $('#error7inline').text(data.endtimeerror);
+                        $('#error7inline p').text(data.endtimeerror);
                     }
                     else
                     {
                         $('#error7').removeClass('has-error');
-                        $('#error7inline').text('');
+                        $('#error7inline p').text('');
                     }
                     if (data.locerror)
                     {
                         $('#error8').addClass('has-error');
-                        $('#error8inline').text(data.locerror);
+                        $('#error8inline p').text(data.locerror);
                     }
                     else
                     {
                         $('#error8').removeClass('has-error');
-                        $('#error8inline').text('');
+                        $('#error8inline p').text('');
                     }
             }
             
@@ -1046,56 +1105,56 @@ $(document).ready(function(){
                     if (data.edit_nameerror)
                     {
                         $(button).closest(".panel-body").find('#error_edit').addClass('has-error');
-                        $(button).closest(".panel-body").find('#errorinline_edit').text(data.edit_nameerror);
+                        $(button).closest(".panel-body").find('#errorinline_edit p').text(data.edit_nameerror);
                     }
                     else
                     {
                         $(button).closest(".panel-body").find('#error_edit').removeClass('has-error');
-                        $(button).closest(".panel-body").find('#errorinline_edit').text('');
+                        $(button).closest(".panel-body").find('#errorinline_edit p').text('');
                     }
 
                     if (data.edit_descerror)
                     {
                         $(button).closest(".panel-body").find('#error2_edit').addClass('has-error');
-                        $(button).closest(".panel-body").find('#error2inline_edit').text(data.edit_descerror);
+                        $(button).closest(".panel-body").find('#error2inline_edit p').text(data.edit_descerror);
                     }
                     else
                     {
                         $(button).closest(".panel-body").find('#error2_edit').removeClass('has-error');
-                        $(button).closest(".panel-body").find('#error2inline_edit').text('');
+                        $(button).closest(".panel-body").find('#error2inline_edit p').text('');
                     }
                     
                     if (data.edit_stTimeError)
                     {
                         $(button).closest(".panel-body").find('#error3_edit').addClass('has-error');
-                        $(button).closest(".panel-body").find('#error3inline_edit').text(data.edit_stTimeError);
+                        $(button).closest(".panel-body").find('#error3inline_edit p').text(data.edit_stTimeError);
                     }
                     else
                     {
                         $(button).closest(".panel-body").find('#error3_edit').removeClass('has-error');
-                        $(button).closest(".panel-body").find('#error3inline_edit').text('');
+                        $(button).closest(".panel-body").find('#error3inline_edit p').text('');
                     }
                     
                     if (data.edit_endTimeError)
                     {
                         $(button).closest(".panel-body").find('#error4_edit').addClass('has-error');
-                        $(button).closest(".panel-body").find('#error4inline_edit').text(data.edit_endTimeError);
+                        $(button).closest(".panel-body").find('#error4inline_edit p').text(data.edit_endTimeError);
                     }
                     else
                     {
                         $(button).closest(".panel-body").find('#error4_edit').removeClass('has-error');
-                        $(button).closest(".panel-body").find('#error4inline_edit').text('');
+                        $(button).closest(".panel-body").find('#error4inline_edit p').text('');
                     }
                     
                     if (data.edit_locerror)
                     {
                         $(button).closest(".panel-body").find('#error5_edit').addClass('has-error');
-                        $(button).closest(".panel-body").find('#error5inline_edit').text(data.edit_locerror);
+                        $(button).closest(".panel-body").find('#error5inline_edit p').text(data.edit_locerror);
                     }
                     else
                     {
                         $(button).closest(".panel-body").find('#error5_edit').removeClass('has-error');
-                        $(button).closest(".panel-body").find('#error5inline_edit').text('');
+                        $(button).closest(".panel-body").find('#error5inline_edit p').text('');
                     }
             }
             });
@@ -1183,333 +1242,267 @@ $(document).ready(function(){
                     if (data.editUsernameError)
                     {
                         $('#error_updateprofile').addClass('has-error');
-                        $('#errorinline_updateprofile').text(data.editUsernameError);
+                        $('#errorinline_updateprofile p').text(data.editUsernameError);
                     }
                     else
                     {
                         $('#error_updateprofile').removeClass('has-error');
-                        $('#errorinline_updateprofile').text('');
+                        $('#errorinline_updateprofile p').text('');
                     }
 
                     if (data.editEmailError)
                     {
                         $('#error2_updateprofile').addClass('has-error');
-                        $('#error2inline_updateprofile').text(data.editEmailError);
+                        $('#error2inline_updateprofile p').text(data.editEmailError);
                     }
                     else
                     {
                         $('#error2_updateprofile').removeClass('has-error');
-                        $('#error2inline_updateprofile').text('');
+                        $('#error2inline_updateprofile p').text('');
                     }
             }
         });
     });
         
-    /*************************************
-    **************************************
-    * SEARCH PLAYER
-    **************************************
-    *************************************/
+    //TABLES
     
-    $("#search_player").keyup(function(e)
-    {
-    	// Sletter innhold i feltet dersom man trykker esc
-		if (e.keyCode === 27) 
-		{ 
-			$(this).val(""); 
-		}
-		 
-        //Henter teksten frå inputfeltet, og resetter counten til 0.
-        var filter = $(this).val(), count = 0;
-        var soking = false;
-        //Looper gjennom ordlisten
-        $(".username").each(function()
-        {
-            // Dersom listen ikke inneholder inputen, så fades det ut.
-            if ($(this).text().search(new RegExp(filter, "i")) < 0)
+    $('#join_team_table').dataTable({
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search' ></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
+    $('#statistics_table').dataTable({
+        bSortClasses: false,
+        bInfo: false,
+        bPaginate: false,
+        bFilter: false,
+        "oLanguage": 
+        { 
+            "sSearch": "<span class='glyphicon glyphicon-search'></span>",
+            "sEmptyTable": '',
+            "sInfoEmpty": '',
+            "sZeroRecords": ''
+        },
+        
+    });  
+    
+    $('#player_table').dataTable({
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
+    $('#coach_table').dataTable({
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
+    $('#player_squad_table').dataTable({
+        bSortClasses: false,
+        bInfo: false,
+        bPaginate: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
+    $('#player_staff_table').dataTable({
+        bSortClasses: false,
+        bInfo: false,
+        bPaginate: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
+    $('#squad_table').dataTable({
+        iDisplayLength: 25,
+        bInfo: false,
+        bPaginate: false,
+        "sDom": 'l<"squad">frtip',
+        aaSorting: [[ 1, "desc" ]],
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+        
+    });
+    
+    $('#staff_table').dataTable({
+        iDisplayLength: 25,
+        bInfo: false,
+        bPaginate: false,
+        "sDom": 'l<"staff">frtip',
+        aaSorting: [[ 1, "desc" ]],
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+        
+    });
+    
+    $('#event_table').dataTable({
+        bSortClasses: false,
+        bInfo: false,
+        bPaginate: false,
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ],
+        bSort: false,
+        bFilter: false
+    });
+    
+    $('#event_table').on(' change','input[name="check_all"]',function() {
+            $('.allboxes').prop("checked" , this.checked);
+    });
+    
+    $('#squad_table').on(' change','input[name="check_all_squad"]',function() {
+            $('.allboxes_squad').prop("checked" , this.checked);
+    });
+    
+    $('#staff_table').on(' change','input[name="check_all_staff"]',function() {
+            $('.allboxes_staff').prop("checked" , this.checked);
+    });
+    
+    $("input[name='search']").each(function() {
+                $(this).attr("placeholder", "Search...");
+                });
+    
+    $('.allboxes_staff').each(function (){
+        console.log($(this));
+        if(user_id === $(this).val())
             {
-                $(this).parent().parent().hide();              
-			} 
-            
-            //Viser inputen dersom listen inneholder denne, og øker counten med 1.
-           	else
-           	{
-                $(this).parent().parent().show();
-                count++;
+                $(this).prop("disabled", true);
             }
-            
-            if ($(this).text() === $("#search_player").val())
-            {
-            	soking = true;
-            }  
-        });
-        
-        // Fjerner blå knapp om ordet finnes
-        if (soking)
-        {
-        	$('#legg_til_ord').removeClass('btn-primary');
-        	$('#legg_til_ord').children().removeClass('icon-white');
-        	$('#legg_til_ord').attr('disabled', 'disabled');
-        }
-        
-        
-        // Hindrer blå knapp om søket er tomt
-        else if ($("#search_player").val() === 0)
-        {
-        	$('#legg_til_ord').removeAttr('disabled');
-        	$('#legg_til_ord').removeClass('btn-primary');
-        	$('#legg_til_ord').children().removeClass('icon-white');
-        }
-        
-        // Setter blå knapp
-        else
-        {
-        	$('#legg_til_ord').removeAttr('disabled');
-        	$('#legg_til_ord').addClass('btn-primary');
-        	$('#legg_til_ord').children().addClass('icon-white');
-        }
-        $('#stripetabell').trigger("update");
-        $('#stripetabell').trigger("appendCache");
     });
+        
+    //SUCCESS MESSAGES
+        
+    var hash = window.location.search.substring(1);
 
-    /* $('#search_player').live('keypress', function(e){
-  		// Trykker enter
-  		if(e.keyCode === 13)
-  		{
-  			// Om legg til-knappen er blå, legg til verdi i modal
-	    	if ($('#legg_til_ord').hasClass('btn-primary'))
-	    	{
-		  		event.preventDefault();
-		  		$('#legg_til_ord_modal').modal();
-		  		$('#ord').val($("#search_player").val());
-		  		//$('#ord').removeAttr('autofocus');
-		  		
-		  		$('#grad').attr('autofocus','autofocus');
-		  	}
-		  	
-		  	// Om knappen er grå, ikke gjør noe
-		  	else
-		  	{
-		  		event.preventDefault();
-		  	}
-	  	}
-	}); */
-
-	// Legger til tekst i modal dersom knappen er blå, og man trykker på den
-	$('#legg_til_ord').click(function(){
-		if ($('#legg_til_ord').hasClass('btn-primary'))
-	    {
-	    	$('#ord').val($("#sok").val());
-	    	$('#grad').focus();
-	    }
-	});
-
-    /*************************************
-    **************************************
-    * SEARCH TEAM
-    **************************************
-    *************************************/
-
-        $("#search_team").keyup(function(e)
+    if ( hash === "addeventsuccess")
     {
-    	// Sletter innhold i feltet dersom man trykker esc
-		if (e.keyCode === 27) 
-		{ 
-			$(this).val(""); 
-		}
-		 
-        //Henter teksten frå inputfeltet, og resetter counten til 0.
-        var filter = $(this).val(), count = 0;
-        var soking = false;
-        //Looper gjennom ordlisten
-        $(".teamname").each(function()
-        {
-            // Dersom listen ikke inneholder inputen, så fades det ut.
-            if ($(this).text().search(new RegExp(filter, "i")) < 0)
-            {
-                $(this).parent().parent().hide();              
-			} 
-            
-            //Viser inputen dersom listen inneholder denne, og øker counten med 1.
-           	else
-           	{
-                $(this).parent().parent().show();
-                count++;
-            }
-            
-            if ($(this).text() === $("#search_team").val())
-            {
-            	soking = true;
-            }  
-        });
-        
-        // Fjerner blå knapp om ordet finnes
-        if (soking)
-        {
-        	$('#legg_til_ord').removeClass('btn-primary');
-        	$('#legg_til_ord').children().removeClass('icon-white');
-        	$('#legg_til_ord').attr('disabled', 'disabled');
-        }
-        
-        
-        // Hindrer blå knapp om søket er tomt
-        else if ($("#search_team").val() === 0)
-        {
-        	$('#legg_til_ord').removeAttr('disabled');
-        	$('#legg_til_ord').removeClass('btn-primary');
-        	$('#legg_til_ord').children().removeClass('icon-white');
-        }
-        
-        // Setter blå knapp
-        else
-        {
-        	$('#legg_til_ord').removeAttr('disabled');
-        	$('#legg_til_ord').addClass('btn-primary');
-        	$('#legg_til_ord').children().addClass('icon-white');
-        }
-        $('#stripetabell').trigger("update");
-        $('#stripetabell').trigger("appendCache");
-    });
-
-    /* $('#search_team').live('keypress', function(e){
-  		// Trykker enter
-  		if(e.keyCode === 13)
-  		{
-  			// Om legg til-knappen er blå, legg til verdi i modal
-	    	if ($('#legg_til_ord').hasClass('btn-primary'))
-	    	{
-		  		event.preventDefault();
-		  		$('#legg_til_ord_modal').modal();
-		  		$('#ord').val($("#search_team").val());
-		  		//$('#ord').removeAttr('autofocus');
-		  		
-		  		$('#grad').attr('autofocus','autofocus');
-		  	}
-		  	
-		  	// Om knappen er grå, ikke gjør noe
-		  	else
-		  	{
-		  		event.preventDefault();
-		  	}
-	  	}
-	}); */
-
-	// Legger til tekst i modal dersom knappen er blå, og man trykker på den
-	$('#legg_til_ord').click(function(){
-		if ($('#legg_til_ord').hasClass('btn-primary'))
-	    {
-	    	$('#ord').val($("#sok").val());
-	    	$('#grad').focus();
-	    }
-	});
-        
-var str=location.href.toLowerCase();
-        $('.navigation li a').each(function() {
-                if (str.indexOf(this.href.toLowerCase()) > -1) {
-						$("li.highlight").removeClass("highlight");
-                        $(this).parent().addClass("highlight"); 
-                   }
-              	 							}); 
-		$('li.highlight').parents().each(function(){
-												  
-					if ($(this).is('li')){
-						$(this).addClass("highlight"); 
-						}							  
-		});
-       
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Events were added to calendar. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'deleteeventsuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Events were deleted. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'deleteepisodesuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event was deleted. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'editepisodesuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event changes were saved. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    } 
+   else if (hash === 'addplayersuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Players were added to squad. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+        var hash = '#manage_squad';
+        $('.nav a[href="' + hash + '"]').tab('show');
+    }
     
-        $('#team_table').dataTable();           
-       
-        
-        
+    else if (hash === 'addcoachsuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Coaches were added to staff. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+        var hash = '#manage_squad';
+        $('.nav a[href="' + hash + '"]').tab('show');
+    }
     
-        /**
-	 *
-	 * Gir brukeren beskjed om at ulike operasjoner var vellykket
-	 * 
-	 */
-        var hash = window.location.search.substring(1);
-        if ( hash === "addeventsuccess")
-        {
-            $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Events were added to calendar. </p>');
-            $("#success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-        else if (hash === 'deleteeventsuccess')
-        {
-            $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Events were deleted. </p>');
-            $("#success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-        else if (hash === 'deleteepisodesuccess')
-        {
-            $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event was deleted. </p>');
-            $("#success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-        else if (hash === 'editepisodesuccess')
-        {
-            $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event changes were saved. </p>');
-            $("#success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        } 
-       else if (hash === 'addplayersuccess')
-        {
-            $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Players were added to squad. </p>');
-            $("#success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-            var hash = '#manage_squad';
-            $('.nav a[href="' + hash + '"]').tab('show');
-        }
-        else if (hash === 'removeplayersuccess')
-        {
-            $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Players were removed from squad. </p>');
-            $("#success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-            var hash = '#manage_squad';
-            $('.nav a[href="' + hash + '"]').tab('show');
-        }
-        else if (hash === 'updateteaminfosuccess')
-        {
-            $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Team information was updated. </p>');
-            $("#success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-            var hash = '#edit';
-            $('.nav a[href="' + hash + '"]').tab('show');
-        }
-
-        else if (hash === 'deleteteamsuccess')
-        {
-            $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>Team was deleted. </p>');
-            $("#home_success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-
-        else if (hash === 'createteamsuccess')
-        {
-            $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>Team was created. </p>');
-            $("#home_success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-
-        else if (hash === 'jointeamsuccess')
-        {
-            $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>Team was joined. </p>');
-            $("#home_success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-        else if (hash === 'leaveteamsuccess')
-        {
-            $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>You left team. </p>');
-            $("#home_success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-        else if (hash === 'updateprofilesuccess')
-        {
-            $("#profile_success").append('<p><span class="glyphicon glyphicon-ok"></span>Profile was updated. </p>');
-            $("#profile_success").show().delay(3000).fadeOut(1000);
-            window.history.replaceState("gammel", "ny", window.location.pathname);
-        }
-       
+    else if (hash === 'removeplayersuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Players were removed from squad. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+        var hash = '#manage_squad';
+        $('.nav a[href="' + hash + '"]').tab('show');
+    }
     
-    });
+    else if (hash === 'removecoachsuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Coaches were removed from staff. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+        var hash = '#manage_squad';
+        $('.nav a[href="' + hash + '"]').tab('show');
+    }
+    
+    else if (hash === 'updateteaminfosuccess')
+    {
+        $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Team information was updated. </p>');
+        $("#success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+        var hash = '#edit';
+        $('.nav a[href="' + hash + '"]').tab('show');
+    }
+
+    else if (hash === 'deleteteamsuccess')
+    {
+        $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>Team was deleted. </p>');
+        $("#home_success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+
+    else if (hash === 'createteamsuccess')
+    {
+        $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>Team was created. </p>');
+        $("#home_success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+
+    else if (hash === 'jointeamsuccess')
+    {
+        $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>Team was joined. </p>');
+        $("#home_success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'leaveteamsuccess')
+    {
+        $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>You left team. </p>');
+        $("#home_success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'updateprofilesuccess')
+    {
+        $("#profile_success").append('<p><span class="glyphicon glyphicon-ok"></span>Profile was updated. </p>');
+        $("#profile_success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+});
+    
+   
