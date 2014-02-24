@@ -2487,7 +2487,7 @@
 		var str = settings.oLanguage.sSearch;
 		str = str.match(/_INPUT_/) ?
 			str.replace('_INPUT_', '<input type="search" />') :
-			str+'<input type="search" class="'+classes.sFilterInput+'"/>';
+			str+'<input type="search" name="search" class="'+classes.sFilterInput+'"/>';
 	
 		var filter = $('<div/>', {
 				'id': ! features.f ? tableId+'_filter' : null,
