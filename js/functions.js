@@ -22,7 +22,7 @@ $(document).ready(function(){
         firstDay:'1',
         defaultView: 'basicWeek',
         height: 200,
-        eventColor: "#eb6864",
+        eventColor: "#c76256",
         timeFormat: 'H(:mm)',
         allDayDefault: false,
         header: 
@@ -93,6 +93,19 @@ $(document).ready(function(){
                             <div class='editbuttons row'><div class='col-sm-6'><button id='delete_episode_button'class='btn btn-danger btn-block' type='button'><span class='glyphicon glyphicon-trash'></span>Delete episode</button></div>\n\
                             <div class='col-sm-6'><button id='edit_episode_button' class='btn btn-default btn-block' type='button'><span class='glyphicon glyphicon-edit'></span>Edit episode details</button></div></div>\n\
                             ");
+                        var varDate = $.fullCalendar.formatDate(calEvent.start, 'yyyy-MM-dd');
+                        var comparison = varDate + " " + startTime;
+                        var haveToPass = moment(comparison);
+                        var bar = moment().subtract("hours", 24);
+                        if (bar > haveToPass)
+                        {
+                            $('#delete_episode_button').attr('disabled', 'disabled');
+                            $('#edit-episode-button').attr('disabled', 'disabled');
+                            $('#attend_yes').prop("disabled", true);
+                            $('#attend_no').prop("disabled", true);
+                            $('#editable').text('Attendance status (CLOSED for changes)');
+                        }
+                        
                         $('#location').append(calEvent.location);
                         $('#time').append(startTime + " - " + endTime);
                         if (calEvent.description !== '')
@@ -102,6 +115,7 @@ $(document).ready(function(){
                         else {
                             $('#description').append('No description');
                         }
+                        
                         
                         $('#event-details').append("\
                             <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
@@ -265,9 +279,9 @@ $(document).ready(function(){
     
     $('#create_team_modal').on('hidden.bs.modal', function () {
         $('#error_createteam').removeClass('has-error');
-        $('#errorinline_createteam').text('');
+        $('#errorinline_createteam p').text('');
         $('#error2_createteam').removeClass('has-error');
-        $('#error2inline_createteam').text('');
+        $('#error2inline_createteam p').text('');
     })
     
     $('#join_team').click(function() {
@@ -642,23 +656,23 @@ $(document).ready(function(){
                     if (data.createteamnameError)
                     {
                         $('#error_createteam').addClass('has-error');
-                        $('#errorinline_createteam').text(data.createteamnameError);
+                        $('#errorinline_createteam p').text(data.createteamnameError);
                     }
                     else
                     {
                         $('#error_createteam').removeClass('has-error');
-                        $('#errorinline_createteam').text('');
+                        $('#errorinline_createteam p').text('');
                     }
 
                     if (data.createsportError)
                     {
                         $('#error2_createteam').addClass('has-error');
-                        $('#error2inline_createteam').text(data.createsportError);
+                        $('#error2inline_createteam p').text(data.createsportError);
                     }
                     else
                     {   
                         $('#error2_createteam').removeClass('has-error');
-                        $('#error2inline_createteam').text('');
+                        $('#error2inline_createteam p').text('');
                     }
             }
         });
@@ -1397,7 +1411,7 @@ $(document).ready(function(){
                 $(this).prop("disabled", true);
             }
     });
-        
+    
     //SUCCESS MESSAGES
         
     var hash = window.location.search.substring(1);
