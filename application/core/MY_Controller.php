@@ -37,7 +37,7 @@ class MY_Controller extends CI_Controller
         $this->form_validation->set_rules('create_teamname', 'Team Name', 'trim|required|min_length[4]|max_length[30]|xss_clean'); //|is_unique[teams.teamname]
         $this->form_validation->set_rules('create_sport', 'Sport', 'trim|callback_check_default');
         $this->form_validation->set_message('check_default', 'Please choose a sport');
-        $this->form_validation->set_error_delimiters('<p class="bg-danger">', '</p>');
+        $this->form_validation->set_error_delimiters('', '');
         
         if ($this->form_validation->run() === FALSE) 
         {
