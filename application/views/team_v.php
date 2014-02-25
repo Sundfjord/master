@@ -44,7 +44,7 @@
             <?php if ( $coach !== TRUE ) : ?>
             <h3 class="margin">Schedule</h3>
             <?php else : ?>
-            <h3>Schedule</h3>
+            <h3 class="push">Schedule</h3>
             <?php endif; ?>
             <div class='row'>
                 <?php if ( $coach === TRUE ) : ?>
