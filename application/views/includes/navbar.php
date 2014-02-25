@@ -80,7 +80,7 @@
                         
                     <div class="form-group" id="error2_createteam">
                         <label for="sport">Sport:</label>
-                        <select class ="form-control" name="sport" id="create_sport" value="">
+                        <select class="form-control" name="sport" id="create_sport" value="">
                             <option value="0" name="choose" selected>Choose sport</option>
                             <option value="Football" name="Football">Football</option>
                             <option value="Badminton" name="Badminton">Badminton</option>
