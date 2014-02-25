@@ -430,6 +430,12 @@ p#time {
     text-align: center;
 }
 
+@media(max-width:767px){
+    .push {
+        margin-bottom: 45px;
+    }
+}
+
 @media(min-width:768px){
     #team_tabs {
         display: block;
