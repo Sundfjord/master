@@ -11,7 +11,7 @@
         <ul class="teams">
             <?php if ( $coach === TRUE ) : ?>
             <?php if (empty($coachteam)) {?>
-            <?php echo '<li class="teamlist"><a id="create_team" href="#create_team_modal"><span class="glyphicon glyphicon-plus"></span><h5>Create a team</h5></a></li>'; ?>
+            <?php echo '<li class="teamlist"><center><a id="create_team" href="#create_team_modal"><span class="glyphicon glyphicon-plus"></span><h5>Create a team</h5></a></center></li>'; ?>
             <?php } else {?><?php foreach ($coachteam as $row): ?>
             <?php echo 
                         '<li class="teamlist">
@@ -21,7 +21,8 @@
                                 <li><p class="infolabel">Coach:</p><p class="infocoach"> ' .$row['coach'] . '</p></li>
                                 <li><p class="infolabel">Players:</p><p class="infovalue"> ' .$row['count'] . ' players</p></li>
                             </ul>
-                            <center><button id="gototeam" class="btn btn-info"><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '">Go to team</a></button></center>
+                            <center><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '" id="gototeam" class="btn btn-info" role="button">Go to team</a></button></center>
+
                         </li>'
             ;?> 
             <?php endforeach; 
@@ -44,7 +45,8 @@
                                 <li><p class="infolabel">Coach:</p><p class="infocoach"> ' .$row['coach'] . '</p></li>
                                 <li><p class="infolabel">Players:</p><p class="infovalue"> ' .$row['count'] . ' players</p></li>
                             </ul>
-                            <center><button id="gototeam" class="btn btn-info"><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '">Go to team</a></button></center>
+                            <center><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '" id="gototeam" class="btn btn-info" role="button">Go to team</a></center>
+
                         </li>'
                         ;?>
             <?php endforeach; 
