@@ -471,7 +471,9 @@ p#time {
         padding-left: 410px;
     }
 }
-
+.margin {
+    margin-bottom: 45px;
+}
 /*************************************
 **************************************
 * TEAM FORMS
@@ -489,17 +491,6 @@ p#time {
 .radio-inline {
     margin-right: 5px;
     margin-bottom: 15px;
-}
-
-.event_field {
-    width: 95%;
-}
-
-.event_field_half {
-    width: 45%;
-    float: left;
-    margin: 0 25px 15px 0;
-
 }
 
 .bfh-datepicker {
@@ -531,6 +522,11 @@ p.danger {
     margin-left: 5px;
     margin-top: 3px;
 }
+
+#error_createteam {
+    margin-bottom: 35px;
+}
+
 
 /*************************************
 **************************************
@@ -630,7 +626,7 @@ td.left {
     margin-bottom: 20px;
 }
 
-#squad_table_wrapper, #staff_table_wrapper {
+#squad_table_wrapper, #staff_table_wrapper, #player_squad_table_wrapper, #player_staff_table_wrapper{
     margin-top: -35px !important; 
 }
 
