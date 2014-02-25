@@ -53,13 +53,13 @@ $captcha = array(
             <form role="form">
                 <div class="form-group">
                     <?php echo form_label($login_label, $login['id'], array('class' =>'control-label')); ?>
-                    <?php echo form_input($login['id'], set_value('login'), 'id="' . $login['id'] . '" class="form-control col-xs-8"'); ?>
+                    <?php echo form_input($login['id'], set_value('login'), 'id="' . $login['id'] . '" class="form-control"'); ?>
                     <?php echo form_error($login['name'], '<div class="alert alert-danger"><p>', '</p></div>'); ?><?php echo isset($errors[$login['name']])?$errors[$login['name']]:''; ?>
                     
                 </div>
                 <div class="form-group">
                     <?php echo form_label('Password', $password['id'], array('class' =>'control-label')); ?>
-                    <?php echo form_password($password['id'], '', 'id="' . $password['id'] . '" class="form-control col-xs-8"'); ?>
+                    <?php echo form_password($password['id'], '', 'id="' . $password['id'] . '" class="form-control"'); ?>
                     <?php echo form_error($password['name'], '<div class="alert alert-danger"><p>', '</p></div>'); ?><?php echo isset($errors[$password['name']])?$errors[$password['name']]:''; ?>
                 </div>
                 <div class="form-group">
