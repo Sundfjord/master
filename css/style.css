@@ -94,6 +94,7 @@ table {
 
 a:hover {
     color: #ddd;
+    text-decoration: none;
 }
 
 /*************************************
@@ -214,7 +215,7 @@ a:hover {
     width: 95px;
 }
 
-#gototeam a, a:hover {
+#gototeam a #gototeam a:hover {
     text-decoration: none;
     color: #ffffff;
 }
@@ -602,6 +603,21 @@ p.danger {
 
 .dataTables_empty {
     display:none;
+}
+
+/*************************************
+**************************************
+* ABOUT
+**************************************
+*************************************/
+
+.leave {
+    margin-top: 20px;
+    
+}
+
+.leave .panel-body {
+    padding: 15px;
 }
 
 /*************************************

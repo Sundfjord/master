@@ -51,7 +51,7 @@
             <div id="knapp_bar" class="col-sm-12">
                 <button type="button" id="add_event" class="btn btn-info" href="#add_event_modal"> <span class="glyphicon glyphicon-plus-sign"></span>Add event</button>
                 <button type="button" id="edit_event" class="btn btn-default" href="#edit_event_modal"> <span class="glyphicon glyphicon-edit"></span>Edit events</button>
-                <button type="button" id="delete_event" class=" btn btn-danger" href="#delete_event_modal"> <span class="glyphicon glyphicon-trash"></span>Delete event</button>
+                <button type="button" id="delete_event" class=" btn btn-danger" href="#delete_event_modal"> <span class="glyphicon glyphicon-trash"></span>Delete events</button>
             </div>
             <?php endif; ?>
                 <div id="calendar" class='col-xs-12'>
@@ -137,6 +137,7 @@
         </div>
         
         <div class="tab-pane fade" id="stats">
+            <h3>Statistics</h3>
             <div id="stats_table">
                 <div class='row'>
                     <div class='col-sm-10 col-md-8 col-lg-6'>
@@ -144,7 +145,7 @@
                         <span class="glyphicon glyphicon-calendar"></span><span class="text"><?php echo date("F j, Y", strtotime('-30 day')); ?> - <?php echo date("F j, Y"); ?></span> <b class="caret"></b>
                     </div>
                 
-                    <h3>Statistics</h3>
+                    
 
                     <table id="statistics_table" class="table table-striped table-bordered dataTable">
                         <thead>
@@ -159,6 +160,10 @@
                         </tbody>
                     </table>
                 </div>
+                    
+                    <div id="box" class="col-md-3 col-md-offset-1">
+                        <p>In the table to the left, you can see an overview over who attended the most events in a certain period of time. Just pick your date range in the picker over the table, and rockEnroll will do the rest.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -169,6 +174,7 @@
             <?php if (empty($squad)) {?>
             <?php } else {?>
                 <div class='col-xs-6'>
+                    <h4>Players</h4>
                     <table id="player_squad_table" class="table table-striped table-bordered dataTable">
                         <thead>
                             <tr> 
@@ -191,6 +197,7 @@
             <?php if (empty($staff)) {?>
             <?php } else {?>
                 <div class='col-xs-6'>
+                    <h4>Coaches</h4>
                     <table id="player_staff_table" class="table table-striped table-bordered dataTable">
                         <thead>
                             <tr> 
@@ -211,13 +218,24 @@
                 </div>
                 <?php } ?>
             </div>
-                <button id="leave_team" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle"></span>Leave Team</button>
-                
-            
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class='leave panel panel-default'>
+                        <div class='panel-heading'>
+                            <span class='glyphicon glyphicon-warning-sign'></span>Danger-zone
+                        </div>
+                        <div class='panel-body'>
+                            
+                            <button id="leave_team" class="btn btn-block btn-danger"><span class="glyphicon glyphicon-remove-circle"></span>Leave Team</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
         </div>
         
         <div class="tab-pane fade" id="manage_squad">
-        <div class="row">
+            <h3>Manage squad</h3>
+            <div class="row">
             
             <?php if (empty($squad)) {?>
 
@@ -225,10 +243,6 @@
                 <div class="col-sm-6">
                     <h3>There is currently no players on <?php echo $teaminfo->teamname; ?> </h3>
                     <p>Press the button below to add players.</p>
-
-                    <div id="knapp">
-                        <button type="button" id="add_player" class="btn btn-info" data-target="#add_player_accordion" data-toggle="collapse" data-parent="knapp"><span class="glyphicon glyphicon-plus-sign"></span>Add more players</button>
-                    </div>
                 </div>
             
             
@@ -237,7 +251,7 @@
                 <div class="col-sm-6">
                     <div id="squad">
                         
-                        <h3>Players</h3>
+                        <h4>Players</h4>
                     <form id="remove_player" action="" method="post">
                         
                     <table id="squad_table" class="table table-striped table-bordered dataTable">
@@ -285,7 +299,7 @@
                 <div class="col-sm-6">
                     <div id="staff">
                         
-                        <h3>Coaches</h3>
+                        <h4>Coaches</h4>
                     <form id="remove_coach" action="" method="post">
                         
                     <table id="staff_table" class="table table-striped table-bordered dataTable">
@@ -405,9 +419,9 @@
             </div>
         
         <div id="edit" class="tab-pane fade">
-            <div id="edit_panels">
-                <h3>Edit</h3>
-                <div class="row">
+            <h3>Edit</h3>
+                
+                <div id="edit_panels" class="row">
                     
                     <div class="col-sm-9 col-md-6 col-lg-5">
                         <div id="edit_team">
@@ -482,7 +496,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>
@@ -598,14 +611,16 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">Edit event</h4>
                 </div>
+                    <div class="modal-body">
+                        <?php if (empty($eventdata)) {?>
 
-                <div class="modal-body">
-                    <?php if (empty($eventdata)) {?>
-                    <div>
-                        <h4>Apparently, there are no events. </h4> <br> <h4>You better add some, fool.</h4>
+                        <div>
+                            <h4>Apparently, there are no events. </h4> <br> <h4>You better add some, fool.</h4>
+                        </div>
+                    
                     </div>
-
                     <?php } else {?>
+                    
                     <div class="panel-group" id="accordion">
                     <?php foreach ($eventdata as $row): ?>
                         <div class="panel panel-default">
@@ -666,11 +681,17 @@
                             </form>                          
                             </div>
                         </div>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
-                      
-                     <?php endforeach; ?>
+            </div>
+        
+                     
                     <?php } ?>
-                    </div>
+                    
+                
+    
+                    
                     
                 
                 <div class="modal-footer">
@@ -688,7 +709,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Delete event</h4>
+                    <h4 class="modal-title">Delete events</h4>
                 </div>
 
                 <div class="modal-body">                                                                        
@@ -724,7 +745,7 @@
 
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
-                    <button class="btn btn-lg btn-danger" id="deleteeventsubmit" type="button" disabled>Delete event</button>
+                    <button class="btn btn-lg btn-danger" id="deleteeventsubmit" type="button" disabled>Delete events</button>
                 </div>
                     </form>
             </div><!-- /.modal-content -->
@@ -814,7 +835,7 @@
                 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Delete event</h4>
+                    <h4 class="modal-title">Delete events</h4>
                 </div>
 
                 <div id="delete_episode_modal_body "class="modal-body">

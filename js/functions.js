@@ -90,8 +90,8 @@ $(document).ready(function(){
                         $('#attendance_tables').append(result);
                         $('.hidden_id').prepend("<input id='episode-id' class='noshow' type='hidden' name='ep-id' value='" + calEvent.id + "' readonly>");
                         $('#coach-only').prepend("\
-                            <div class='editbuttons row'><div class='col-sm-6'><button id='delete_episode_button'class='btn btn-danger btn-block' type='button'><span class='glyphicon glyphicon-trash'></span>Delete episode</button></div>\n\
-                            <div class='col-sm-6'><button id='edit_episode_button' class='btn btn-default btn-block' type='button'><span class='glyphicon glyphicon-edit'></span>Edit episode details</button></div></div>\n\
+                            <div class='editbuttons row'><div class='col-sm-6'><button id='delete_episode_button'class='btn btn-danger btn-block' type='button'><span class='glyphicon glyphicon-trash'></span>Delete this event</button></div>\n\
+                            <div class='col-sm-6'><button id='edit_episode_button' class='btn btn-default btn-block' type='button'><span class='glyphicon glyphicon-edit'></span>Edit event details</button></div></div>\n\
                             ");
                         var varDate = $.fullCalendar.formatDate(calEvent.start, 'yyyy-MM-dd');
                         var comparison = varDate + " " + startTime;
@@ -116,7 +116,6 @@ $(document).ready(function(){
                             $('#description').append('No description');
                         }
                         
-                        
                         $('#event-details').append("\
                             <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
                             <input id='date' class='noshow' type='hidden' name='date' value='" + stDate + "' readonly>\n\
@@ -124,11 +123,10 @@ $(document).ready(function(){
                             <input id='end-time' class='noshow' type='hidden' name='end-time' value='" + endTime + "' readonly>\n\
                             <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
                         ");
-                        $('#event-info').fadeIn(500); //css("display", "block");
+                        $('#event-info').fadeIn(500);
                         
                     }
-            });
-            
+            });   
         }
     });
     

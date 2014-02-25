@@ -308,7 +308,7 @@ class Team_m extends MY_Model {
         
     }
     
-    public function add_coach() 
+    public function add_coach($coaches) 
     {
         $this->db->set('user_id', $coaches);
         $this->db->set('team_id', $this->uri->segment(3));
