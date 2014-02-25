@@ -195,8 +195,21 @@ class Team extends MY_Controller
 
         foreach( $data as $key => $value)
         {
-            $this->team_m->join_team($value);
+            $this->db->where('user_id', $value);
+            $exists = $this->db->get_where('plays_for', array(
+                'team_id'   => $this->uri->segment(3)
+                ));
+            if($exists->num_rows() === 0)
+            {
+                $this->team_m->join_team($value);
+            }
+            else 
+            {
+                continue;
+            }
         }
+        
+            
         
         $count = count($data);
         

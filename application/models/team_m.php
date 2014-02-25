@@ -312,7 +312,7 @@ class Team_m extends MY_Model {
     {
         $this->db->set('user_id', $coaches);
         $this->db->set('team_id', $this->uri->segment(3));
-        $this->db->insert('is_coach_of');
+        $this->db->on_duplicate('is_coach_of');
         
         return $this->db->affected_rows();
     }
@@ -371,7 +371,7 @@ class Team_m extends MY_Model {
     {      
         $this->db->set('user_id', $this->session->userdata('user_id'));
         $this->db->set('team_id', $value);
-        $this->db->insert('plays_for');
+        $this->db->on_duplicate('plays_for');
         
         $count = $this->db->affected_rows();
         
@@ -393,8 +393,6 @@ class Team_m extends MY_Model {
         $this->db->where_in('event_id', $eventarray);
         $episodes = $this->db->get();
         
-        echo $this->db->last_query();
-        
         if ($episodes->num_rows() > 0)
 
         foreach ($episodes->result_array() as $row) 
@@ -405,7 +403,7 @@ class Team_m extends MY_Model {
                     'is_attending'  =>  0
                     );
 
-                    $this->db->insert('attendance_status', $attendanceinsert);
+                    $this->db->on_duplicate('attendance_status', $attendanceinsert);
             }
         }
         else

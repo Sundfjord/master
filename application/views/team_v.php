@@ -108,13 +108,13 @@
                                 <div class='panel-body'>
                                     <div class='row'>
                                         <div class='col-xs-6'>
-                                            <input type="radio" value="1" name="attendance_choice" id="attend_yes">
-                                            <label for="attend_yes">YES</label>
+                                            <center><input type="radio" value="1" name="attendance_choice" id="attend_yes">
+                                            <label for="attend_yes">YES</label></center>
 
                                         </div>
                                         <div class='col-xs-6'>
-                                            <input type="radio" value="2" name="attendance_choice" id="attend_no">
-                                            <label for="attend_no">NO</label>
+                                            <center><input type="radio" value="2" name="attendance_choice" id="attend_no">
+                                            <label for="attend_no">NO</label></center>
                                         </div>
                                     </div>
                                 </div>
