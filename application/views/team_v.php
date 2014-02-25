@@ -17,12 +17,12 @@
                 <li><a href="#schedule" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span>Schedule</a></li>
                 <li><a href="#stats" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span>Statistics</a></li>
                 <li><a href="#manage_squad" data-toggle="tab"><span class="glyphicon glyphicon-list-alt"></span>Manage squad</a></li>
-                <li><a href="#edit" data-toggle="tab"><span class="glyphicon glyphicon-edit"></span>Edit</a></li>
+                <li><a href="#edit" data-toggle="tab"><span class="glyphicon glyphicon-edit"></span>Edit <?php echo $teaminfo->teamname; ?></a></li>
             </ul>
             <?php else : ?>
             <ul id="team_tabs" class="nav nav-tabs">
                 <li><a href="#schedule" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span>Schedule</a></li>
-                <li><a href="#about" data-toggle="tab"><span class="glyphicon glyphicon-info-sign"></span>About</a></li>
+                <li><a href="#about" data-toggle="tab"><span class="glyphicon glyphicon-info-sign"></span>About <?php echo $teaminfo->teamname; ?></a></li>
             </ul>
             <?php endif; ?>
         </div>
@@ -36,16 +36,16 @@
     <input id="filter_id" type="hidden" name="filter_id" value="<?php echo $this->uri->segment(2); ?>">
     <input id='user' type='hidden' name='user_id' value='<?php echo $this->session->userdata('user_id'); ?>'>
     
-    
-    
-    
-    
     <!-- Tab panes -->
 
     
     <div id="team_content" class="tab-content">
         <div class="tab-pane fade in active" id="schedule">
+            <?php if ( $coach !== TRUE ) : ?>
+            <h3 class="margin">Schedule</h3>
+            <?php else : ?>
             <h3>Schedule</h3>
+            <?php endif; ?>
             <div class='row'>
                 <?php if ( $coach === TRUE ) : ?>
             <div id="knapp_bar" class="col-sm-12">
@@ -55,8 +55,6 @@
             </div>
             <?php endif; ?>
                 <div id="calendar" class='col-xs-12'>
-                    
-                    
                     
                 </div>
             </div>
@@ -106,7 +104,7 @@
                         <form class="after" id="set_attendance_form" action="" method="post">
                             <div class='col-xs-12'>
                                 <div class='attendance panel panel-default'>
-                                <div class='panel-heading'><span class='glyphicon glyphicon-question-sign'></span>Attendance status</div>
+                                <div id="editable" class='panel-heading'><span class='glyphicon glyphicon-question-sign'></span>Attendance status</div>
                                 <div class='panel-body'>
                                     <div class='row'>
                                         <div class='col-xs-6'>
@@ -166,6 +164,7 @@
         </div>
         
         <div class="tab-pane fade" id="about">
+            <h3>About</h3>
             <div class='row'>
             <?php if (empty($squad)) {?>
             <?php } else {?>
@@ -186,8 +185,9 @@
                     <?php endforeach;?>
                         </tbody>
                     </table>
+                    </div>
             <?php } ?>
-                </div>
+                
             <?php if (empty($staff)) {?>
             <?php } else {?>
                 <div class='col-xs-6'>
@@ -207,12 +207,13 @@
                     <?php endforeach;?>
                         </tbody>
                     </table>
-            <?php } ?>        
+                    
                 </div>
-            
+                <?php } ?>
+            </div>
+                <button id="leave_team" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle"></span>Leave Team</button>
                 
-                </div>
-            <button id="leave_team" class="btn btn-danger"><span class="glyphicon glyphicon-remove-circle"></span>Leave Team</button>
+            
         </div>
         
         <div class="tab-pane fade" id="manage_squad">
@@ -484,6 +485,7 @@
             </div>
         </div>
     </div>
+</div>
 <div id="modals">
 <!-- ADD EVENT MODAL -->
     
@@ -678,7 +680,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    </div>
 
     <!-- DELETE EVENT MODAL -->
     
@@ -850,5 +851,4 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-</div>
 </div>
