@@ -12,6 +12,9 @@
         <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-datepicker.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/daterangepicker-bs3.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/square/green.css" rel="stylesheet">
+        <link rel="stylesheet" href="<?php echo base_url();?>css/square/blue.css" rel="stylesheet">
+        <link rel="stylesheet" href="<?php echo base_url();?>css/square/red.css" rel="stylesheet">
         <link rel="stylesheet" href="<?php echo base_url();?>css/fullcalendar.css" type="text/css" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
     </head>
@@ -28,13 +31,14 @@
     
         <script src="<?php echo base_url(); ?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo base_url(); ?>js/icheck.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/jquery.dataTables.js" type="text/javascript" charset="utf-8" ></script>
         <script src="<?php echo base_url(); ?>js/dataTables.bootstrap.js" type="text/javascript" charset="utf-8" ></script>
         <script src="<?php echo base_url(); ?>js/moment.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/bootstrap-datepicker.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/bootstrap-datetimepicker.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/daterangepicker.js" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo base_url(); ?>js/fullcalendar.js" type='text/javascript' ></script> 
+        <script src="<?php echo base_url(); ?>js/fullcalendar.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/functions.js" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>
