@@ -237,12 +237,12 @@ class Team extends MY_Controller
         $this->form_validation->set_rules('eventname', 'Event Name', 'required|max_length[25]|min_length[3]');
         $this->form_validation->set_rules('eventdesc', 'Event Description', 'max_length[140]');
         $this->form_validation->set_rules('frequency', 'Frequency', 'required');
-        $this->form_validation->set_rules('start_date', 'Start Date', 'required');
+        $this->form_validation->set_rules('start_date', 'Start Date', 'required|callback_compareToNow');
         if($this->input->post('frequency') !== 'single') 
         {
             $this->form_validation->set_rules('end_date', 'End Date', 'required|callback_compareDates');
         }
-        $this->form_validation->set_rules('start_time', 'Start Time', 'required|callback_compareToNow');
+        $this->form_validation->set_rules('start_time', 'Start Time', 'required');
         $this->form_validation->set_rules('end_time', 'End Time', 'required|callback_compareTimes');
         $this->form_validation->set_rules('eventlocation', 'Location', 'trim|required');
         $this->form_validation->set_error_delimiters('', '');
@@ -377,10 +377,13 @@ class Team extends MY_Controller
     
     public function compareToNow()
     {
-        $now = date('d-m-Y H:i');
+        $tempnow = date('d-m-Y H:i');
         $space = " ";
         //need to make sure $comparison matches $now
-        $comparison = $this->input->post('start_date') . $space . $this->input->post('start_time');
+        $tempcomparison = $this->input->post('start_date') . $space . $this->input->post('start_time');
+        
+        $now = strtotime($tempnow);
+        $comparison = strtotime($tempcomparison);
         
         if ($now > $comparison)
         {
