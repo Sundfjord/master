@@ -243,7 +243,7 @@ class Team extends MY_Controller
             $this->form_validation->set_rules('end_date', 'End Date', 'required|callback_compareDates');
         }
         $this->form_validation->set_rules('start_time', 'Start Time', 'required');
-        $this->form_validation->set_rules('end_time', 'End Time', 'required|callback_compareTimes');
+        $this->form_validation->set_rules('end_time', 'End Time', 'required|callback_compareTimes|callback_minDuration');
         $this->form_validation->set_rules('eventlocation', 'Location', 'trim|required');
         $this->form_validation->set_error_delimiters('', '');
         
@@ -390,6 +390,24 @@ class Team extends MY_Controller
             $this->form_validation->set_message('compareToNow', 'Your start time must be later than the current time');
             return false;
         }
+    }
+    
+    public function minDuration() {
+        $tempStartTime = $this->input->post('start_time');
+        $tempEndTime = $this->input->post('end_time');
+        $startTime = strtotime($tempStartTime);
+        $endTime = strtotime($tempEndTime);
+                
+        $event_length = 15;
+        
+        $minimum = strtotime("+$event_length minutes", $startTime);
+        
+        if ($minimum > $endTime) 
+        {
+            $this->form_validation->set_message('minDuration', 'Your event must last at least 15 minutes');
+            return false;
+        }
+        
     }
     
     public function edit_event()
