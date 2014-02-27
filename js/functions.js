@@ -11,6 +11,22 @@ $(document).ready(function(){
     var user_id = $('#user').val();
     var base_url = 'http://localhost/master';
     
+    $('#green').iCheck({
+        radioClass: 'iradio_square-green',
+        increaseArea: '30%',
+        inheritID: true
+    });
+
+    $('#red').iCheck({
+        radioClass: 'iradio_square-red',
+        increaseArea: '30%',
+        inheritID: true
+    });
+    
+    /*$('table').iCheck({
+        checkboxClass: 'iradio_square-blue'
+    });*/
+    
     /*************************************
     **************************************
     * CALENDAR
@@ -18,18 +34,17 @@ $(document).ready(function(){
     *************************************/
     
     $('#calendar').fullCalendar({
-        
         firstDay:'1',
         defaultView: 'basicWeek',
         height: 200,
-        eventColor: "#c76256",
+        eventColor: "#336799",
         timeFormat: 'H(:mm)',
         allDayDefault: false,
         header: 
         {
             left: 'prev,next',
             center: '',
-            right:  'basicWeek,basicDay'
+            right:  'month,basicWeek,basicDay'
         },
         columnFormat: 'ddd d/M',
         events: function(start,end, callback) 
@@ -100,10 +115,15 @@ $(document).ready(function(){
                         if (bar > haveToPass)
                         {
                             $('#delete_episode_button').attr('disabled', 'disabled');
-                            $('#edit-episode-button').attr('disabled', 'disabled');
-                            $('#attend_yes').prop("disabled", true);
-                            $('#attend_no').prop("disabled", true);
-                            $('#editable').text('Attendance status (CLOSED for changes)');
+                            $('#edit_episode_button').attr('disabled', 'disabled');
+                            //Find something brilliant to stop people from doing stuff
+                        }
+                        else {
+                            $('#delete_episode_button').attr('disabled', false);
+                            $('#edit-episode-button').attr('disabled', false);
+                            $('#green, #red').removeClass('notinmyhouse');
+                            $('#attend_yes').iCheck('disable');
+                            $('#attend_no').iCheck('disable');
                         }
                         
                         $('#location').append(calEvent.location);
@@ -115,6 +135,8 @@ $(document).ready(function(){
                         else {
                             $('#description').append('No description');
                         }
+                        
+                        $('#attend_yes, #attend_no').iCheck('uncheck');
                         
                         $('#event-details').append("\
                             <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
@@ -448,10 +470,20 @@ $(document).ready(function(){
     **************************************
     *************************************/
    
-    $('#attend_yes, #attend_no').click(function()
+    $("#green, #label_yes").click(function(){
+        $('#attend_yes').iCheck('check');
+    });
+
+    $("#red, #label_no").click(function(){
+        $('#attend_no').iCheck('check');
+    });
+
+    $('#green, #label_yes, #red, #label_no').click(function()
     {
-        var attendance_choice   = $("[name='attendance_choice']:checked").val();
+        var attendance_choice   = $("[name='attendance_choice']:checked").val(); //
         var episode_id          = $("#episode-id").val();
+        
+        console.log(attendance_choice);
         
         $.ajax({  
             type: "POST",
@@ -1516,5 +1548,12 @@ $(document).ready(function(){
         window.history.replaceState("gammel", "ny", window.location.pathname);
     }
 });
-    
+
+$(document).ajaxStart(function(){
+   $("#loading").show();
+ });
+
+$(document).ajaxComplete(function(){
+   $("#loading").hide();
+ });
    
