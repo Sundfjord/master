@@ -1,6 +1,10 @@
     <div id="success" class="success">
         
     </div>
+
+    <div id="loading" class='loadingoverlay pageoverlay'>
+        
+    </div>
     
 <div id="top" class="container-fluid">
     <div id="inner_top" class="container">
@@ -35,7 +39,6 @@
     
     <input id="filter_id" type="hidden" name="filter_id" value="<?php echo $this->uri->segment(2); ?>">
     <input id='user' type='hidden' name='user_id' value='<?php echo $this->session->userdata('user_id'); ?>'>
-    
     <!-- Tab panes -->
 
     
@@ -48,7 +51,7 @@
             <?php endif; ?>
             <div class='row'>
                 <?php if ( $coach === TRUE ) : ?>
-            <div id="knapp_bar" class="col-sm-12">
+            <div id="knapp_bar" class="col-sm-7 col-md-5">
                 <button type="button" id="add_event" class="btn btn-info" href="#add_event_modal"> <span class="glyphicon glyphicon-plus-sign"></span>Add event</button>
                 <button type="button" id="edit_event" class="btn btn-default" href="#edit_event_modal"> <span class="glyphicon glyphicon-edit"></span>Edit events</button>
                 <button type="button" id="delete_event" class=" btn btn-danger" href="#delete_event_modal"> <span class="glyphicon glyphicon-trash"></span>Delete events</button>
@@ -98,23 +101,26 @@
                     <div id="coach-only">
 
                     </div>
-                    <?php else : ?>
+                        
+                    <?php endif; ?>
+                </div>    
                     
-                    <div id="attendance_select" class='row'>
+                    <div class='col-xs-12 col-md-6'>
+                        <?php if ( $coach !== TRUE ) : ?>
+                        <div id="attendance_select" class='row'>
                         <form class="after" id="set_attendance_form" action="" method="post">
                             <div class='col-xs-12'>
                                 <div class='attendance panel panel-default'>
                                 <div id="editable" class='panel-heading'><span class='glyphicon glyphicon-question-sign'></span>Attendance status</div>
                                 <div class='panel-body'>
-                                    <div class='row'>
-                                        <div class='col-xs-6'>
-                                            <center><input type="radio" value="1" name="attendance_choice" id="attend_yes">
-                                            <label for="attend_yes">YES</label></center>
-
+                                    <div id='choice' class='nomargin row'>
+                                        <div id="green" class='col-xs-6'>
+                                            <input class='attendance_choice' type="radio" value="1" name="attendance_choice" id="attend_yes">
+                                            <label class='labelyes leftmargin' id='label_yes' for="attend_yes">Count me in!</label>
                                         </div>
-                                        <div class='col-xs-6'>
-                                            <center><input type="radio" value="2" name="attendance_choice" id="attend_no">
-                                            <label for="attend_no">NO</label></center>
+                                        <div id="red" class='col-xs-6'>
+                                            <input class='attendance_choice' type="radio" value="2" name="attendance_choice" id="attend_no">
+                                            <label class='labelno leftmargin' id='label_no' for="attend_no">I can't make it</label>
                                         </div>
                                     </div>
                                 </div>
@@ -123,10 +129,7 @@
                         <div class="hidden_id"></div>
                         </form>   
                     </div>
-                        
-                    <?php endif; ?>
-                </div>    
-                    <div class='col-xs-12 col-md-6'>
+                        <?php endif; ?>
                         <div id='attendance_tables' class='row'>
                             
                         </div>
@@ -332,7 +335,7 @@
             </div>
             
             <div id="knapp_bar2"> 
-                <button type="button" id="add_people" class="btn btn-lg btn-info" data-target="#add_people_accordion" data-toggle="collapse" data-parent="knapp_bar"><span class="glyphicon glyphicon-plus-sign"></span>Add more people<span class="caret"></span></button>
+                <button type="button" id="add_people" class="btn btn-block btn-success" data-target="#add_people_accordion" data-toggle="collapse" data-parent="knapp_bar"><span class="glyphicon glyphicon-plus-sign"></span>Add more people<span class="caret"></span></button>
             </div>
             
             <div id="add_people_accordion" class="collapse">
@@ -349,7 +352,7 @@
                     
                         <div class="col-sm-6">
                             <div id="playersearch">
-                                <h3>Player database</h3>
+                                <h4>Player database</h4>
 
                                 <form id="add_player_form" action="" method="post">
                                 <table id="player_table" class="table table-striped table-bordered dataTable">
@@ -370,7 +373,7 @@
                                     </tbody>
                                 </table>
 
-                                <button class="btn btn-success" id="addplayersubmit" type="button" disabled >Add to team</button>
+                                <button class="btn btn-block btn-success" id="addplayersubmit" type="button" disabled >Add players to team</button>
 
                                 </form>
                             </div>
@@ -390,7 +393,7 @@
                 
                 <div class="col-sm-6">
                     <div id="coachsearch">
-                        <h3>Coach database</h3>
+                        <h4>Coach database</h4>
                         <table id="coach_table" class="table table-striped table-bordered dataTable">
                             <thead>
                                 <tr class="tabellheader"> 
@@ -409,7 +412,7 @@
                                 
                             </table>
                             
-                            <button class="btn btn-success" id="addcoachsubmit" type="button" disabled >Add to team</button>
+                            <button class="btn btn-block btn-success" id="addcoachsubmit" type="button" disabled >Add coaches to team</button>
                         </form>
                     </div>
                 </div>
