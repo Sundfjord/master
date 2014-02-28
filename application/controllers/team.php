@@ -375,6 +375,23 @@ class Team extends MY_Controller
         }
     }
     
+    public function compareEditedEpisodeTimes()
+    {
+        $start = strtotime($this->input->post('edited_episodeStartTime'));
+        $end = strtotime($this->input->post('edited_episodeEndTime'));
+        
+        if($start > $end)
+        {
+            $this->form_validation->set_message('compareEditedEpisodeTimes', 'Your end time must be after your start time');
+            
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
     public function compareToNow()
     {
         $tempnow = date('d-m-Y H:i');
@@ -388,6 +405,23 @@ class Team extends MY_Controller
         if ($now > $comparison)
         {
             $this->form_validation->set_message('compareToNow', 'Your start time must be later than the current time');
+            return false;
+        }
+    }
+    
+    public function episode_compareToNow()
+    {
+        $tempnow = date('d-m-Y H:i');
+        $space = " ";
+        //need to make sure $comparison matches $now
+        $tempcomparison = $this->input->post('edited_episodeDate') . $space . $this->input->post('edited_episodeStartTime');
+        
+        $now = strtotime($tempnow);
+        $comparison = strtotime($tempcomparison);
+        
+        if ($now > $comparison)
+        {
+            $this->form_validation->set_message('episode_compareToNow', 'Your start time must be later than the current time');
             return false;
         }
     }
@@ -410,12 +444,48 @@ class Team extends MY_Controller
         
     }
     
+    public function edited_minDuration() {
+        $tempStartTime = $this->input->post('edited_start_time');
+        $tempEndTime = $this->input->post('edited_end_time');
+        $startTime = strtotime($tempStartTime);
+        $endTime = strtotime($tempEndTime);
+                
+        $event_length = 15;
+        
+        $minimum = strtotime("+$event_length minutes", $startTime);
+        
+        if ($minimum > $endTime) 
+        {
+            $this->form_validation->set_message('edited_minDuration', 'Your event must last at least 15 minutes');
+            return false;
+        }
+        
+    }
+    
+    public function editedEpisode_minDuration() {
+        $tempStartTime = $this->input->post('edited_episodeStartTime');
+        $tempEndTime = $this->input->post('edited_episodeEndTime');
+        $startTime = strtotime($tempStartTime);
+        $endTime = strtotime($tempEndTime);
+                
+        $event_length = 15;
+        
+        $minimum = strtotime("+$event_length minutes", $startTime);
+        
+        if ($minimum > $endTime) 
+        {
+            $this->form_validation->set_message('editedEpisode_minDuration', 'Your event must last at least 15 minutes');
+            return false;
+        }
+        
+    }
+    
     public function edit_event()
     {
         $this->form_validation->set_rules('edited_eventname', 'Event Name', 'required|max_length[25]|min_length[6]');
         $this->form_validation->set_rules('edited_eventdesc', 'Event Description', 'max_length[140]');
         $this->form_validation->set_rules('edited_start_time', 'Start Time', 'required');
-        $this->form_validation->set_rules('edited_end_time', 'End Time', 'required|compareEditedTimes');
+        $this->form_validation->set_rules('edited_end_time', 'End Time', 'required|callback_compareEditedTimes|callback_edited_minDuration');
         $this->form_validation->set_rules('edited_location', 'Location', 'required');
         $this->form_validation->set_error_delimiters('', '');
         
@@ -489,8 +559,8 @@ class Team extends MY_Controller
         $this->form_validation->set_rules('edited_episodeName', 'Episode Name', 'required|max_length[25]|min_length[6]');
         $this->form_validation->set_rules('edited_episodeDesc', 'Episode Description', 'max_length[140]');
         $this->form_validation->set_rules('edited_episodeDate', 'Episode Date', 'required');
-        $this->form_validation->set_rules('edited_episodeStartTime', 'Episode Start Time', 'required');
-        $this->form_validation->set_rules('edited_episodeEndTime', 'Episode End Time', 'required');
+        $this->form_validation->set_rules('edited_episodeStartTime', 'Episode Start Time', 'required|callback_compareEditedEpisodeTimes|callback_episode_compareToNow');
+        $this->form_validation->set_rules('edited_episodeEndTime', 'Episode End Time', 'required|callback_editedEpisode_minDuration');
         $this->form_validation->set_rules('edited_episodeLocation', 'Episode Location', 'required');
         $this->form_validation->set_error_delimiters('', '');
         
