@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/daterangepicker-bs3.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/square/green.css" rel="stylesheet">
-        <link rel="stylesheet" href="<?php echo base_url();?>css/square/blue.css" rel="stylesheet">
+        <link rel="stylesheet" href="<?php echo base_url();?>css/flat/red.css" rel="stylesheet">
         <link rel="stylesheet" href="<?php echo base_url();?>css/square/red.css" rel="stylesheet">
         <link rel="stylesheet" href="<?php echo base_url();?>css/fullcalendar.css" type="text/css" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
