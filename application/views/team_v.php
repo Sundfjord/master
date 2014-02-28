@@ -260,7 +260,7 @@
                     <table id="squad_table" class="table table-striped table-bordered dataTable">
                         <thead>
                             <tr> 
-                                <th class="left" scope="col"><input name="check_all_squad" id="selectall" type="checkbox" />
+                                <th class="left" scope="col"><!--<input name="check_all_squad" id="selectall" type="checkbox" />--></th>
                                 <th class="middle_l" scope="col">Name</th>
                                 <th class="middle_r" scope="col">Email</th>
                             </tr>
@@ -308,7 +308,7 @@
                     <table id="staff_table" class="table table-striped table-bordered dataTable">
                         <thead>
                             <tr> 
-                                <th class="left" scope="col"><input name="check_all_staff" type="checkbox" />
+                                <th class="left" scope="col"><!--<input name="check_all_staff" type="checkbox" />--></th>
                                 <th class="middle_l" scope="col">Name</th>
                                 <th class="middle_r" scope="col">Email</th>
                             </tr>
@@ -364,11 +364,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>	
+                                        <?php $teamlist = array();
+                                        foreach ($squad as $tl) {
+                                            $teamlist[] = $tl['id'];
+                                        }
+                                        ?>
                                         <?php foreach ($players as $p):?> 
+                                        
                                         <tr>
-                                            <td class="left"><input type="checkbox" name="players[]" id="checktest" value="<?php echo $p['id'];?>" /> </td>
+                                            <td class="left"><input type="checkbox" name="players[]" id="checktest" value="<?php echo $p['id'];?>" <?php if(in_array($p['id'], $teamlist)) {echo "disabled='disabled'";}?> /> </td>
                                             <td class="right"><div class="username"><?php echo $p['username'];?></div></td>
                                         </tr>
+                                        
                                         <?php endforeach;?>
                                     </tbody>
                                 </table>
@@ -378,7 +385,7 @@
                                 </form>
                             </div>
                     </div>
-                        
+                       
                     <?php } ?>
                 
                 <?php if (empty($coaches)) {?>
@@ -401,10 +408,15 @@
                                     <th class="right" scope="col">Name</th>
                                 </tr>
                             </thead>
-                            <tbody>	
+                            <tbody>
+                                <?php $coachlist = array();
+                                        foreach ($staff as $sl) {
+                                            $coachlist[] = $sl['id'];
+                                            
+                                        } ?>
                                 <?php foreach ($coaches as $c):?> 
                                 <tr>
-                                    <td class="left"><input type="checkbox" name="coaches[]" id="coachtest" value="<?php echo $c['id'];?>" /> </td>
+                                    <td class="left"><input type="checkbox" name="coaches[]" id="coachtest" value="<?php echo $c['id'];?>" <?php if(in_array($c['id'], $coachlist)) {echo "disabled='disabled'";}?> /> </td>
                                     <td class="right"><div class="username"><?php echo $c['username'];?></div></td>
                                 </tr>
                                 <?php endforeach;?>
@@ -654,17 +666,17 @@
                                         <div class="edit-start-time input-group date" id="edit-start-time">
                                             <input value="<?php echo $row['start_time']; ?>" class="form-control" id="edited_start_time" name="edited_start_time" placeholder="Start time" type="text" class="form-control">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                                            <span class='help-inline' id='error3inline_edit'><p class="danger"></p></span>
                                         </div>
+                                        <span class='help-inline' id='error3inline_edit'><p class="danger"></p></span>
                                     </div>
 
                                     <div class="col-xs-6" id="error4_edit">
                                         <label class="sr-only">End time</label>
                                         <div class="edit-end-time input-group date" id="edit-end-time">
                                             <input value="<?php echo $row['end_time']; ?>" class="form-control" id="edited_end_time"name="edited_end_time" placeholder="End time" type="text" class="form-control">
-                                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                                            <span class='help-inline' id='error4inline_edit'><p class="danger"></p></span>
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span> 
                                         </div>
+                                        <span class='help-inline' id='error4inline_edit'><p class="danger"></p></span>
                                     </div>
                                 </div>
 
@@ -727,7 +739,7 @@
                     <table id="event_table" class="table table-striped table-bordered dataTable">
                         <thead>
                             <tr class="tabellheader"> 
-                                <th class="left" scope="col"><input rel="popover" name="check_all" type="checkbox" />
+                                <th class="left" scope="col"><!--<input rel="popover" name="check_all" type="checkbox" />--></th>
                                 <th class="middle_l" scope="col">Event Name</th>
                                 <th class="middle_r" scope="col">Location</th>
                             </tr>
@@ -797,8 +809,8 @@
                         <div class="input-group date" id="edit-episode-start-time">
                             <input id="edited_episodeStartTime" value="" class="form-control" name="edited_episodeStartTime" placeholder="Start time" type="text" class="form-control">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                            <span class='help-inline' id='error4inline_editEp'><p class="danger"></p></span>
                         </div>
+                        <span class='help-inline' id='error4inline_editEp'><p class="danger"></p></span>
                     </div>
 
                     <div class="col-xs-6" id="error5_editEp">
@@ -806,8 +818,8 @@
                         <div class="input-group date" id="edit-episode-end-time">
                             <input id="edited_episodeEndTime" value="" class="form-control" name="edited_episodeEndTime" placeholder="End time" type="text" class="form-control">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                            <span class='help-inline' id='error5inline_editEp'><p class="danger"></p></span>
                         </div>
+                        <span class='help-inline' id='error5inline_editEp'><p class="danger"></p></span>
                     </div>
                 </div>
 
