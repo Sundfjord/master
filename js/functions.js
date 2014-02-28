@@ -2,30 +2,9 @@ globals = {};
 
 $(document).ready(function(){    
     
-    if (window.location.search.substring(1) === "#create_team_modal")
-        {
-            $("li.team.active").removeClass('active');
-        }
-    
     var filter_id = $('#filter_id').val();
     var user_id = $('#user').val();
     var base_url = 'http://localhost/master';
-    
-    $('#green').iCheck({
-        radioClass: 'iradio_square-green',
-        increaseArea: '30%',
-        inheritID: true
-    });
-
-    $('#red').iCheck({
-        radioClass: 'iradio_square-red',
-        increaseArea: '30%',
-        inheritID: true
-    });
-    
-    /*$('table').iCheck({
-        checkboxClass: 'iradio_square-blue'
-    });*/
     
     /*************************************
     **************************************
@@ -64,7 +43,7 @@ $(document).ready(function(){
         },        
        // determines what should be shown in the calendar
         eventRender: function(event, element, view) {
-            if (view.name === "basicWeek") 
+            if (view.name === "basicDay") 
                 {
                 element.find(".fc-event-content");
                     content: event.description;
@@ -118,7 +97,8 @@ $(document).ready(function(){
                             $('#edit_episode_button').attr('disabled', 'disabled');
                             //Find something brilliant to stop people from doing stuff
                         }
-                        else {
+                        else 
+                        {
                             $('#delete_episode_button').attr('disabled', false);
                             $('#edit-episode-button').attr('disabled', false);
                             $('#green, #red').removeClass('notinmyhouse');
@@ -146,7 +126,6 @@ $(document).ready(function(){
                             <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
                         ");
                         $('#event-info').fadeIn(500);
-                        
                     }
             });   
         }
@@ -172,12 +151,13 @@ $(document).ready(function(){
          else
          {
             $("#end_date").removeAttr("disabled");
+            $("#end_date").attr("placeholder", "End date");
          }   
     });
     
     /*************************************
     **************************************
-    * FORMS
+    * DATE AND TIME PICKERS
     **************************************
     *************************************/
     
@@ -290,7 +270,7 @@ $(document).ready(function(){
     *************************************/
     
     $('#create_team').click(function() {
-        $('#create_team_modal').modal('show');
+        $('#create_team_modal').modal('show');	
     });
     
     $('#home_create_team').click(function() {
@@ -302,7 +282,7 @@ $(document).ready(function(){
         $('#errorinline_createteam p').text('');
         $('#error2_createteam').removeClass('has-error');
         $('#error2inline_createteam p').text('');
-    })
+    });
     
     $('#join_team').click(function() {
         $('#join_team_modal').modal();
@@ -344,11 +324,7 @@ $(document).ready(function(){
         // on load of the page: switch to the currently selected tab
         var hash = window.location.hash;
         $('.nav a[href="' + hash + '"]').tab('show');
-        
-        //except when the modal hashes are active
-        
-        
-        
+       
         // store the currently selected tab in the hash value
         $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
             var id = $(e.target).attr("href").substr(1);
@@ -469,13 +445,9 @@ $(document).ready(function(){
     * AJAX FUNCTIONS
     **************************************
     *************************************/
-   
-    $("#green, #label_yes").click(function(){
-        $('#attend_yes').iCheck('check');
-    });
-
-    $("#red, #label_no").click(function(){
-        $('#attend_no').iCheck('check');
+    
+    $(document).ajaxStart(function(){
+        $("#loading").show();
     });
 
     $('#green, #label_yes, #red, #label_no').click(function()
@@ -1307,72 +1279,43 @@ $(document).ready(function(){
             }
         });
     });
-        
-    //TABLES
     
-    $('#join_team_table').dataTable({
-        bSortClasses: false,
-        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search' ></span>" },
-        "aoColumnDefs" : [ {
-            'bSortable' : false,
-            'aTargets' : [ 0 ]
-        } ]
+    /*************************************
+    **************************************
+    * CHECKBOX AND RADIO BUTTONS
+    **************************************
+    *************************************/
+    
+    $('#green').iCheck({
+        radioClass: 'iradio_square-green',
+        increaseArea: '30%',
+        inheritID: true
+    });
+
+    $('#red').iCheck({
+        radioClass: 'iradio_square-red',
+        increaseArea: '30%',
+        inheritID: true
     });
     
-    $('#statistics_table').dataTable({
-        bSortClasses: false,
-        bInfo: false,
-        bPaginate: false,
-        bFilter: false,
-        "oLanguage": 
-        { 
-            "sSearch": "<span class='glyphicon glyphicon-search'></span>",
-            "sEmptyTable": '',
-            "sInfoEmpty": '',
-            "sZeroRecords": ''
-        },
-        
-    });  
-    
-    $('#player_table').dataTable({
-        bSortClasses: false,
-        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        "aoColumnDefs" : [ {
-            'bSortable' : false,
-            'aTargets' : [ 0 ]
-        } ]
+    $('input').iCheck({
+       checkboxClass: 'icheckbox_flat-red' 
     });
     
-    $('#coach_table').dataTable({
-        bSortClasses: false,
-        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        "aoColumnDefs" : [ {
-            'bSortable' : false,
-            'aTargets' : [ 0 ]
-        } ]
+    
+    $("#green, #label_yes").click(function(){
+        $('#attend_yes').iCheck('check');
+    });
+
+    $("#red, #label_no").click(function(){
+        $('#attend_no').iCheck('check');
     });
     
-    $('#player_squad_table').dataTable({
-        bSortClasses: false,
-        bInfo: false,
-        bPaginate: false,
-        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        "aoColumnDefs" : [ {
-            'bSortable' : false,
-            'aTargets' : [ 0 ]
-        } ]
-    });
-    
-    $('#player_staff_table').dataTable({
-        bSortClasses: false,
-        bInfo: false,
-        bPaginate: false,
-        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        "aoColumnDefs" : [ {
-            'bSortable' : false,
-            'aTargets' : [ 0 ]
-        } ]
-    });
+    /*************************************
+    **************************************
+    * TABLES
+    **************************************
+    *************************************/
     
     $('#squad_table').dataTable({
         iDisplayLength: 25,
@@ -1406,6 +1349,60 @@ $(document).ready(function(){
         
     });
     
+    $('#player_squad_table').dataTable({
+        bSortClasses: false,
+        bInfo: false,
+        bPaginate: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
+    $('#player_staff_table').dataTable({
+        bSortClasses: false,
+        bInfo: false,
+        bPaginate: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
+        "aoColumnDefs" : [{
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        }]
+    });
+    
+    $('#player_table').dataTable({
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search white'></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
+    $('#coach_table').dataTable({
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search white'></span>" },
+        "aoColumnDefs" : [{
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        }]
+    });
+    
+    $('#statistics_table').dataTable({
+        bSortClasses: false,
+        bInfo: false,
+        bPaginate: false,
+        bFilter: false,
+        "oLanguage": 
+        { 
+            "sSearch": "<span class='glyphicon glyphicon-search'></span>",
+            "sEmptyTable": '',
+            "sInfoEmpty": '',
+            "sZeroRecords": ''
+        }
+    });  
+    
     $('#event_table').dataTable({
         bSortClasses: false,
         bInfo: false,
@@ -1418,12 +1415,21 @@ $(document).ready(function(){
         bFilter: false
     });
     
+    $('#join_team_table').dataTable({
+        bSortClasses: false,
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search' ></span>" },
+        "aoColumnDefs" : [ {
+            'bSortable' : false,
+            'aTargets' : [ 0 ]
+        } ]
+    });
+    
     $('#event_table').on(' change','input[name="check_all"]',function() {
-            $('.allboxes').prop("checked" , this.checked);
+            $('.allboxes').prop('checked', $(this).prop('checked'));
     });
     
     $('#squad_table').on(' change','input[name="check_all_squad"]',function() {
-            $('.allboxes_squad').prop("checked" , this.checked);
+            $('.allboxes_squad').prop('checked', $(this).prop('checked'));
     });
     
     $('#staff_table').on(' change','input[name="check_all_staff"]',function() {
@@ -1441,7 +1447,7 @@ $(document).ready(function(){
                 $(this).prop("disabled", true);
             }
     });
-    
+ 
     //SUCCESS MESSAGES
         
     var hash = window.location.search.substring(1);
@@ -1549,9 +1555,7 @@ $(document).ready(function(){
     }
 });
 
-$(document).ajaxStart(function(){
-   $("#loading").show();
- });
+
 
 $(document).ajaxComplete(function(){
    $("#loading").hide();
