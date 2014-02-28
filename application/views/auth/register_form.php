@@ -22,7 +22,7 @@ $email = array(
 );
 
 $role = array(
-        'group_id'      => 'group_id'
+    'group_id'      => 'group_id'
 );
 
 $group_id = array(
@@ -88,7 +88,7 @@ $captcha = array(
                                         
     <div class="form-group">
         <?php echo form_label('Role', $role['group_id'], array('class' =>'control-label')); ?>                                  
-        <?php echo form_dropdown('group_id', $group_id, '0', ' class="form-control"'); ?>
+        <?php echo form_dropdown('group_id', $group_id, set_value('group_id'), ' class="form-control"'); ?>
         <?php echo form_error('group_id', '<div class="alert alert-danger"><p>', '</p></div>'); ?>   
     </div>                                    
                                         
