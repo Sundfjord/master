@@ -14,7 +14,6 @@ html {
 
 body {
     margin-bottom: 100px;
-    
 }
 
 #content {
@@ -111,6 +110,10 @@ a:hover {
 #loading {
     background:  #000 url('../img/ajax-loader.gif') no-repeat center;
     z-index: 10000;
+}
+
+.white, .white a {
+  color: #fff;
 }
 
 /*************************************
