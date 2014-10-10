@@ -1,0 +1,880 @@
+/* 
+    Document   : style
+    Created on : 18.okt.2013, 13:29:12
+    Author     : Yngve
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+html {
+    position: relative;
+    min-height: 100%;
+    background: url(../img/fabric_of_squares_gray.png);
+}
+
+body {
+    margin-bottom: 100px;
+}
+
+#content {
+    padding-bottom: 50px;
+    background: url(../img/fabric_of_squares_gray.png);
+}
+
+@media(max-width:767px){}
+@media(min-width:768px){}
+@media(min-width:992px){}
+@media(min-width:1200px){}
+
+/*************************************
+**************************************
+* HEADER
+**************************************
+*************************************/
+
+.header { 
+    background-color: #3b5999;
+    border-bottom: 1px solid black;
+    color: white;
+    display: none;
+}
+  
+/*************************************
+**************************************
+* LOGIN AND REGISTRATION
+**************************************
+*************************************/
+
+#box {
+    background-color: #ffffff;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#box h3 {
+    margin: 0 0 20px 0;
+}
+#box .alert {
+    padding: 5px;
+    margin-bottom: 0;
+}
+
+/*************************************
+**************************************
+* GENERAL
+**************************************
+*************************************/
+
+h3 {
+    margin-bottom: 20px;
+}
+
+.glyphicon {
+    margin-right: 5px;
+}
+
+ul, li {
+    list-style: none;
+}
+
+table {
+    background-color: #fff;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+}
+
+.btn-danger.disabled, .btn-danger[disabled] {
+    background-color: #d9534f;
+}
+
+.btn-danger:hover, .btn-danger:active, .btn-danger:focus {
+    background-color: #ca4945;
+}
+
+.bg-info {
+    background-color: #d9edf7;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.bg-warning {
+    color: #c09853;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.bg-danger {
+    background-color: #f2dede;
+}
+
+a {
+    color: #336799;
+}
+
+a:hover {
+    color: #ccc;
+    text-decoration: none;
+}
+
+a:focus {
+    border: none;
+}
+
+.pageoverlay {
+    top: 0;
+    left: 0;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 1001;
+    display: none;
+    opacity: 0.4;
+}
+ 
+#loading {
+    background:  #000 url('../img/ajax-loader.gif') no-repeat center;
+    z-index: 10000;
+}
+
+.white, .white a {
+  color: #fff;
+}
+
+/*************************************
+**************************************
+* NAVIGATION
+**************************************
+*************************************/
+.navbar {
+    margin-bottom: 0;
+    border: 0;
+    border-radius: 0;
+}
+.navbar-default {
+    background: url(../img/grey_wash_wall.png);
+    color: #fff;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #fff;
+    font-size: 16px
+}
+.navbar-brand {
+    color: #fff !important;
+    margin-right: 20px;
+}
+
+@media(min-width:992px){
+    .navbar-default .navbar-nav>li>a {
+    font-size: 18px
+    }
+    .navbar-brand {
+        margin-right: 50px;
+    }
+}
+
+.dropdown-menu .glyphicon {
+    margin-right: 10px;
+}
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+    background-color: #336799;
+}
+
+.navbar-brand {
+    text-transform: none;
+}
+
+#join_team_table {
+    border: 1px solid #ddd;
+}
+/*************************************
+**************************************
+* HOME
+**************************************
+*************************************/
+
+.jumbotron {
+    display: none;
+    padding: 30px;
+}
+
+.teams {
+    display: block;
+    padding: 0;
+    margin-top: 20px;
+    margin-left: 15px;
+}
+
+.teams >li {
+    display: inline-block;
+    float:left; 
+    
+}
+
+.teamlist {
+    padding-top: 10px;
+    margin: 5px 10px 50px 0;
+    border: 1px solid #DDD;
+    -webkit-box-shadow: 1px 1px 7px rgba(153, 153, 153, 0.2);
+    -moz-box-shadow: 1px 1px 7px rgba(153, 153, 153, 0.2);
+    box-shadow: 1px 1px 7px rgba(153, 153, 153, 0.2);
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    width: 138px;
+    height: 165px;
+    background: url(../img/listbg.gif);
+}
+
+.teamlist:last-child {
+    margin-right: 0;
+}
+
+.teamlist .glyphicon {
+    font-size: 4em;
+}
+
+.teamlist h5 {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #336799;
+}
+
+.teamlist h5:hover {
+    color: #ccc;
+}
+
+.teamlist h4 {
+    text-align: center;
+    border-bottom: 1px solid #dcdcdd;
+    color: #676767;
+    padding: 5px 0 12px ;
+    margin: 0 0 25px 0;
+    text-shadow: 0 1px 0 #fff;
+    font-size: 14px;
+}
+
+.teamdetails {
+    padding: 10px;
+    display: none;   
+}
+
+.teamdetails li {
+    margin: 0 0 10px 15px;
+    color: #676767;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 2px; 
+}
+
+.infolabel, .infovalue, .infosport, .infocoach {
+    display: none;
+}
+
+#gototeam {
+    width: 95px;
+}
+
+#gototeam a #gototeam a:hover {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+@media (min-width:768px) {
+        .jumbotron {
+        display: block;
+        padding: 30px;
+    }
+    
+    .jumbotron h1 {
+        margin-top: 10px;
+    }
+    
+    .teamlist {
+        width: 225px;
+        height: 250px;
+        padding: 10px;  
+    }
+    
+    .teamlist h4 {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+    }
+    
+    .teams > li {
+        margin-right: 20px;
+    }
+    
+    #gototeam {
+    width: 170px;
+    }
+    
+    .teamdetails {
+        display: inline-block;
+    }
+    
+    .teamdetails > li {
+        margin: 0 0 20px 5px;
+        width: 170px;
+    }
+    
+    .teamlist .glyphicon {
+        margin-top: 40px;
+    }
+    
+    .infovalue, .infosport, .infocoach {
+        display: inline;
+        margin-right: 10px;
+    }
+}
+
+@media all and (min-width:992px){
+    .teamlist {
+        width: 300px;
+        height: 275px;
+        padding: 10px;  
+    }
+    
+    .teamlist h4 {
+        font-size: 20px;
+    }
+    
+    .teams > li {
+        margin-right: 20px;
+    }
+    
+    #gototeam {
+    width: 250px;
+    }
+    
+    .teamdetails > li {
+        margin: 0 0 20px 5px;
+        width: 250px;
+    }
+    
+    .teamlist .glyphicon {
+        font-size: 6em;
+        margin-top: 85px;
+    }
+    
+    .teamlist h5 {
+        font-size: 25px;
+    }
+    
+    .infolabel, .infovalue, .infosport, .infocoach {
+        display: inline;
+        margin-right: 10px;
+    }
+    
+    .infolabel {
+        font-weight: bold;
+        margin-left: 5px;
+    }
+    
+    .infosport {
+        margin-left: 11px;
+    }
+    
+    .infocoach {
+        margin-left: 6px;
+    }
+    
+}
+
+@media(min-width:1200px){
+    .teamlist {
+        width: 365px;
+    }
+    
+    #gototeam {
+        width: 315px;
+    }
+    
+    .teamdetails > li {
+        margin: 0 0 20px 5px;
+        width: 315px;
+    }
+    
+    .teamlist .glyphicon {
+    font-size: 6em;
+    margin-top: 90px;
+    }
+}
+
+/*************************************
+**************************************
+* TEAM
+**************************************
+*************************************/
+
+#top {
+    padding: 0;
+    background: #fff;
+}
+
+#top h2 {
+    font-size: 25px;
+    margin: 20px;
+}
+
+#top a {
+    color: #5b5b5b;
+}
+@media(min-width:992px){
+    #top .nav > li > a:hover {
+
+        background: url(../img/grey_wash_wall.png);
+        color: #fff;
+    }
+}
+.nav-tabs>li.active>a {
+    background: url(../img/fabric_of_squares_gray.png);
+}
+
+#team_tabs {
+    display: none;
+}
+
+#container {
+    margin-top: 15px;
+}
+
+#knapp_bar {
+   display: none;
+   margin-left: 140px;
+   z-index: 1;
+}
+
+#calendar {
+    margin-top: -30px;
+}
+
+.fc-header {
+    background: url(../img/fabric_of_squares_gray.png);
+}
+
+#event-info {
+    display: none;
+}
+
+#coach-only {
+    display: none;
+}
+
+#calendar {
+    margin-bottom: 20px;
+}
+
+#boxes-inline {
+    display: inline-block;
+}
+.panel {
+    margin-bottom: 15px;
+}
+
+.attendance .panel .panel-default {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.attendance .panel-body {
+    padding: 0;
+}
+
+#attendance_tables table {
+    margin-top: 0 !important;
+}
+
+#green, #red {
+    padding: 5px 0 5px 50px;
+}
+
+#green {
+    background-color: #5cb082;
+    cursor: pointer;
+    border-right: 2px solid #ddd;
+}
+
+#green input {
+    opacity: 1;
+}
+
+#red {
+    background-color: #d87d5f;
+    cursor: pointer;
+}
+
+#red input {
+    opacity: 1;
+}
+#notallowed.bg-danger{
+    padding: 5px;
+}
+
+#notallowed p {
+    margin: 0 0 5px;
+}
+
+@media(max-width:767px){
+    #green {
+        padding-left: 20px;
+    }
+    
+    #red {
+        padding-left: 20px;
+    }
+}
+
+.nomargin {
+    margin: 0;
+}
+
+.leftmargin {
+    margin-left: 10px;
+    color: #fff;
+    cursor: pointer;
+}
+
+p#time {
+    text-align: center;
+}
+
+@media(max-width:767px){
+    .push {
+        margin-bottom: 45px;
+    }
+}
+
+@media(min-width:768px){
+    #team_tabs {
+        display: block;
+        padding-left: 135px;
+    }
+
+    #knapp_bar {
+        display: block;
+    }
+    
+    #coach-only {
+        display: block;
+    }
+    
+    #top h2 {
+        font-size: 32px;
+        
+    }
+    
+    .editbuttons {
+        margin-bottom: 10px;
+    }
+}
+
+@media(min-width:992px){
+    #knapp_bar {
+        margin-left: 250px;
+    }
+}
+
+@media(min-width:1200px){
+    #knapp_bar {
+        margin-left: 387px;
+    }
+    
+    #team_tabs {
+        padding-left: 410px;
+    }
+}
+.margin {
+    margin-bottom: 45px;
+}
+
+/*************************************
+**************************************
+* TEAM FORMS
+**************************************
+*************************************/
+#add_event_form {
+    padding: 10px;
+}
+
+.input-group-addon > .glyphicon {
+    top: 2px;
+    left: 2px;
+}
+
+.radio-inline {
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+
+.datetimepicker thead tr:first-child th:hover, .datetimepicker tfoot tr:first-child th:hover {
+    background: none;
+}
+
+.datetimepicker thead tr:first-child th, .datetimepicker tfoot tr:first-child th {
+    cursor: default;
+}
+
+.datetimepicker table {
+    font-size: 15px;
+}
+
+.btn .caret {
+    margin-left: 5px;
+}
+
+p.danger {
+    color: #eb6864;
+    margin-left: 5px;
+    margin-top: 3px;
+}
+
+#error_createteam {
+    margin-bottom: 35px;
+}
+
+/*************************************
+**************************************
+* PROFILE
+**************************************
+*************************************/
+
+li.list-group-item p {
+    font-size: 18px;
+    margin: 0 0 5px 0;
+}
+
+/*************************************
+**************************************
+* CALENDAR
+**************************************
+*************************************/
+
+.fc-content {
+    background: #fff;
+}
+
+.fc-past {
+    background-color: #999;
+}
+
+.fc-today {
+    background-color: #e68e8c;
+}   
+
+.fc-event {
+    cursor: pointer;
+}
+
+.noshow {
+    display: hidden!important;
+}
+
+.panel-heading {
+    padding: 5px 15px;
+}
+
+.panel-body {
+    padding: 8px 15px;
+}
+
+/*************************************
+**************************************
+* STATISTICS
+**************************************
+*************************************/
+
+#daterange {
+    background: #ffffff;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 0 0 rgba(0,0,0,.1);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 0 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 3px rgba(0,0,0,.25), inset 0 0 0 rgba(0,0,0,.1);
+    color: #777777;
+    padding: 10px;
+    line-height: 18px;
+    cursor: pointer;
+    border-top: 1px solid #ddd;
+}
+
+.number {
+    text-align: center;
+    font-weight: bold;
+}
+
+.dataTables_empty {
+    display:none;
+}
+
+/*************************************
+**************************************
+* ABOUT
+**************************************
+*************************************/
+
+.leave {
+    margin-top: 20px;
+    
+}
+
+.leave .panel-body {
+    padding: 15px;
+}
+
+/*************************************
+**************************************
+* MANAGE SQUAD
+**************************************
+*************************************/
+
+table.dataTable thead th.left {
+    text-align: center;
+}
+
+table.dataTable thead th {
+    padding: 8px;
+}
+
+td.left {
+    text-align: center;
+}
+
+#squad, #staff {
+    margin-bottom: 20px;
+}
+
+#squad_table_wrapper, #staff_table_wrapper, #player_squad_table_wrapper, #player_staff_table_wrapper{
+    margin-top: -35px !important; 
+}
+
+#playersearch {
+    margin-bottom: 20px;
+}
+
+#player_table .username {
+    margin-left: 5px;
+}
+
+#add_people {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#add_people_accordion {
+    background: url('../img/grey_wash_wall.png');
+    padding: 15px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#player_table_length > label {
+    color: #fff;
+}
+
+#coach_table_length > label {
+    color: #fff;
+}
+/*************************************
+**************************************
+* EDIT
+**************************************
+*************************************/
+    
+#deleteteamsubmit {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#edit_team .panel-body {
+    padding: 25px;
+}
+
+#edit_team .form-group {
+    margin-bottom: 35px;
+}
+
+#delete_team .panel-body {
+    padding: 25px;
+}
+
+/*************************************
+**************************************
+* ERROR HANDLING
+**************************************
+*************************************/
+
+.success {
+    display: none;
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top: 60px;
+    padding: 5px;
+    left: 38%;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    z-index: 1050;
+}
+
+.warning {
+    background-color: #fcf8e3;
+    border-color: #fbeed5;
+    color: #c09853;
+}
+
+.success > p {
+    margin: 10px;
+    font-weight: bold;
+}
+
+
+#success .glyphicon {
+    margin-right: 10px;
+}
+
+p.nomargin {
+    margin: 0;
+}
+
+p.nopadding {
+    padding-left: 0;
+}
+
+.editeventsubmit {
+    width: 116px;
+}
+/*************************************
+**************************************
+* FOOTER
+**************************************
+*************************************/
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px; 
+    color: #ffffff;
+    font-size: 20px;
+    background: url(../img/grey_wash_wall.png);
+}
+
+#footer p {
+    text-align: center;
+    margin-top: 40px;
+    color: #909090;
+}
+
+#footer li {
+    list-style: none;
+    padding: 10px;
+    display: inline;
+    font-size: 16px;
+}

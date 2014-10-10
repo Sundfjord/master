@@ -21,7 +21,7 @@
                                 <li><p class="infolabel">Coach:</p><p class="infocoach"> ' .$row['coach'] . '</p></li>
                                 <li><p class="infolabel">Players:</p><p class="infovalue"> ' .$row['count'] . ' players</p></li>
                             </ul>
-                            <center><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '" id="gototeam" class="btn btn-info" role="button">Go to team</a></button></center>
+                            <center><a href="'. base_url() .'index.php/team/' . $row['team_id'] . '" id="gototeam" class="btn btn-info" role="button">Go to team</a></button></center>
 
                         </li>'
             ;?> 
@@ -36,16 +36,16 @@
             <?php if (empty($playerteam)) {?>
             <?php echo '<li class="teamlist"><center><a id="join_team" href="#join_team_modal"><span class="glyphicon glyphicon-plus"></span><h5>Join a team</h5></a></center></li>';?>
             <?php } else {?>
-            <?php foreach ($playerteam as $row): ?>
+            <?php foreach ($playerteam as $row): ?> 
                 <?php echo 
                 '<li class="teamlist">
                             <h4>' .$row['teamname'] .'</h4>
                             <ul class="teamdetails">
-                                <li><p class="infolabel">Sport:</p><p class="infosport"> ' .$row['sport'] . '</p></li>
-                                <li><p class="infolabel">Coach:</p><p class="infocoach"> ' .$row['coach'] . '</p></li>
-                                <li><p class="infolabel">Players:</p><p class="infovalue"> ' .$row['count'] . ' players</p></li>
+                                <li><p class="infolabel">Sport:</p><p class="infosport"> ' .$row['sport']. '</p></li>
+                                <li><p class="infolabel">Coach:</p><p class="infocoach"> ' .$row['coach']. '</p></li>
+                                <li><p class="infolabel">Players:</p><p class="infovalue"> ' .$row['count']. ' players</p></li>
                             </ul>
-                            <center><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '" id="gototeam" class="btn btn-info" role="button">Go to team</a></center>
+                            <center><a href="'. base_url() .'index.php/team/' . $row['team_id'] . '" id="gototeam" class="btn btn-info" role="button">Go to team</a></center>
 
                         </li>'
                         ;?>

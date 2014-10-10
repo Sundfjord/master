@@ -416,7 +416,7 @@ class CI_Session {
 				);
 
 		// Kill session data
-		$this->userdata = array();
+		//$this->userdata = array();
 	}
 
 	// --------------------------------------------------------------------

@@ -10,28 +10,26 @@ class Profile extends MY_Controller
         $this->load->library('tank_auth_groups', '', 'tank_auth');
         //$this->load->model('message_m');
         $this->load->library('form_validation');
+        $this->load->model('profile_m');
     }
     
     public function index()
     {
-        if (!$this->tank_auth->is_logged_in()) {
-            redirect('/auth/login/');
-        } else 
-            {
-                $data['title'] = 'My Profile';
-                $data['main_content'] = 'profile_v';
-                $data['username'] = $this->tank_auth->get_username();
-                $data['coach'] = $this->tank_auth->is_admin();
-                $this->load->vars($data);
-                $this->load->view('includes/template');
-            }
+        $profile_data['title'] = 'My Profile';
+        $profile_data['main_content'] = 'profile_v';
+        $profile_data['username'] = $this->tank_auth->get_username();
+        $profile_data['teams'] = $this->team_m->get_teams();
+        $profile_data['coach'] = $this->tank_auth->is_admin();
+        $this->load->vars($profile_data);
+        $this->load->view('includes/template');
+            
     }
     
     public function update_profile()
     {
         $this->form_validation->set_rules('edit_username', 'Edit Username', 'trim|required|max_length[30]|min_length[4]');
         $this->form_validation->set_rules('edit_email', 'Edit Email', 'trim|required|xss_clean|valid_email');
-        $this->form_validation->set_error_delimiters('<p class="bg-danger">', '</p>');
+        $this->form_validation->set_error_delimiters('', '');
         
         if($this->form_validation->run() === FALSE) 
         {
@@ -58,32 +56,29 @@ class Profile extends MY_Controller
         }
     }
     
-    /*public function custom_change_password()
+    public function profile_leave_team() 
     {
-        $this->form_validation->set_rules('custom_old_password', 'Old Password', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('custom_new_password', 'New Password', 'trim|required|xss_clean|min_length['.$this->config->item('password_min_length', 'tank_auth').']|max_length['.$this->config->item('password_max_length', 'tank_auth').']|alpha_dash');
-        $this->form_validation->set_rules('custom_confirm_new_password', 'Confirm new Password', 'trim|required|xss_clean|matches[custom_new_password]');
-    
-        if($this->form_validation->run() === FALSE) 
+        $team_id = $this->input->post('team_id');
+        
+        $this->db->select('group_id');
+        $result = $this->db->get_where('users', array( 
+            'id' => $this->session->userdata('user_id')
+        ));
+        $row = $result->row(); 
+        $role = $row->group_id;
+        
+        if ($role === '100') 
         {
-            echo validation_errors();
+            $count = $this->profile_m->coach_leave_team($team_id);
         }
         else 
-        { //on success
-            if ($this->tank_auth->change_password(
-                $this->form_validation->set_value('custom_old_password'),
-                $this->form_validation->set_value('custom_new_password')))
-            
-            {   //success
-                $this->_show_message($this->lang->line('auth_message_password_changed'));
-            }
-            else
-            {
-                echo json_encode(array(
-                    "old_password"  => 'Incorrect password.'
-                ));
-            }
-        }*/
+        {
+            $count = $this->team_m->leave_team($team_id);
+        }
         
+        echo json_encode(array(
+            "count" => $count
+        ));
+    }
         
     }

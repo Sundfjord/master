@@ -7,16 +7,10 @@
         <title><?php echo $title; ?></title>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" />
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.0.3/journal/bootstrap.min.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/jquery.dataTables.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/dataTables.bootstrap.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-datepicker.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/bootstrap-datetimepicker.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/daterangepicker-bs3.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/square/green.css" rel="stylesheet">
-        <link rel="stylesheet" href="<?php echo base_url();?>css/flat/red.css" rel="stylesheet">
         <link rel="stylesheet" href="<?php echo base_url();?>css/square/red.css" rel="stylesheet">
-        <link rel="stylesheet" href="<?php echo base_url();?>css/fullcalendar.css" type="text/css" />
-        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/rockenroll.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/overrides.css" type="text/css" media="screen" />
     </head>
     
     <body>
@@ -29,9 +23,9 @@
             <?php $this->load->view('includes/footer'); ?>
         </div>
     
-        <script src="<?php echo base_url(); ?>js/jquery.js" type="text/javascript" charset="utf-8"></script>
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="<?php echo base_url(); ?>js/icheck.js" type='text/javascript' ></script>
+		<script src="<?php echo base_url(); ?>js/icheck.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/jquery.dataTables.js" type="text/javascript" charset="utf-8" ></script>
         <script src="<?php echo base_url(); ?>js/dataTables.bootstrap.js" type="text/javascript" charset="utf-8" ></script>
         <script src="<?php echo base_url(); ?>js/moment.js" type='text/javascript' ></script>

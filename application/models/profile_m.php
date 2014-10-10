@@ -31,4 +31,6 @@ class Profile_m extends MY_Model {
         return $this->db->affected_rows();
     }
     
+    
+    
 }

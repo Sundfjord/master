@@ -20,5 +20,5 @@ Your password: <?php echo $password; ?>
 
 
 
-Have fun!
+rockEnroll!
 The <?php echo $site_name; ?> Team

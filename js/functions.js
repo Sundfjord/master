@@ -1,10 +1,15 @@
+/*!
+ * rockEnroll v1.0
+ * (c) 2014 Yngve Sundfjord
+ */
+
 globals = {};
 
 $(document).ready(function(){    
     
     var filter_id = $('#filter_id').val();
     var user_id = $('#user').val();
-    var base_url = 'http://localhost/master';
+    var base_url = 'http://sundfjord.com/rockEnroll';
     
     /*************************************
     **************************************
@@ -26,9 +31,9 @@ $(document).ready(function(){
             right:  'month,basicWeek,basicDay'
         },
         columnFormat: 'ddd d/M',
-        events: function(start,end, callback) 
+        events: function(start, end, callback)
         {
-            $.getJSON('http://localhost/master/index.php/team/json', function(data)
+            $.getJSON(base_url+'/index.php/team/json', function(data)
             {
                 var eventsToShow = [];
                 for(var i=0; i<data.length; i++)
@@ -41,15 +46,6 @@ $(document).ready(function(){
                 callback(eventsToShow);
             });
         },        
-       // determines what should be shown in the calendar
-        eventRender: function(event, element, view) {
-            if (view.name === "basicDay") 
-                {
-                element.find(".fc-event-content");
-                    content: event.description;
-                }
-        },
-        
         eventClick: function(calEvent) 
         {
             var stDate = $.fullCalendar.formatDate(calEvent.start, 'dd-MM-yyyy');
@@ -79,6 +75,10 @@ $(document).ready(function(){
                             $("#time").empty();
                             $("#description").empty();
                             $("#attendance_tables").empty();
+                            $("#invisible").empty();
+                            $("#notallowed").remove();
+                            $("#choice").show();
+                            $('.attendance .panel-body').removeAttr("style");
                         }
                         
                         $('#attendance_tables').append(result);
@@ -91,20 +91,6 @@ $(document).ready(function(){
                         var comparison = varDate + " " + startTime;
                         var haveToPass = moment(comparison);
                         var bar = moment().subtract("hours", 24);
-                        if (bar > haveToPass)
-                        {
-                            $('#delete_episode_button').attr('disabled', 'disabled');
-                            $('#edit_episode_button').attr('disabled', 'disabled');
-                            //Find something brilliant to stop people from doing stuff
-                        }
-                        else 
-                        {
-                            $('#delete_episode_button').attr('disabled', false);
-                            $('#edit-episode-button').attr('disabled', false);
-                            $('#green, #red').removeClass('notinmyhouse');
-                            $('#attend_yes').iCheck('disable');
-                            $('#attend_no').iCheck('disable');
-                        }
                         
                         $('#location').append(calEvent.location);
                         $('#time').append(startTime + " - " + endTime);
@@ -118,7 +104,7 @@ $(document).ready(function(){
                         
                         $('#attend_yes, #attend_no').iCheck('uncheck');
                         
-                        $('#event-details').append("\
+                        $('#invisible').append("\
                             <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
                             <input id='date' class='noshow' type='hidden' name='date' value='" + stDate + "' readonly>\n\
                             <input id='start-time' class='noshow' type='hidden' name='start-time' value='" + startTime + "' readonly>\n\
@@ -126,6 +112,20 @@ $(document).ready(function(){
                             <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
                         ");
                         $('#event-info').fadeIn(500);
+                        
+                        if (bar > haveToPass)
+                        {
+                            $('#delete_episode_button').attr('disabled', 'disabled');
+                            $('#edit_episode_button').attr('disabled', 'disabled'); 
+                            $("#choice").hide();
+                            $('.attendance .panel-body').append("<div id='notallowed' class='bg-danger'><center><p><span class='glyphicon glyphicon-exclamation-sign'></span>Registration for this event has expired.</p></center></div>");
+                            $('.attendance .panel-body').css("border", "1px solid #ecb1b4");
+                        }
+                        else 
+                        {
+                            $('#delete_episode_button').attr('disabled', false);
+                            $('#edit-episode-button').attr('disabled', false);
+                        }
                     }
             });   
         }
@@ -133,10 +133,58 @@ $(document).ready(function(){
     
     /*************************************
     **************************************
-    * BLABLA
+    * SNIPPETS
     **************************************
     *************************************/
-     
+    
+    $('#event_table').on(' change','input[name="check_all"]',function() {
+            $('.allboxes').prop('checked', $(this).prop('checked'));
+    });
+    
+    $('#squad_table').on(' change','input[name="check_all_squad"]',function() {
+            $('.allboxes_squad').prop('checked', $(this).prop('checked'));
+    });
+    
+    $('#staff_table').on(' change','input[name="check_all_staff"]',function() {
+            $('.allboxes_staff').prop("checked" , this.checked);
+    });
+    
+    $("input[name='search']").each(function() {
+                $(this).attr("placeholder", "Search...");
+                });
+    
+    $('.allboxes_staff').each(function (){
+        if(user_id === $(this).val())
+            {
+                $(this).prop("disabled", true);
+            }
+    });
+    
+    $('.nrOfCoaches').each(function () {
+        var coachcount = $(this).val();
+        if (coachcount === '1') 
+        {
+            var button = ($(this).closest(".list-group-item").find(".disabledcheck"));
+            
+            $(function() {
+                jQuery.fn.extend({
+                    disable: function(state) {
+                        return this.each(function() {
+                            var $this = $(this);
+                            $this.toggleClass('disabled', state);
+                        });
+                    }
+                });
+    
+                $(button).disable(true);
+    
+                $('body').on('click', 'a.disabled', function(event) {
+                    event.preventDefault();
+                });
+            });  
+        } 
+    });
+    
     $('input[name="frequency"]').change(function()
     {
          if($(this).val() === "single")
@@ -153,6 +201,32 @@ $(document).ready(function(){
             $("#end_date").removeAttr("disabled");
             $("#end_date").attr("placeholder", "End date");
          }   
+    });
+    
+    /*************************************
+    **************************************
+    * CHECKBOX AND RADIO BUTTONS
+    **************************************
+    *************************************/
+    
+    $('#green').iCheck({
+        radioClass: 'iradio_square-green',
+        increaseArea: '30%',
+        inheritID: true
+    });
+
+    $('#red').iCheck({
+        radioClass: 'iradio_square-red',
+        increaseArea: '30%',
+        inheritID: true
+    });
+    
+    $("#green, #label_yes").click(function(){
+        $('#attend_yes').iCheck('check');
+    });
+
+    $("#red, #label_no").click(function(){
+        $('#attend_no').iCheck('check');
     });
     
     /*************************************
@@ -288,6 +362,11 @@ $(document).ready(function(){
         $('#join_team_modal').modal();
     });
     
+    $('#join_team_modal').on('hidden.bs.modal', function () {
+        $('#join_team_table').removeClass('has-error');
+        $('#errorinline_join p').text('');
+    });
+    
     $('#home_join_team').click(function() {
         $('#join_team_modal').modal();
     });
@@ -307,7 +386,6 @@ $(document).ready(function(){
     $('#delete_event').click(function() {
         $('#delete_event_modal').modal();
     });
-    
 
     /*************************************
     **************************************
@@ -315,16 +393,16 @@ $(document).ready(function(){
     **************************************
     *************************************/
     
-    $('.nav a').click(function() {
+    $('.nav-tabs a').click(function() {
             preventDefault();
-            $(this).tab('show');
+            $('.nav-tabs a').tab('show');
             $('#calendar').fullCalendar('render');
         });
         
         // on load of the page: switch to the currently selected tab
         var hash = window.location.hash;
         $('.nav a[href="' + hash + '"]').tab('show');
-       
+        
         // store the currently selected tab in the hash value
         $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
             var id = $(e.target).attr("href").substr(1);
@@ -332,7 +410,11 @@ $(document).ready(function(){
         });
     
     $("#add_event_modal").on('shown', function() {
-    $(this).find("[autofocus]:first").focus();
+    $(this).find("input[name='eventname']").focus();
+    });
+    
+    $("#edit_episode_modal").on('shown', function() {
+    $(this).find("input[name='edited_episodeName']").focus();
     });
     
     /*************************************
@@ -364,7 +446,6 @@ $(document).ready(function(){
                 $.each(data, function(index, data) 
                 {
                     $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.email + '</td><td class="number">' + data.count + '</td></tr>');
-                    //remember to empty this if updated
                 });            
             }
     });
@@ -398,7 +479,7 @@ $(document).ready(function(){
                         $("#statistics_table > tbody").empty();
                         $.each(data, function(index, data) 
                         {
-                            $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.email + '</td><td class="number">' + data.count + '</td></tr>');
+                            $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.email + '</td><td class="number">' + data.count + '</td></tr>').fadeIn(500);
                         });
                     }
                 }
@@ -449,13 +530,11 @@ $(document).ready(function(){
     $(document).ajaxStart(function(){
         $("#loading").show();
     });
-
-    $('#green, #label_yes, #red, #label_no').click(function()
+    
+    $("#attend_yes, #attend_no").on('ifChecked', function()
     {
         var attendance_choice   = $("[name='attendance_choice']:checked").val(); //
         var episode_id          = $("#episode-id").val();
-        
-        console.log(attendance_choice);
         
         $.ajax({  
             type: "POST",
@@ -468,22 +547,22 @@ $(document).ready(function(){
             success:                   
                 function(data)
             {       
-                    if(data.count > 0)
-                    {   
-                        $("#attendance_tables").empty();
-                        $.ajax({
-                            type: "POST",
-                            dataType: "html",
-                            data: { episode_id:episode_id },
-                            url: base_url+"/index.php/team/get_attendance",
-                            success: function(result)
-                            {
-                                $("#attendance_tables").hide();
-                                $("#attendance_tables").append(result);
-                                $("#attendance_tables").fadeIn(500);
-                            }
-                        });
-                    }
+                if(data.count > 0)
+                {   
+                    $("#attendance_tables").empty();
+                    $.ajax({
+                        type: "POST",
+                        dataType: "html",
+                        data: { episode_id:episode_id },
+                        url: base_url+"/index.php/team/get_attendance",
+                        success: function(result)
+                        {
+                            $("#attendance_tables").hide();
+                            $("#attendance_tables").append(result);
+                            $("#attendance_tables").fadeIn(500);
+                        }
+                    });
+                }
             }
         });
     });
@@ -499,9 +578,8 @@ $(document).ready(function(){
     {
         var players = new Array();
         $("input[name='players[]']:checked").each(function() {
-                players.push($(this).val());
-                });
-        console.log(players);
+            players.push($(this).val());
+            });
         
         $.ajax({
             type: "POST",
@@ -535,9 +613,8 @@ $(document).ready(function(){
     {
         var coaches = new Array();
         $("input[name='coaches[]']:checked").each(function() {
-                coaches.push($(this).val());
-                });
-        console.log(coaches);
+            coaches.push($(this).val());
+            });
         
         $.ajax({
             type: "POST",
@@ -573,7 +650,6 @@ $(document).ready(function(){
         $("input[name='squad[]']:checked").each(function() {
                 squad.push($(this).val());
                 });
-        console.log(squad);
         
         $.ajax({
             type: "POST",
@@ -609,7 +685,6 @@ $(document).ready(function(){
         $("input[name='staff[]']:checked").each(function() {
                 staff.push($(this).val());
                 });
-        console.log(staff);
         
         $.ajax({
             type: "POST",
@@ -622,7 +697,6 @@ $(document).ready(function(){
             success:
                 function(data)
             {
-                
                 if(data.count > 0)
                 {   
                     window.location = "?removecoachsuccess";
@@ -630,6 +704,14 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+    
+    $('#input_form input').keydown(function(e) {
+        if (e.keyCode === 13) 
+        {
+            $('#createteamsubmit').click();
+            return false;
+        }
     });
     
     $('#createteamsubmit').click(function()
@@ -693,26 +775,30 @@ $(document).ready(function(){
         $("input[name='team[]']:checked").each(function() {
                 teams.push($(this).val());
                 });
-        console.log(teams);
         
-        $.ajax({
+        var request = $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/join_team",
-            data: { teams:teams },
-            success:
-                function(data)
-            {
-                
+            data: { teams:teams }
+            });
+            request.done(function(data) {
+                if (data.joinError)
+                {
+                    $('#join_team_modal').modal('hide');
+                    window.location = base_url+"/?jointeampartlysuccess";
+                    return true;
+                }
+            });
+                    
+            request.done(function(data) {
                 if(data.count > 0)
                 {   
-                    console.log(data.count);
                     $('#join_team_modal').modal('hide');
                     window.location = base_url+"/?jointeamsuccess";
                     return true;
                 }
-            }
-        });
+            });
     });
     
     $('#leaveteamsubmit').click(function()
@@ -720,7 +806,8 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             dataType: "json",
-            url: base_url+"/index.php/team/leave_team/"+filter_id,
+            url: base_url+"/index.php/team/leave_team/",
+            data: {team_id:filter_id},
             success:
                 function(data)
             {
@@ -733,6 +820,42 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+    
+    $('.leaveteam').click(function() {
+        var teamid = $(this).closest(".list-group-item").find(".team_id").val();
+        $(".modal-body #teamid").val(teamid);
+        $('#profile_leave_team_modal').modal();
+    });
+    
+    $('#profileleaveteamsubmit').click(function()
+    {
+        var team_id = $("#teamid").val();
+        
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: base_url+"/index.php/profile/profile_leave_team",
+            data: {team_id:team_id},
+            success:
+                function(data)
+            {
+                if(data.count > 0)
+                {   
+                    $('#profile_leave_team_modal').modal('hide');
+                    window.location = base_url+"/?profileleaveteamsuccess";
+                    return true;
+                }
+            }
+        });
+    });
+    
+    $('#edit_team_info input').keydown(function(e) {
+        if (e.keyCode === 13) 
+        {
+            $('#teaminfosubmit').click();
+            return false;
+        }
     });
     
     $('#teaminfosubmit').click(function()
@@ -780,6 +903,14 @@ $(document).ready(function(){
                     }
             }
         });
+    });
+    
+    $('#delete_team input').keydown(function(e) {
+        if (e.keyCode === 13) 
+        {
+            $('#deleteteamsubmit').click();
+            return false;
+        }
     });
     
     $('#deleteteamsubmit').click(function()
@@ -847,7 +978,6 @@ $(document).ready(function(){
         $("#edited_episodeId").val(episodeId);
     });
     
-    //Write a function that submits edit_episode with the input data
     $('#editepisodesubmit').click(function()
     {   
         var edited_episodeName = $("#edited_episodeName").val();
@@ -885,65 +1015,65 @@ $(document).ready(function(){
                 if (data.episodeNameError)
                 {
                     $('#error_editEp').addClass('has-error');
-                    $('#errorinline_editEp').text(data.episodeNameError);
+                    $('#errorinline_editEp p').text(data.episodeNameError);
                 }
                 else
                 {
                     $('#error_editEp').removeClass('has-error');
-                    $('#errorinline_editEp').text('');
+                    $('#errorinline_editEp p').text('');
                 }
 
                 if (data.episodeDescError)
                 {
                     $('#error2_editEp').addClass('has-error');
-                    $('#error2inline_editEp').text(data.episodeDescError);
+                    $('#error2inline_editEp p').text(data.episodeDescError);
                 }
                 else
                 {
                     $('#error2_editEp').removeClass('has-error');
-                    $('#error2inline_editEp').text('');
+                    $('#error2inline_editEp p').text('');
                 }
 
                 if (data.episodeDateError)
                 {
                     $('#error3_editEp').addClass('has-error');
-                    $('#error3inline_editEp').text(data.episodeDateError);
+                    $('#error3inline_editEp p').text(data.episodeDateError);
                 }
                 else
                 {
                     $('#error3_editEp').removeClass('has-error');
-                    $('#error3inline_editEp').text('');
+                    $('#error3inline_editEp p').text('');
                 }
 
                 if (data.episodeStartTimeError)
                 {
                     $('#error4_editEp').addClass('has-error');
-                    $('#error4inline_editEp').text(data.episodeStartTimeError);
+                    $('#error4inline_editEp p').text(data.episodeStartTimeError);
                 }
                 else
                 {
                     $('#error4_editEp').removeClass('has-error');
-                    $('#error4inline_editEp').text('');
+                    $('#error4inline_editEp p').text('');
                 }
                 if (data.episodeEndTimeError)
                 {
                     $('#error5_editEp').addClass('has-error');
-                    $('#error5inline_editEp').text(data.episodeEndTimeError);
+                    $('#error5inline_editEp p').text(data.episodeEndTimeError);
                 }
                 else
                 {
                     $('#error5_editEp').removeClass('has-error');
-                    $('#error5inline_editEp').text('');
+                    $('#error5inline_editEp p').text('');
                 }
                 if (data.episodeLocationError)
                 {
                     $('#error6_editEp').addClass('has-error');
-                    $('#error6inline_editEp').text(data.episodeLocationError);
+                    $('#error6inline_editEp p').text(data.episodeLocationError);
                 }
                 else
                 {
                     $('#error6_editEp').removeClass('has-error');
-                    $('#error6inline_editEp').text('');
+                    $('#error6inline_editEp p').text('');
                 }
             } 
         }); 
@@ -958,6 +1088,14 @@ $(document).ready(function(){
     $('#delete_episode_modal').on('hidden.bs.modal', function (e) {
         $('#delete_episode_modal .modal-body').empty();
     }); 
+    
+    $('#add_event_form input').keydown(function(e) {
+        if (e.keyCode === 13) 
+        {
+            $('#addeventsubmit').click();
+            return false;
+        }
+    });
     
     $('#addeventsubmit').click(function()
     {
@@ -1015,6 +1153,17 @@ $(document).ready(function(){
                     {
                         $('#error2').removeClass('has-error');
                         $('#error2inline p').text('');
+                    }
+                    
+                    if (data.freqerror)
+                    {
+                        $('#error3').addClass('has-error');
+                        $('#error3inline p').text(data.freqerror);
+                    }
+                    else
+                    {
+                        $('#error3').removeClass('has-error');
+                        $('#error3inline p').text('');
                     }
                     
                     if (data.stdateerror)
@@ -1097,7 +1246,6 @@ $(document).ready(function(){
             success:
                     function(data)
             {       
-                    console.log(data.count);
                     if(data.count > 0)
                     {   
                         $(button).closest(".panel-body").find(".form-group").removeClass("has-error");
@@ -1187,9 +1335,8 @@ $(document).ready(function(){
     {
         var events = new Array();
         $("input[name='events[]']:checked").each(function() {
-                events.push($(this).val());
-                });
-        console.log(events);
+            events.push($(this).val());
+            });
         
         $.ajax({
             type: "POST",
@@ -1199,10 +1346,8 @@ $(document).ready(function(){
             success:
                 function(data)
             {
-                
                 if(data.count > 0)
                 {   
-                    console.log(data.count);
                     $('#delete_event_modal').modal('hide');
                     window.location = "?deleteeventsuccess";
                     return true;
@@ -1214,7 +1359,6 @@ $(document).ready(function(){
     $('#deleteepisodesubmit').click(function()
     {
         var id = globals.textId;
-        console.log(id);
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -1231,6 +1375,14 @@ $(document).ready(function(){
                 }
             }
         });
+    });
+    
+    $('#update_profile input').keydown(function(e) {
+        if (e.keyCode === 13) 
+        {
+            $('#profileinfosubmit').click();
+            return false;
+        }
     });
     
     $('#profileinfosubmit').click(function()
@@ -1282,37 +1434,6 @@ $(document).ready(function(){
     
     /*************************************
     **************************************
-    * CHECKBOX AND RADIO BUTTONS
-    **************************************
-    *************************************/
-    
-    $('#green').iCheck({
-        radioClass: 'iradio_square-green',
-        increaseArea: '30%',
-        inheritID: true
-    });
-
-    $('#red').iCheck({
-        radioClass: 'iradio_square-red',
-        increaseArea: '30%',
-        inheritID: true
-    });
-    
-    $('input').iCheck({
-       checkboxClass: 'icheckbox_flat-red' 
-    });
-    
-    
-    $("#green, #label_yes").click(function(){
-        $('#attend_yes').iCheck('check');
-    });
-
-    $("#red, #label_no").click(function(){
-        $('#attend_no').iCheck('check');
-    });
-    
-    /*************************************
-    **************************************
     * TABLES
     **************************************
     *************************************/
@@ -1329,8 +1450,7 @@ $(document).ready(function(){
         "aoColumnDefs" : [ {
             'bSortable' : false,
             'aTargets' : [ 0 ]
-        } ]
-        
+        } ] 
     });
     
     $('#staff_table').dataTable({
@@ -1345,34 +1465,28 @@ $(document).ready(function(){
         "aoColumnDefs" : [ {
             'bSortable' : false,
             'aTargets' : [ 0 ]
-        } ]
-        
+        } ]    
     });
     
     $('#player_squad_table').dataTable({
         bSortClasses: false,
         bInfo: false,
         bPaginate: false,
-        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        "aoColumnDefs" : [ {
-            'bSortable' : false,
-            'aTargets' : [ 0 ]
-        } ]
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" }
+        
     });
     
     $('#player_staff_table').dataTable({
         bSortClasses: false,
         bInfo: false,
         bPaginate: false,
-        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        "aoColumnDefs" : [{
-            'bSortable' : false,
-            'aTargets' : [ 0 ]
-        }]
+        "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" }
+        
     });
     
     $('#player_table').dataTable({
         bSortClasses: false,
+        //bInfo: false,
         "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search white'></span>" },
         "aoColumnDefs" : [ {
             'bSortable' : false,
@@ -1423,32 +1537,12 @@ $(document).ready(function(){
             'aTargets' : [ 0 ]
         } ]
     });
-    
-    $('#event_table').on(' change','input[name="check_all"]',function() {
-            $('.allboxes').prop('checked', $(this).prop('checked'));
-    });
-    
-    $('#squad_table').on(' change','input[name="check_all_squad"]',function() {
-            $('.allboxes_squad').prop('checked', $(this).prop('checked'));
-    });
-    
-    $('#staff_table').on(' change','input[name="check_all_staff"]',function() {
-            $('.allboxes_staff').prop("checked" , this.checked);
-    });
-    
-    $("input[name='search']").each(function() {
-                $(this).attr("placeholder", "Search...");
-                });
-    
-    $('.allboxes_staff').each(function (){
-        console.log($(this));
-        if(user_id === $(this).val())
-            {
-                $(this).prop("disabled", true);
-            }
-    });
  
-    //SUCCESS MESSAGES
+    /*************************************
+    **************************************
+    * SUCCESS MESSAGES
+    **************************************
+    *************************************/
         
     var hash = window.location.search.substring(1);
 
@@ -1541,11 +1635,25 @@ $(document).ready(function(){
         $("#home_success").show().delay(3000).fadeOut(1000);
         window.history.replaceState("gammel", "ny", window.location.pathname);
     }
+    else if (hash === 'jointeampartlysuccess')
+    {
+        $("#home_success").addClass('warning');
+        $("#home_success").append('<p><span class="glyphicon glyphicon-warning-sign"></span>One or more of the teams selected was not joined because the team limit was exceeded. </p>');
+        $("#home_success").show().delay(5000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
     else if (hash === 'leaveteamsuccess')
     {
         $("#home_success").append('<p><span class="glyphicon glyphicon-ok"></span>You left team. </p>');
         $("#home_success").show().delay(3000).fadeOut(1000);
         window.history.replaceState("gammel", "ny", window.location.pathname);
+    }
+    else if (hash === 'profileleaveteamsuccess')
+    {
+        $("#profile_success").append('<p><span class="glyphicon glyphicon-ok"></span>You left team.</p>');
+        $("#profile_success").show().delay(3000).fadeOut(1000);
+        window.history.replaceState("gammel", "ny", window.location.pathname);
+
     }
     else if (hash === 'updateprofilesuccess')
     {
@@ -1553,11 +1661,12 @@ $(document).ready(function(){
         $("#profile_success").show().delay(3000).fadeOut(1000);
         window.history.replaceState("gammel", "ny", window.location.pathname);
     }
+    
+    $(document).ajaxComplete(function(){
+        $("#loading").hide();
+    });
+    
 });
 
 
-
-$(document).ajaxComplete(function(){
-   $("#loading").hide();
- });
    

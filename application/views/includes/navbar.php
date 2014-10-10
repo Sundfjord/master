@@ -21,7 +21,7 @@
             <?php } else {?>
             <?php foreach ($coachteam as $row): ?>
             <?php echo 
-            '<li class="team"><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '">' . $row['teamname'] . '</a></li>';?> 
+            '<li class="team"><a href="'.base_url().'index.php/team/' . $row['team_id'] . '">' . $row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
                 if(count($coachteam) <= 2) 
                 {
@@ -35,7 +35,7 @@
             <?php } else {?>
             <?php foreach ($playerteam as $row): ?>
             <?php echo 
-            '<li class="team"><a href="http://localhost/master/index.php/team/' . $row['team_id'] . '">' .$row['teamname'] . '</a></li>';?> 
+            '<li class="team"><a href="'.base_url().'index.php/team/' . $row['team_id'] . '">' .$row['teamname'] . '</a></li>';?> 
             <?php endforeach; 
                 if(count($playerteam) <= 2) 
                 {
@@ -73,13 +73,13 @@
                 
                 <form id="input_form" action="" method="POST">
                     <div class="form-group" id="error_createteam">
-                        <label for="teamname">Team Name:</label>
+                        <label class='control-label' for="teamname">Team Name:</label>
                         <input type="text" class="form-control" id="create_teamname" value="<?php echo set_value('teamname'); ?>" name="teamname" placeholder="Team name" autofocus />
                         <span class='help-inline' id='errorinline_createteam'><p class="danger"></p></span>
                     </div>
                         
                     <div class="form-group" id="error2_createteam">
-                        <label for="sport">Sport:</label>
+                        <label class='control-label' for="sport">Sport:</label>
                         <select class="form-control" name="sport" id="create_sport" value="">
                             <option value="0" name="choose" selected>Choose sport</option>
                             <option value="Football" name="Football">Football</option>
@@ -106,7 +106,7 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" id="createteamsubmit" class="btn btn-primary">Create team</button>
+                <button type="button" id="createteamsubmit" class="btn btn-info">Create team</button>
             </div>
             
             </form>
@@ -133,10 +133,19 @@
                         </tr>
                     </thead>
                     <tbody>	
-            
+                    <?php $playerteamlist = array();
+                    if (empty($playerteam))
+                    {}
+                    else 
+                    {
+                        foreach ($playerteam as $pt) 
+                        {
+                            $playerteamlist[] = $pt['team_id'];
+                        }
+                    } ?>
                     <?php foreach ($teams as $team):?>
                         <tr>
-                            <td class="left"><input form="team" type="checkbox" name="team[]" id="teamids" value="<?php echo $team['id'];?>" > </td>
+                            <td class="left"><input form="team" type="checkbox" name="team[]" id="teamids" value="<?php echo $team['id'];?>" <?php if(in_array($team['id'], $playerteamlist)) {echo "disabled='disabled'";}?> > </td>
                             <td class="middle_l"><div class="teamname"><?php echo $team['teamname'];?></div></td>
                             <td class="middle_r"><div class="sport"><?php echo $team['sport'];?></div></td>
                             <td class="middle_r"><div class="sport"><?php echo $team['coach'];?></div></td>
@@ -144,10 +153,11 @@
                     <?php endforeach;?>
                     </tbody>
                 </table>
+                <span class='help-inline' id='errorinline_join'><p class="danger"></p></span>
                 
             </div>
             <div class="modal-footer">
-                <form id="team" action="<?php echo base_url(); ?>index.php/team/join_team" method="post">
+                <form id="team" action="" method="post">
                     <button class="btn btn-info" id="jointeamsubmit" type="button" disabled>Join team</button>
                 </form>
             </div>

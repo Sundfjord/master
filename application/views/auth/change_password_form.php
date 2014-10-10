@@ -24,7 +24,7 @@ $confirm_new_password = array(
 <html lang="en">
     <head>
         <link href="<?php echo $tankstrap["bootstrap_path"];?>" rel="stylesheet">
-        <link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="<?php echo base_url();?>css/overrides.css" type="text/css" media="screen" />
         <title><?php echo $tankstrap["change_pw_page_title"];?></title>
     </head>
     <body>

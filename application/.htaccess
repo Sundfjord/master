@@ -1,6 +1,6 @@
 RewriteEngine on
 RewriteCond $1 !^(index\.php|img|js|css|robots\.txt)
-RewriteRule ^(.*)$ /master/index.php/$1 [L]
+RewriteRule ^(.*)$ /rockEnroll/index.php/$1 [L]
 
 <Files "*.tpl">
 Order Allow,Deny

@@ -3,9 +3,7 @@
 class MY_Model extends CI_Model {
     
     function __construct() {
-        parent::__construct();
-        
-        
+        parent::__construct(); 
     }
     
     public function add_team() {
@@ -29,6 +27,18 @@ class MY_Model extends CI_Model {
         }
     }
     
+    public function coach_leave_team($team_id) 
+    {
+        $this->db->delete('is_coach_of', array(
+           'user_id'    => $this->session->userdata('user_id'),
+           'team_id'    => $team_id
+        ));
+        
+        $count = $this->db->affected_rows();
+        
+        return $count;
+    }
+    
     public function get_team_by_coach()
     {
         $this->db->select('teamname, id');
@@ -47,5 +57,7 @@ class MY_Model extends CI_Model {
             return $data;
         }
     }
+    
+    
     
 }
