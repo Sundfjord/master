@@ -1,9 +1,0 @@
-application/config/config.php
-application/config/database.php
-application/config/email.php
-application/config/tank_auth.php
-application/config/tankstrap.php
-system/logs/log-*.php
-system/cache/*
-system/cache/!index.html
-.DS_Store
