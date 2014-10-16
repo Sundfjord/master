@@ -854,10 +854,21 @@ class Team_m extends MY_Model {
 
     public function archive_attendance()
     {
-        
+        $eventArray[] = array();
+        $this->db->select('id');
+        $this->db->from('events');
+        $this->db->where('add_to_statistics', 1);
+        $eventArray = $this->db->get();
+        $statEvents = array();
+        foreach($eventArray->result_array() as $row)
+        {
+            //array with ID's of events where attendance should be added to statistics
+            $statEvents[] = $row['id'];
+        }
+
         $this->db->select('id, event_date');
         $this->db->from('episodes');
-        //$this->db->where_in('event_id', $statEvents);
+        $this->db->where_in('event_id', $statEvents);
         $this->db->order_by('event_date', 'asc');
         $episodes = $this->db->get();
 
