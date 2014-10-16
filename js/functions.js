@@ -9,7 +9,7 @@ $(document).ready(function(){
     
     var filter_id = $('#filter_id').val();
     var user_id = $('#user').val();
-    var base_url = 'http://sundfjord.com/rockEnroll';
+    var base_url = 'http://localhost/rockEnroll';
     
     /*************************************
     **************************************
@@ -45,26 +45,26 @@ $(document).ready(function(){
                 }
                 callback(eventsToShow);
             });
-        },        
-        eventClick: function(calEvent) 
+        },
+        eventClick: function(calEvent)
         {
             var stDate = $.fullCalendar.formatDate(calEvent.start, 'dd-MM-yyyy');
             var stime = calEvent.start_time;
             var startTime = stime.slice(0, -3);
             var etime = calEvent.end_time;
             var endTime = etime.slice(0, -3);
-            
+
             globals['textDate'] = $.fullCalendar.formatDate(calEvent.start, 'dddd, MMMM dS, yyyy');
             globals['textTitle'] = calEvent.title;
             globals['textId'] = calEvent.id;
-            
+
             $.ajax({
                 type: "POST",
-                url: base_url+"/index.php/team/get_attendance", 
+                url: base_url+"/index.php/team/get_attendance",
                 data: { episode_id : calEvent.id },
-                dataType: "text",  
+                dataType: "text",
                 cache: false,
-                success: 
+                success:
                     function(result)
                     {
                         if($('#event-info').css("display") === 'block')

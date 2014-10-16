@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `add_to_statistics` TINYINT(1) NOT NULL ;

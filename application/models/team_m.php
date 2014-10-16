@@ -836,10 +836,10 @@ class Team_m extends MY_Model {
                             'username'  =>  $att['username'],
                             'email'     =>  $att['email'],
                             'count'     =>  $att['num_of_eps']
-                        );  
-                    }  
+                        );
+                    }
                 }
-                return $statArray;      
+                return $statArray;
             }
             else
             {
@@ -849,35 +849,37 @@ class Team_m extends MY_Model {
         else
         {
             return false;
-        }   
+        }
     }
-    
-    public function archive_attendance() 
+
+    public function archive_attendance()
     {
+        
         $this->db->select('id, event_date');
         $this->db->from('episodes');
+        //$this->db->where_in('event_id', $statEvents);
         $this->db->order_by('event_date', 'asc');
         $episodes = $this->db->get();
-        
-        if ($episodes->num_rows() > 0) 
+
+        if ($episodes->num_rows() > 0)
         {
             $i = 0;
             $a = 0;
-            foreach ($episodes->result_array() as $row) 
+            foreach ($episodes->result_array() as $row)
             {
                 //checks if the episode is more than 24 hours (1day) old relative to current date
                 $now = date('Y-m-d');
                 $eventdate = date('Y-m-d', strtotime($row['event_date']));
                 $validstat = date('Y-m-d', strtotime($eventdate. ' + 1 day'));
-                
+
                 if ($now > $validstat)
-                {   
+                {
                     $i++;
                     $this->db->select('user_id, episode_id');
                     $this->db->where('is_attending', 1);
                     $this->db->where('episode_id', $row['id']);
                     $stats = $this->db->get('attendance_status');
-                    foreach ($stats->result_array() as $stat) 
+                    foreach ($stats->result_array() as $stat)
                     {
                         $statinfo = array(
                             'user_id'       =>  $stat['user_id'],
@@ -885,15 +887,15 @@ class Team_m extends MY_Model {
                             );
                         $this->db->on_duplicate('attendance_statistics', $statinfo);
                         $a++;
-                    }                
-                }                 
+                    }
+                }
             }
             $result = "$i episodes affected <br> $a new attendance rows added to statistics";
             echo $result;
         }
-        else 
-        { 
-            return false; 
-        }   
-    }   
+        else
+        {
+            return false;
+        }
+    }
 }

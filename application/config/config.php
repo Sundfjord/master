@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://sundfjord.com/rockEnroll/';
+$config['base_url']	= 'http://localhost/rockEnroll';
 
 /*
 |--------------------------------------------------------------------------
