@@ -248,7 +248,7 @@ class Team_m extends MY_Model {
     
     public function getTeamEvents()
     {
-        $this->db->select('id, name, description, location, start_time, end_time');
+        $this->db->select('id, name, description, location, start_time, end_time, add_to_statistics');
         $this->db->from('events');
         $this->db->where('team_id', $this->uri->segment(2));
         $events = $this->db->get();
@@ -266,7 +266,8 @@ class Team_m extends MY_Model {
                     'description'   =>  $v['description'],
                     'location'      =>  $v['location'],
                     'start_time'    =>  $start_time,
-                    'end_time'      =>  $end_time
+                    'end_time'      =>  $end_time,
+                    'add_to_statistics' => $v['add_to_statistics']
                     );
             }
             return $data;
@@ -580,12 +581,13 @@ class Team_m extends MY_Model {
     public function add_event($teamid)
     {
         $eventinfo = array(
-            'team_id'       =>  $teamid,
-            'name'          =>  $this->input->post('eventname'),
-            'description'   =>  $this->input->post('eventdesc'),
-            'location'      =>  $this->input->post('eventlocation'),
-            'start_time'    =>  $this->input->post('start_time'),
-            'end_time'      =>  $this->input->post('end_time')
+            'team_id'           =>  $teamid,
+            'name'              =>  $this->input->post('eventname'),
+            'description'       =>  $this->input->post('eventdesc'),
+            'location'          =>  $this->input->post('eventlocation'),
+            'start_time'        =>  $this->input->post('start_time'),
+            'end_time'          =>  $this->input->post('end_time'),
+            'add_to_statistics' =>  $this->input->post('add_to_stats')
         );
 
         $this->db->insert('events', $eventinfo);
@@ -628,7 +630,8 @@ class Team_m extends MY_Model {
             'description'   =>  $this->input->post('edited_eventdesc'),
             'location'      =>  $this->input->post('edited_location'),
             'start_time'    =>  $this->input->post('edited_start_time'),
-            'end_time'      =>  $this->input->post('edited_end_time')
+            'end_time'      =>  $this->input->post('edited_end_time'),
+            'add_to_statistics' => $this->input->post('edited_add_to_statistics')
         );
 
         $this->db->where('id', $this->uri->segment(3));

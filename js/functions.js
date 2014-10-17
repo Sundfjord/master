@@ -76,11 +76,12 @@ $(document).ready(function(){
                             $("#description").empty();
                             $("#attendance_tables").empty();
                             $("#invisible").empty();
+                            $(".hidden_id").empty();
                             $("#notallowed").remove();
                             $("#choice").show();
                             $('.attendance .panel-body').removeAttr("style");
                         }
-                        
+
                         $('#attendance_tables').append(result);
                         $('.hidden_id').prepend("<input id='episode-id' class='noshow' type='hidden' name='ep-id' value='" + calEvent.id + "' readonly>");
                         $('#coach-only').prepend("\
@@ -91,7 +92,7 @@ $(document).ready(function(){
                         var comparison = varDate + " " + startTime;
                         var haveToPass = moment(comparison);
                         var bar = moment().subtract("hours", 24);
-                        
+
                         $('#location').append(calEvent.location);
                         $('#time').append(startTime + " - " + endTime);
                         if (calEvent.description !== '')
@@ -101,9 +102,9 @@ $(document).ready(function(){
                         else {
                             $('#description').append('No description');
                         }
-                        
+
                         $('#attend_yes, #attend_no').iCheck('uncheck');
-                        
+
                         $('#invisible').append("\
                             <input id='title' class='noshow' type='hidden' name='title' value='" + calEvent.title + "' readonly>\n\
                             <input id='date' class='noshow' type='hidden' name='date' value='" + stDate + "' readonly>\n\
@@ -112,60 +113,60 @@ $(document).ready(function(){
                             <input id='episode-id' class='noshow' type='hidden' name='episode-id' value='" + calEvent.id + "' readonly>\n\
                         ");
                         $('#event-info').fadeIn(500);
-                        
+
                         if (bar > haveToPass)
                         {
                             $('#delete_episode_button').attr('disabled', 'disabled');
-                            $('#edit_episode_button').attr('disabled', 'disabled'); 
+                            $('#edit_episode_button').attr('disabled', 'disabled');
                             $("#choice").hide();
                             $('.attendance .panel-body').append("<div id='notallowed' class='bg-danger'><center><p><span class='glyphicon glyphicon-exclamation-sign'></span>Registration for this event has expired.</p></center></div>");
                             $('.attendance .panel-body').css("border", "1px solid #ecb1b4");
                         }
-                        else 
+                        else
                         {
                             $('#delete_episode_button').attr('disabled', false);
                             $('#edit-episode-button').attr('disabled', false);
                         }
                     }
-            });   
+            });
         }
     });
-    
+
     /*************************************
     **************************************
     * SNIPPETS
     **************************************
     *************************************/
-    
+
     $('#event_table').on(' change','input[name="check_all"]',function() {
             $('.allboxes').prop('checked', $(this).prop('checked'));
     });
-    
+
     $('#squad_table').on(' change','input[name="check_all_squad"]',function() {
             $('.allboxes_squad').prop('checked', $(this).prop('checked'));
     });
-    
+
     $('#staff_table').on(' change','input[name="check_all_staff"]',function() {
             $('.allboxes_staff').prop("checked" , this.checked);
     });
-    
+
     $("input[name='search']").each(function() {
                 $(this).attr("placeholder", "Search...");
                 });
-    
+
     $('.allboxes_staff').each(function (){
         if(user_id === $(this).val())
             {
                 $(this).prop("disabled", true);
             }
     });
-    
+
     $('.nrOfCoaches').each(function () {
         var coachcount = $(this).val();
-        if (coachcount === '1') 
+        if (coachcount === '1')
         {
             var button = ($(this).closest(".list-group-item").find(".disabledcheck"));
-            
+
             $(function() {
                 jQuery.fn.extend({
                     disable: function(state) {
@@ -175,16 +176,16 @@ $(document).ready(function(){
                         });
                     }
                 });
-    
+
                 $(button).disable(true);
-    
+
                 $('body').on('click', 'a.disabled', function(event) {
                     event.preventDefault();
                 });
-            });  
-        } 
+            });
+        }
     });
-    
+
     $('input[name="frequency"]').change(function()
     {
          if($(this).val() === "single")
@@ -200,15 +201,15 @@ $(document).ready(function(){
          {
             $("#end_date").removeAttr("disabled");
             $("#end_date").attr("placeholder", "End date");
-         }   
+         }
     });
-    
+
     /*************************************
     **************************************
     * CHECKBOX AND RADIO BUTTONS
     **************************************
     *************************************/
-    
+
     $('#green').iCheck({
         radioClass: 'iradio_square-green',
         increaseArea: '30%',
@@ -220,7 +221,7 @@ $(document).ready(function(){
         increaseArea: '30%',
         inheritID: true
     });
-    
+
     $("#green, #label_yes").click(function(){
         $('#attend_yes').iCheck('check');
     });
@@ -228,21 +229,21 @@ $(document).ready(function(){
     $("#red, #label_no").click(function(){
         $('#attend_no').iCheck('check');
     });
-    
+
     /*************************************
     **************************************
     * DATE AND TIME PICKERS
     **************************************
     *************************************/
-    
+
     $('#start-date').datepicker({
         format: "dd-mm-yyyy",
         weekStart: 1,
         startDate: "today",
         todayHighlight: true,
         autoclose: true
-    }); 
-    
+    });
+
     $('#end-date').datepicker({
         format: "dd-mm-yyyy",
         weekStart: 1,
@@ -250,7 +251,7 @@ $(document).ready(function(){
         endDate: "+1y",
         autoclose: true
     });
-    
+
     $('#edit-episode-date').datepicker({
         format: "dd-mm-yyyy",
         weekStart: 1,
@@ -259,7 +260,7 @@ $(document).ready(function(){
         todayHighlight: true,
         autoclose: true
     });
-    
+
     $('#start-time').datetimepicker({
         formatViewType:"time",
         format: "hh:ii",
@@ -270,9 +271,9 @@ $(document).ready(function(){
         todayHighlight: true,
         viewSelect: "day",
         pickerPosition: "bottom-left"
-        
+
     });
-    
+
     $('#end-time').datetimepicker({
         formatViewType:"time",
         format: "hh:ii",
@@ -284,7 +285,7 @@ $(document).ready(function(){
         viewSelect: "day",
         pickerPosition: "bottom-left"
     });
-    
+
     $('.edit-start-time').each(function(){
         $(this).datetimepicker({
             formatViewType:"time",
@@ -298,7 +299,7 @@ $(document).ready(function(){
             pickerPosition: "bottom-left"
         });
     });
-    
+
     $('.edit-end-time').each(function(){
         $(this).datetimepicker({
             formatViewType:"time",
@@ -312,7 +313,7 @@ $(document).ready(function(){
             pickerPosition: "bottom-left"
         });
     });
-    
+
     $('#edit-episode-start-time').datetimepicker({
         formatViewType:"time",
         format: "hh:ii",
@@ -324,7 +325,7 @@ $(document).ready(function(){
         viewSelect: "day",
         pickerPosition: "bottom-left"
     });
-    
+
     $('#edit-episode-end-time').datetimepicker({
         formatViewType:"time",
         format: "hh:ii",
@@ -336,53 +337,53 @@ $(document).ready(function(){
         viewSelect: "day",
         pickerPosition: "bottom-left"
     });
-    
+
     /*************************************
     **************************************
     * MODALS
     **************************************
     *************************************/
-    
+
     $('#create_team').click(function() {
-        $('#create_team_modal').modal('show');	
+        $('#create_team_modal').modal('show');
     });
-    
+
     $('#home_create_team').click(function() {
         $('#create_team_modal').modal();
     });
-    
+
     $('#create_team_modal').on('hidden.bs.modal', function () {
         $('#error_createteam').removeClass('has-error');
         $('#errorinline_createteam p').text('');
         $('#error2_createteam').removeClass('has-error');
         $('#error2inline_createteam p').text('');
     });
-    
+
     $('#join_team').click(function() {
         $('#join_team_modal').modal();
     });
-    
+
     $('#join_team_modal').on('hidden.bs.modal', function () {
         $('#join_team_table').removeClass('has-error');
         $('#errorinline_join p').text('');
     });
-    
+
     $('#home_join_team').click(function() {
         $('#join_team_modal').modal();
     });
-    
+
     $('#leave_team').click(function() {
         $('#leave_team_modal').modal();
     });
-        
+
     $('#add_event').click(function() {
         $('#add_event_modal').modal();
     });
-    
+
     $('#edit_event').click(function() {
         $('#edit_event_modal').modal();
     });
-    
+
     $('#delete_event').click(function() {
         $('#delete_event_modal').modal();
     });
@@ -392,92 +393,92 @@ $(document).ready(function(){
     * TABS
     **************************************
     *************************************/
-    
+
     $('.nav-tabs a').click(function() {
             preventDefault();
             $('.nav-tabs a').tab('show');
             $('#calendar').fullCalendar('render');
         });
-        
+
         // on load of the page: switch to the currently selected tab
         var hash = window.location.hash;
         $('.nav a[href="' + hash + '"]').tab('show');
-        
+
         // store the currently selected tab in the hash value
         $("ul.nav-tabs > li > a").on("shown.bs.tab", function (e) {
             var id = $(e.target).attr("href").substr(1);
             window.location.hash = id;
         });
-    
+
     $("#add_event_modal").on('shown', function() {
     $(this).find("input[name='eventname']").focus();
     });
-    
+
     $("#edit_episode_modal").on('shown', function() {
     $(this).find("input[name='edited_episodeName']").focus();
     });
-    
+
     /*************************************
     **************************************
     * STATISTICS TABLE
     **************************************
     *************************************/
-    
+
     var startmoment = moment().subtract('days', 29);
     var startend = moment();
-    
+
     var initialstart = startmoment.format('YYYY-MM-DD');
     var initialend = startend.format('YYYY-MM-DD');
 
     $.ajax({
         type: "POST",
-        url: base_url+"/index.php/team/get_statistics", 
-        data: 
-            { 
+        url: base_url+"/index.php/team/get_statistics",
+        data:
+            {
                 team_id : filter_id,
                 startrange : initialstart,
                 endrange : initialend
             },
-        dataType: "json",  
+        dataType: "json",
         cache: false,
-        success: 
-            function(data) 
+        success:
+            function(data)
             {
-                $.each(data, function(index, data) 
+                $.each(data, function(index, data)
                 {
                     $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.email + '</td><td class="number">' + data.count + '</td></tr>');
-                });            
+                });
             }
     });
-                
-    var cb = function(start, end) 
+
+    var cb = function(start, end)
     {
         $('#daterange .text').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         var startrange = start.format('YYYY-MM-DD');
         var endrange = end.format('YYYY-MM-DD');
-                    
+
         $.ajax({
             type: "POST",
-            url: base_url+"/index.php/team/get_statistics", 
-            data: 
-                { 
+            url: base_url+"/index.php/team/get_statistics",
+            data:
+                {
                     team_id : filter_id,
                     startrange: startrange,
                     endrange: endrange
                 },
-            dataType: "json",  
+            dataType: "json",
             cache: false,
-            success: 
-                function(data) 
+            success:
+                function(data)
                 {
-                    if (data === null) 
+                    if (data === null)
                     {
                         $("#statistics_table > tbody").empty();
                     }
                     else
                     {
                         $("#statistics_table > tbody").empty();
-                        $.each(data, function(index, data) 
+                        $.each(data, function(index, data)
                         {
                             $("#statistics_table > tbody").append('<tr><td>' + data.username + '</td><td>' + data.email + '</td><td class="number">' + data.count + '</td></tr>').fadeIn(500);
                         });
@@ -486,7 +487,7 @@ $(document).ready(function(){
         });
     };
 
-    var optionSet1 = 
+    var optionSet1 =
     {
         startDate: moment().subtract('days', 29),
         endDate: moment(),
@@ -1075,28 +1076,28 @@ $(document).ready(function(){
                     $('#error6_editEp').removeClass('has-error');
                     $('#error6inline_editEp p').text('');
                 }
-            } 
-        }); 
+            }
+        });
     });
-      
+
     $('#event-info').on("click", "#delete_episode_button", function () {
         $('#delete_episode_modal .modal-body').append("<p>Are you sure you want to delete the event " + globals.textTitle + " on " + globals.textDate + " ?</p>");
         $("#delete_episodeId").val(globals.textId);
-        $('#delete_episode_modal').modal('show');         
+        $('#delete_episode_modal').modal('show');
     });
-      
+
     $('#delete_episode_modal').on('hidden.bs.modal', function (e) {
         $('#delete_episode_modal .modal-body').empty();
-    }); 
-    
+    });
+
     $('#add_event_form input').keydown(function(e) {
-        if (e.keyCode === 13) 
+        if (e.keyCode === 13)
         {
             $('#addeventsubmit').click();
             return false;
         }
     });
-    
+
     $('#addeventsubmit').click(function()
     {
         var eventname       = $("#event_name").val();
@@ -1107,12 +1108,17 @@ $(document).ready(function(){
         var start_time      = $("#start_time").val();
         var end_time        = $("#end_time").val();
         var eventlocation   = $("#eventlocation").val();
-        
+        if($("#add_to_statistics").is(":checked")) {
+            var add_to_stats = 1;
+        } else {
+            var add_to_stats = 0;
+        }
+
         $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/add_event/"+filter_id,
-            data: 
+            data:
             {
                 eventname: eventname,
                 eventdesc: eventdesc,
@@ -1121,18 +1127,19 @@ $(document).ready(function(){
                 end_date: end_date,
                 start_time: start_time,
                 end_time: end_time,
-                eventlocation: eventlocation 
+                eventlocation: eventlocation,
+                add_to_stats: add_to_stats
             },
             success:
             function(data)
-            {       
+            {
                     if(data.count > 0)
-                    {   
+                    {
                         $('#add_event_modal').modal('hide');
                         window.location = "?addeventsuccess";
                         return true;
                     }
-                    
+
                     if (data.nameerror)
                     {
                         $('#error').addClass('has-error');
@@ -1154,7 +1161,7 @@ $(document).ready(function(){
                         $('#error2').removeClass('has-error');
                         $('#error2inline p').text('');
                     }
-                    
+
                     if (data.freqerror)
                     {
                         $('#error3').addClass('has-error');
@@ -1165,7 +1172,7 @@ $(document).ready(function(){
                         $('#error3').removeClass('has-error');
                         $('#error3inline p').text('');
                     }
-                    
+
                     if (data.stdateerror)
                     {
                         $('#error4').addClass('has-error');
@@ -1217,37 +1224,42 @@ $(document).ready(function(){
                         $('#error8inline p').text('');
                     }
             }
-            
         });
     });
-    
+
     $(".editeventsubmit").click(function()
     {
-        var button            = $(this).closest(".panel-body").find(".editeventsubmit");   
+        var button            = $(this).closest(".panel-body").find(".editeventsubmit");
         var edited_eventname  = $(this).closest(".panel-body").find("#edited_eventname").val();
         var edited_eventdesc  = $(this).closest(".panel-body").find("#edited_eventdesc").val();
         var edited_start_time = $(this).closest(".panel-body").find("#edited_start_time").val();
         var edited_end_time   = $(this).closest(".panel-body").find("#edited_end_time").val();
         var edited_location   = $(this).closest(".panel-body").find("#edited_location").val();
         var event_id          = $(this).closest(".panel-body").find(".event_id").val();
-        
+        if($(this).closest(".panel-body").find("#edited_add_to_statistics").is(":checked")) {
+            var edited_add_to_statistics = 1;
+        } else {
+            var edited_add_to_statistics = 0;
+        }
+
         $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/edit_event/"+event_id,
-            data: 
+            data:
             {
                 edited_eventname: edited_eventname,
                 edited_eventdesc: edited_eventdesc,
                 edited_start_time: edited_start_time,
                 edited_end_time: edited_end_time,
-                edited_location: edited_location 
+                edited_location: edited_location,
+                edited_add_to_statistics: edited_add_to_statistics
             },
             success:
                     function(data)
-            {       
+            {
                     if(data.count > 0)
-                    {   
+                    {
                         $(button).closest(".panel-body").find(".form-group").removeClass("has-error");
                         $(button).closest(".panel-body").find(".help-inline").text("");
                         $(button).closest(".panel-default").css("border-color", "green");
@@ -1255,8 +1267,7 @@ $(document).ready(function(){
                         button.addClass("btn btn-success");
                         button.text("");
                         button.append('<p class="nomargin"><span class="glyphicon glyphicon-ok"></span>Saved!</p>');
-                        
-                        setTimeout(function () 
+                        setTimeout(function ()
                         {
                             $(button).closest(".panel-default").css("border-color", "#ddd");
                             button.removeClass("btn btn-success");
@@ -1265,7 +1276,7 @@ $(document).ready(function(){
                             button.text("Save changes");
                         }, 2500);
                     }
-                    
+
                     if (data.edit_nameerror)
                     {
                         $(button).closest(".panel-body").find('#error_edit').addClass('has-error');
@@ -1287,7 +1298,7 @@ $(document).ready(function(){
                         $(button).closest(".panel-body").find('#error2_edit').removeClass('has-error');
                         $(button).closest(".panel-body").find('#error2inline_edit p').text('');
                     }
-                    
+
                     if (data.edit_stTimeError)
                     {
                         $(button).closest(".panel-body").find('#error3_edit').addClass('has-error');
@@ -1298,7 +1309,7 @@ $(document).ready(function(){
                         $(button).closest(".panel-body").find('#error3_edit').removeClass('has-error');
                         $(button).closest(".panel-body").find('#error3inline_edit p').text('');
                     }
-                    
+
                     if (data.edit_endTimeError)
                     {
                         $(button).closest(".panel-body").find('#error4_edit').addClass('has-error');
@@ -1309,7 +1320,7 @@ $(document).ready(function(){
                         $(button).closest(".panel-body").find('#error4_edit').removeClass('has-error');
                         $(button).closest(".panel-body").find('#error4inline_edit p').text('');
                     }
-                    
+
                     if (data.edit_locerror)
                     {
                         $(button).closest(".panel-body").find('#error5_edit').addClass('has-error');
@@ -1323,21 +1334,21 @@ $(document).ready(function(){
             }
             });
     });
-    
+
     var eventcheckboxes = $("input[id='ids']"),
     deleteevent = $("#deleteeventsubmit");
 
     eventcheckboxes.click(function() {
         deleteevent.attr("disabled", !eventcheckboxes.is(":checked"));
-    });    
-    
+    });
+
     $('#deleteeventsubmit').click(function()
     {
         var events = new Array();
         $("input[name='events[]']:checked").each(function() {
             events.push($(this).val());
             });
-        
+
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -1347,7 +1358,7 @@ $(document).ready(function(){
                 function(data)
             {
                 if(data.count > 0)
-                {   
+                {
                     $('#delete_event_modal').modal('hide');
                     window.location = "?deleteeventsuccess";
                     return true;
@@ -1355,7 +1366,7 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $('#deleteepisodesubmit').click(function()
     {
         var id = globals.textId;
@@ -1368,7 +1379,7 @@ $(document).ready(function(){
                 function(data)
             {
                 if(data.count > 0)
-                {   
+                {
                     $('#delete_episode_modal').modal('hide');
                     window.location = "?deleteepisodesuccess";
                     return true;
@@ -1376,37 +1387,37 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $('#update_profile input').keydown(function(e) {
-        if (e.keyCode === 13) 
+        if (e.keyCode === 13)
         {
             $('#profileinfosubmit').click();
             return false;
         }
     });
-    
+
     $('#profileinfosubmit').click(function()
     {
         var edit_username   = $("#edit_name").val();
         var edit_email      = $("#edit_email").val();
-        
-        $.ajax({  
+
+        $.ajax({
             type: "POST",
             dataType: "json",
-            url: base_url+"/index.php/profile/update_profile",  
-            data: { 
+            url: base_url+"/index.php/profile/update_profile",
+            data: {
                 edit_username:edit_username,
                 edit_email:edit_email
                 },
-            success:                   
+            success:
                 function(data)
-            {       
+            {
                     if(data.count > 0)
-                    {   
+                    {
                         window.location = "?updateprofilesuccess";
                         return true;
                     }
-                    
+
                     if (data.editUsernameError)
                     {
                         $('#error_updateprofile').addClass('has-error');
@@ -1431,13 +1442,13 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     /*************************************
     **************************************
     * TABLES
     **************************************
     *************************************/
-    
+
     $('#squad_table').dataTable({
         iDisplayLength: 25,
         bInfo: false,
@@ -1446,13 +1457,13 @@ $(document).ready(function(){
         aaSorting: [[ 1, "desc" ]],
         bSortClasses: false,
         "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        
+
         "aoColumnDefs" : [ {
             'bSortable' : false,
             'aTargets' : [ 0 ]
-        } ] 
+        } ]
     });
-    
+
     $('#staff_table').dataTable({
         iDisplayLength: 25,
         bInfo: false,
@@ -1461,13 +1472,13 @@ $(document).ready(function(){
         aaSorting: [[ 1, "desc" ]],
         bSortClasses: false,
         "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" },
-        
+
         "aoColumnDefs" : [ {
             'bSortable' : false,
             'aTargets' : [ 0 ]
-        } ]    
+        } ]
     });
-    
+
     $('#player_squad_table').dataTable({
         bSortClasses: false,
         bInfo: false,

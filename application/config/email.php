@@ -10,12 +10,23 @@
 |	http://codeigniter.com/user_guide/libraries/email.html
 |
 */
-$config['protocol'] = 'smtp';
+/*$config['protocol'] = 'smtp';
 $config['smtp_host'] = 'mailout.one.com';
 $config['smtp_user'] = 'rockenroll@sundfjord.com';
 $config['smtp_pass'] = 'manchesterutd1';
 $config['smtp_timeout'] = '30';
 $config['smtp_port'] = 25;
+$config['mailtype'] = 'html';
+$config['charset'] = 'utf-8';
+$config['newline'] = '\r\n';
+$config['crlf']    = '\r\n';
+*/
+$config['protocol'] = 'smtp';
+$config['smtp_host'] = 'smtp.gmail.com';
+$config['smtp_user'] = 'bttestmail@gmail.com';
+$config['smtp_pass'] = 'kaffeogbrus';
+$config['smtp_timeout'] = '30';
+$config['smtp_port'] = 587;
 $config['mailtype'] = 'html';
 $config['charset'] = 'utf-8';
 $config['newline'] = '\r\n';
