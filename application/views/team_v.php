@@ -130,21 +130,19 @@
 
                     <div class='col-xs-12 col-md-6'>
 
-
-
                     <div id="event-details">
 
-                        <div class='row'>
+                        <div class="row">
 
-                            <div class='col-xs-7'>
+                            <div class='col-xs-12 col-sm-6'>
 
                                 <div class='panel panel-default'>
 
-                                    <div class='panel-heading'><span class='glyphicon glyphicon-map-marker'></span>Location</div>
+                                    <div class='panel-heading'><span class='glyphicon glyphicon-map-marker'></span>Date</div>
 
                                     <div class='panel-body'>
 
-                                        <p class="nomargin" id='location' type='text' name='location'></p>
+                                        <p class="nomargin" id='date' type='text' name='date'></p>
 
                                     </div>
 
@@ -152,9 +150,7 @@
 
                             </div>
 
-
-
-                            <div class='col-xs-5'>
+                            <div class='col-xs-12 col-sm-6'>
 
                                 <div class='panel panel-default'>
 
@@ -172,9 +168,25 @@
 
                         </div>
 
-                        <div class='row'>
+                        <div class="row">
 
-                            <div class='col-xs-12'>
+                            <div class='col-xs-12 col-sm-6'>
+
+                                <div class='panel panel-default'>
+
+                                    <div class='panel-heading'><span class='glyphicon glyphicon-map-marker'></span>Location</div>
+
+                                    <div class='panel-body'>
+
+                                        <p class="nomargin" id='location' type='text' name='location'></p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class='col-xs-12 col-sm-6'>
 
                                 <div class='panel panel-default'>
 

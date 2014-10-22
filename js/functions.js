@@ -71,6 +71,7 @@ $(document).ready(function(){
                         {
                             $("#event-info").css("display", "none");
                             $("#coach-only").empty();
+                            $("#date").empty();
                             $("#location").empty();
                             $("#time").empty();
                             $("#description").empty();
@@ -89,10 +90,12 @@ $(document).ready(function(){
                             <div class='col-sm-6'><button id='edit_episode_button' class='btn btn-default btn-block' type='button'><span class='glyphicon glyphicon-edit'></span>Edit event details</button></div></div>\n\
                             ");
                         var varDate = $.fullCalendar.formatDate(calEvent.start, 'yyyy-MM-dd');
+                        var outputDate = $.fullCalendar.formatDate(calEvent.start, 'dd.MM.yyyy');
                         var comparison = varDate + " " + startTime;
                         var haveToPass = moment(comparison);
                         var bar = moment().subtract("hours", 24);
 
+                        $('#date').append(outputDate);
                         $('#location').append(calEvent.location);
                         $('#time').append(startTime + " - " + endTime);
                         if (calEvent.description !== '')
