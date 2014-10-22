@@ -1,15 +1,13 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Home extends MY_Controller 
+class Home extends MY_Controller
 {
-
     function __construct() {
-        
+
         parent::__construct();
         $this->load->library('form_validation');
-        
     }
-    
+
     function index()
     {
         $home_data['title'] = 'Home';
@@ -18,5 +16,4 @@ class Home extends MY_Controller
         $this->load->vars($home_data);
         $this->load->view('includes/template');
     }
-
 }

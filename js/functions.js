@@ -5,18 +5,18 @@
 
 globals = {};
 
-$(document).ready(function(){    
-    
+$(document).ready(function(){
+
     var filter_id = $('#filter_id').val();
     var user_id = $('#user').val();
     var base_url = 'http://localhost/rockEnroll';
-    
+
     /*************************************
     **************************************
     * CALENDAR
     **************************************
     *************************************/
-    
+
     $('#calendar').fullCalendar({
         firstDay:'1',
         defaultView: 'basicWeek',
@@ -521,35 +521,35 @@ $(document).ready(function(){
     };
 
     $('#daterange').daterangepicker(optionSet1, cb);
-                  
+
     /*************************************
     **************************************
     * AJAX FUNCTIONS
     **************************************
     *************************************/
-    
+
     $(document).ajaxStart(function(){
         $("#loading").show();
     });
-    
+
     $("#attend_yes, #attend_no").on('ifChecked', function()
     {
         var attendance_choice   = $("[name='attendance_choice']:checked").val(); //
         var episode_id          = $("#episode-id").val();
-        
-        $.ajax({  
+
+        $.ajax({
             type: "POST",
             dataType: "json",
-            url: base_url+"/index.php/team/set_attendance",  
-            data: { 
+            url: base_url+"/index.php/team/set_attendance",
+            data: {
                 attendance_choice:attendance_choice,
                 episode_id:episode_id
                 },
-            success:                   
+            success:
                 function(data)
-            {       
+            {
                 if(data.count > 0)
-                {   
+                {
                     $("#attendance_tables").empty();
                     $.ajax({
                         type: "POST",
@@ -567,177 +567,174 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     var checkboxes = $("input[id='checktest']"),
     addplayer = $("#addplayersubmit");
 
     checkboxes.click(function() {
         addplayer.attr("disabled", !checkboxes.is(":checked"));
     });
-    
+
     $(addplayer).click(function()
     {
         var players = new Array();
         $("input[name='players[]']:checked").each(function() {
             players.push($(this).val());
             });
-        
+
         $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/add_player/"+filter_id,
-            data: 
-            { 
-                players:players 
+            data:
+            {
+                players:players
             },
             success:
                 function(data)
             {
-                
+
                 if(data.count > 0)
-                {   
+                {
                     window.location = "?addplayersuccess";
                     return true;
                 }
             }
         });
     });
-    
+
     var coachboxes = $("input[id='coachtest']"),
     addcoach = $("#addcoachsubmit");
 
     coachboxes.click(function() {
         addcoach.attr("disabled", !coachboxes.is(":checked"));
     });
-    
+
     $(addcoach).click(function()
     {
         var coaches = new Array();
         $("input[name='coaches[]']:checked").each(function() {
             coaches.push($(this).val());
             });
-        
+
         $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/add_coach/"+filter_id,
-            data: 
-            { 
-                coaches:coaches 
+            data:
+            {
+                coaches:coaches
             },
             success:
                 function(data)
             {
-                
                 if(data.count > 0)
-                {   
+                {
                     window.location = "?addcoachsuccess";
                     return true;
                 }
             }
         });
     });
-    
+
     var squadcheckboxes = $("input[id='squadchecktest']"),
     removeplayer = $("#removeplayersubmit");
 
     squadcheckboxes.click(function() {
         removeplayer.attr("disabled", !squadcheckboxes.is(":checked"));
     });
-    
+
     $('#removeplayersubmit').click(function()
     {
         var squad = new Array();
         $("input[name='squad[]']:checked").each(function() {
                 squad.push($(this).val());
                 });
-        
+
         $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/remove_player/"+filter_id,
-            data: 
-            { 
-                squad:squad 
+            data:
+            {
+                squad:squad
             },
             success:
                 function(data)
             {
-                
                 if(data.count > 0)
-                {   
+                {
                     window.location = "?removeplayersuccess";
                     return true;
                 }
             }
         });
     });
-    
+
     var staffcheckboxes = $("input[id='staffchecktest']"),
     removecoach = $("#removecoachsubmit");
 
     staffcheckboxes.click(function() {
         removecoach.attr("disabled", !staffcheckboxes.is(":checked"));
     });
-    
+
     $('#removecoachsubmit').click(function()
     {
         var staff = new Array();
         $("input[name='staff[]']:checked").each(function() {
                 staff.push($(this).val());
                 });
-        
+
         $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/team/remove_coach/"+filter_id,
-            data: 
-            { 
-                staff:staff 
+            data:
+            {
+                staff:staff
             },
             success:
                 function(data)
             {
                 if(data.count > 0)
-                {   
+                {
                     window.location = "?removecoachsuccess";
                     return true;
                 }
             }
         });
     });
-    
+
     $('#input_form input').keydown(function(e) {
-        if (e.keyCode === 13) 
+        if (e.keyCode === 13)
         {
             $('#createteamsubmit').click();
             return false;
         }
     });
-    
+
     $('#createteamsubmit').click(function()
     {
         var create_teamname    = $("#create_teamname").val();
         var create_sport       = $("#create_sport").val();
-        
-        $.ajax({  
+
+        $.ajax({
             type: "POST",
             dataType: "json",
-            url: base_url+"/index.php/team/create_team",  
-            data: { 
+            url: base_url+"/index.php/team/create_team",
+            data: {
                 create_teamname:create_teamname,
                 create_sport:create_sport
                 },
-            success:                   
+            success:
                 function(data)
-            {       
+            {
                     if(data.count > 0)
-                    {   
+                    {
                         $('#create_team_modal').modal('hide');
                         window.location = base_url+"/?createteamsuccess";
                     return true;
                     }
-                    
                     if (data.createteamnameError)
                     {
                         $('#error_createteam').addClass('has-error');
@@ -755,28 +752,28 @@ $(document).ready(function(){
                         $('#error2inline_createteam p').text(data.createsportError);
                     }
                     else
-                    {   
+                    {
                         $('#error2_createteam').removeClass('has-error');
                         $('#error2inline_createteam p').text('');
                     }
             }
         });
     });
-    
+
     var joincheckboxes = $("input[id='teamids']"),
     jointeam = $("#jointeamsubmit");
 
     joincheckboxes.click(function() {
         jointeam.attr("disabled", !joincheckboxes.is(":checked"));
-    });    
-    
+    });
+
     $('#jointeamsubmit').click(function()
     {
         var teams = new Array();
         $("input[name='team[]']:checked").each(function() {
                 teams.push($(this).val());
                 });
-        
+
         var request = $.ajax({
             type: "POST",
             dataType: "json",
@@ -791,17 +788,17 @@ $(document).ready(function(){
                     return true;
                 }
             });
-                    
+
             request.done(function(data) {
                 if(data.count > 0)
-                {   
+                {
                     $('#join_team_modal').modal('hide');
                     window.location = base_url+"/?jointeamsuccess";
                     return true;
                 }
             });
     });
-    
+
     $('#leaveteamsubmit').click(function()
     {
         $.ajax({
@@ -812,9 +809,9 @@ $(document).ready(function(){
             success:
                 function(data)
             {
-                
+
                 if(data.count > 0)
-                {   
+                {
                     $('#leave_team_modal').modal('hide');
                     window.location = base_url+"/?leaveteamsuccess";
                     return true;
@@ -822,17 +819,17 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $('.leaveteam').click(function() {
         var teamid = $(this).closest(".list-group-item").find(".team_id").val();
         $(".modal-body #teamid").val(teamid);
         $('#profile_leave_team_modal').modal();
     });
-    
+
     $('#profileleaveteamsubmit').click(function()
     {
         var team_id = $("#teamid").val();
-        
+
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -842,7 +839,7 @@ $(document).ready(function(){
                 function(data)
             {
                 if(data.count > 0)
-                {   
+                {
                     $('#profile_leave_team_modal').modal('hide');
                     window.location = base_url+"/?profileleaveteamsuccess";
                     return true;
@@ -850,37 +847,36 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $('#edit_team_info input').keydown(function(e) {
-        if (e.keyCode === 13) 
+        if (e.keyCode === 13)
         {
             $('#teaminfosubmit').click();
             return false;
         }
     });
-    
+
     $('#teaminfosubmit').click(function()
     {
         var teamname    = $("#teamname").val();
         var sport       = $("#sport").val();
-        
-        $.ajax({  
+
+        $.ajax({
             type: "POST",
             dataType: "json",
-            url: base_url+"/index.php/team/update_team/"+filter_id,  
-            data: { 
+            url: base_url+"/index.php/team/update_team/"+filter_id,
+            data: {
                 teamname:teamname,
                 sport:sport
                 },
-            success:                   
+            success:
                 function(data)
-            {       
+            {
                     if(data.count > 0)
-                    {   
+                    {
                         window.location = "?updateteaminfosuccess";
                         return true;
                     }
-                    
                     if (data.teamnameError)
                     {
                         $('#error_teaminfo').addClass('has-error');
@@ -905,43 +901,42 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $('#delete_team input').keydown(function(e) {
-        if (e.keyCode === 13) 
+        if (e.keyCode === 13)
         {
             $('#deleteteamsubmit').click();
             return false;
         }
     });
-    
+
     $('#deleteteamsubmit').click(function()
     {
         var deletion  = $("#delete").val();
         var match   = $("#match").val();
-        
-        $.ajax({  
+
+        $.ajax({
             type: "POST",
             dataType: "json",
-            url: base_url+"/index.php/team/delete_team/"+filter_id,  
-            data: { 
+            url: base_url+"/index.php/team/delete_team/"+filter_id,
+            data: {
                 deletion:deletion,
                 match:match
                 },
-            success:                   
+            success:
                 function(data)
-            {     
+            {
                 if (data.count > 0)
                 {
                     window.location = base_url+"/?deleteteamsuccess";
                     return true;
                 }
-                
-                 if (data.matchError)
+                if (data.matchError)
                     {
                         $('#error_deleteteam').addClass('has-error');
                         $('#errorinline_deleteteam p').text(data.matchError);
                     }
-                    
+
                     else if (data.deleteError)
                     {
                         $('#error_deleteteam').addClass('has-error');
@@ -952,15 +947,13 @@ $(document).ready(function(){
                         $('#error_deleteteam').removeClass('has-error');
                         $('#errorinline_deleteteam p').text('');
                     }
-
-                   
             }
         });
     });
-    
-    
+
+
     $('#event-info').on("click", "#edit_episode_button", function() {
-        
+
         var description = $("#event-details").find("#description").text();
         var location = $("#event-details").find("#location").text();
         var title = $('#title').val();
@@ -968,7 +961,7 @@ $(document).ready(function(){
         var startTime = $('#start-time').val();
         var endTime = $('#end-time').val();
         var episodeId = $('#episode-id').val();
-        
+
         $('#edit_episode_modal').modal();
         $("#edited_episodeName").val(title);
         $("#edited_episodeDate").val(date);
@@ -978,9 +971,9 @@ $(document).ready(function(){
         $("#edited_episodeLocation").val(location);
         $("#edited_episodeId").val(episodeId);
     });
-    
+
     $('#editepisodesubmit').click(function()
-    {   
+    {
         var edited_episodeName = $("#edited_episodeName").val();
         var edited_episodeDate = $("#edited_episodeDate").val();
         var edited_episodeDesc = $("#edited_episodeDesc").val();
@@ -988,26 +981,26 @@ $(document).ready(function(){
         var edited_episodeEndTime = $("#edited_episodeEndTime").val();
         var edited_episodeLocation = $("#edited_episodeLocation").val();
         var episodeId = $("#edited_episodeId").val();
-    
-        $.ajax({  
+
+        $.ajax({
             type: "POST",
             dataType: "json",
-            url: base_url+"/index.php/team/edit_episode/"+episodeId,  
-            data: 
-            { 
+            url: base_url+"/index.php/team/edit_episode/"+episodeId,
+            data:
+            {
                 edited_episodeName:edited_episodeName,
                 edited_episodeDesc:edited_episodeDesc,
                 edited_episodeDate:edited_episodeDate,
                 edited_episodeStartTime:edited_episodeStartTime,
                 edited_episodeEndTime:edited_episodeEndTime,
                 edited_episodeLocation:edited_episodeLocation
-                
+
             },
-            success:                   
+            success:
             function(data)
-            {       
+            {
                 if(data.count > 0)
-                {   
+                {
                     $('#edit_episode_modal').modal('hide');
                     window.location = "?editepisodesuccess";
                     return true;
@@ -1484,17 +1477,15 @@ $(document).ready(function(){
         bInfo: false,
         bPaginate: false,
         "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" }
-        
     });
-    
+
     $('#player_staff_table').dataTable({
         bSortClasses: false,
         bInfo: false,
         bPaginate: false,
         "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search'></span>" }
-        
     });
-    
+
     $('#player_table').dataTable({
         bSortClasses: false,
         //bInfo: false,
@@ -1504,7 +1495,7 @@ $(document).ready(function(){
             'aTargets' : [ 0 ]
         } ]
     });
-    
+
     $('#coach_table').dataTable({
         bSortClasses: false,
         "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search white'></span>" },
@@ -1513,21 +1504,21 @@ $(document).ready(function(){
             'aTargets' : [ 0 ]
         }]
     });
-    
+
     $('#statistics_table').dataTable({
         bSortClasses: false,
         bInfo: false,
         bPaginate: false,
         bFilter: false,
-        "oLanguage": 
-        { 
+        "oLanguage":
+        {
             "sSearch": "<span class='glyphicon glyphicon-search'></span>",
             "sEmptyTable": '',
             "sInfoEmpty": '',
             "sZeroRecords": ''
         }
-    });  
-    
+    });
+
     $('#event_table').dataTable({
         bSortClasses: false,
         bInfo: false,
@@ -1539,7 +1530,7 @@ $(document).ready(function(){
         bSort: false,
         bFilter: false
     });
-    
+
     $('#join_team_table').dataTable({
         bSortClasses: false,
         "oLanguage": { "sSearch": "<span class='glyphicon glyphicon-search' ></span>" },
@@ -1548,13 +1539,13 @@ $(document).ready(function(){
             'aTargets' : [ 0 ]
         } ]
     });
- 
+
     /*************************************
     **************************************
     * SUCCESS MESSAGES
     **************************************
     *************************************/
-        
+
     var hash = window.location.search.substring(1);
 
     if ( hash === "addeventsuccess")
@@ -1580,7 +1571,7 @@ $(document).ready(function(){
         $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Event changes were saved. </p>');
         $("#success").show().delay(3000).fadeOut(1000);
         window.history.replaceState("gammel", "ny", window.location.pathname);
-    } 
+    }
    else if (hash === 'addplayersuccess')
     {
         $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Players were added to squad. </p>');
@@ -1589,7 +1580,7 @@ $(document).ready(function(){
         var hash = '#manage_squad';
         $('.nav a[href="' + hash + '"]').tab('show');
     }
-    
+
     else if (hash === 'addcoachsuccess')
     {
         $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Coaches were added to staff. </p>');
@@ -1598,7 +1589,7 @@ $(document).ready(function(){
         var hash = '#manage_squad';
         $('.nav a[href="' + hash + '"]').tab('show');
     }
-    
+
     else if (hash === 'removeplayersuccess')
     {
         $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Players were removed from squad. </p>');
@@ -1607,7 +1598,7 @@ $(document).ready(function(){
         var hash = '#manage_squad';
         $('.nav a[href="' + hash + '"]').tab('show');
     }
-    
+
     else if (hash === 'removecoachsuccess')
     {
         $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Coaches were removed from staff. </p>');
@@ -1616,7 +1607,7 @@ $(document).ready(function(){
         var hash = '#manage_squad';
         $('.nav a[href="' + hash + '"]').tab('show');
     }
-    
+
     else if (hash === 'updateteaminfosuccess')
     {
         $("#success").append('<p><span class="glyphicon glyphicon-ok"></span>Team information was updated. </p>');
@@ -1672,12 +1663,8 @@ $(document).ready(function(){
         $("#profile_success").show().delay(3000).fadeOut(1000);
         window.history.replaceState("gammel", "ny", window.location.pathname);
     }
-    
+
     $(document).ajaxComplete(function(){
         $("#loading").hide();
     });
-    
 });
-
-
-   

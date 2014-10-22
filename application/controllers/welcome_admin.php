@@ -9,9 +9,9 @@ class Welcome_admin extends CI_Controller
 		$this->load->helper('url');
 		$this->load->library('tank_auth_groups', '', 'tank_auth');
 	}
- 
+
         public function index() {
-            
+
             if (!$this->tank_auth->is_logged_in()) {
 			redirect('/auth/login/');
             } else {

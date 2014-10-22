@@ -1,27 +1,27 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Team_m extends MY_Model {
-    
+
     function __construct() {
         parent::__construct();
     }
-    
+
     public function check_access()
     {
         $id = $this->uri->segment(2);
-        
+
         $this->db->select('user_id');
         $presult = $this->db->get_where('plays_for', array (
-           'team_id'    => $id 
+           'team_id'    => $id
         ));
         $playercheck = $presult->num_rows();
-        
+
         $this->db->select('user_id');
         $cresult = $this->db->get_where('is_coach_of', array (
-           'team_id'    => $id 
+           'team_id'    => $id
         ));
         $coachcheck = $cresult->num_rows();
-        
+
         if ($playercheck === 0 && $coachcheck === 0)
         {
             return false;
@@ -31,7 +31,7 @@ class Team_m extends MY_Model {
             return true;
         }
     }
-    
+
     public function get_teamname($id)
     {
         $this->db->select('teamname');
@@ -39,21 +39,21 @@ class Team_m extends MY_Model {
             'id'    =>  $id
         ));
         $teamname = $result->row();
-        
+
         return $teamname->teamname;
     }
     public function get_page($id)
     {
             $this->db->select('id, teamname, sport');
             $this->db->where('id', $id);
-            
+
             $query = $this->db->get('teams', 1);
-            
+
             if($query->num_rows() === 1)
-                
+
                 return $query->row();
     }
-    
+
     public function get_team_by_coach()
     {
         $this->db->select('teams.teamname AS teamname, teams.sport AS sport, teams.id AS id');
@@ -64,7 +64,7 @@ class Team_m extends MY_Model {
         $this->db->where('is_coach_of.user_id', $this->session->userdata('user_id'));
         $this->db->order_by('teamname', 'asc');
         $coachteam = $this->db->get();
-        
+
         if($coachteam->num_rows() > 0)
         {
             foreach($coachteam->result() as $row)
@@ -73,12 +73,12 @@ class Team_m extends MY_Model {
                 $this->db->where('team_id' , $row->id);
                 $query = $this->db->get('plays_for');
                 $count = $query->num_rows();
-                
+
                 $this->db->select('user_id');
                 $this->db->where('team_id' , $row->id);
                 $coachquery = $this->db->get('is_coach_of');
                 $coachcount = $coachquery->num_rows();
-                
+
                 $data[] = array(
                     'teamname'  => $row->teamname,
                     'sport'     => $row->sport,
@@ -91,7 +91,7 @@ class Team_m extends MY_Model {
             return $data;
         }
     }
-    
+
     public function get_team_by_player()
     {
         $this->db->select('teams.teamname AS teamname, teams.sport AS sport, teams.id AS id');
@@ -102,7 +102,7 @@ class Team_m extends MY_Model {
         $this->db->where('plays_for.user_id', $this->session->userdata('user_id'));
         $this->db->order_by('teamname', 'asc');
         $playerteam = $this->db->get();
-        
+
         if($playerteam->num_rows() > 0)
         {
             foreach($playerteam->result() as $row)
@@ -111,7 +111,7 @@ class Team_m extends MY_Model {
                 $this->db->where('team_id' , $row->id);
                 $query = $this->db->get('plays_for');
                 $count = $query->num_rows();
-                
+
                 $this->db->select('username');
                 $this->db->join('users', 'is_coach_of.user_id = users.id');
                 $this->db->where('team_id', $row->id);
@@ -122,11 +122,11 @@ class Team_m extends MY_Model {
                     $coachrow = $result->row(1);
                     $coach = $coachrow->username;
                 }
-                else 
+                else
                 {
                     $coach = 'None';
                 }
-                
+
                 $data[] = array(
                     'teamname'  => $row->teamname,
                     'sport'     => $row->sport,
@@ -134,23 +134,23 @@ class Team_m extends MY_Model {
                     'team_id'   => $row->id,
                     'count'     => $count,
                     'coachcount'=> $coachcount
-                );   
+                );
             }
             return $data;
-            
+
         }
     }
-    
+
     public function get_teams()
     {
         // Fetch all teams in the database
         $this->db->select('id, teamname, sport');
         $this->db->from('teams');
-        $query = $this->db->get(); 
+        $query = $this->db->get();
 
         $teams = array();
         foreach ($query->result_array() as $team)
-        {	
+        {
             $this->db->select('username');
             $this->db->where('team_id', $team['id']);
             $this->db->join('users', 'is_coach_of.user_id = users.id');
@@ -160,11 +160,11 @@ class Team_m extends MY_Model {
                 $coachtemp = $coacharray->row();
                 $coach = $coachtemp->username;
             }
-            else 
+            else
             {
                 $coach = 'None';
             }
-            
+
             $teams[] = array(
                 'id'        =>  $team['id'],
                 'teamname'  =>  $team['teamname'],
@@ -174,10 +174,10 @@ class Team_m extends MY_Model {
         }
 
         // Returns teams
-        
+
         return $teams;
     }
-    
+
     public function update_team()
     {
         $data = array (
@@ -188,16 +188,16 @@ class Team_m extends MY_Model {
 
         return $this->db->affected_rows();
     }
-       
-    public function delete_team() 
+
+    public function delete_team()
     {
-        
+
         $this->db->where('id', $this->uri->segment(3));
         $this->db->delete('teams');
-        
+
         return $this->db->affected_rows() > 0;
     }
-    
+
     public function get_squad()
     {
         $this->db->select('username, id, email, group_id');
@@ -206,7 +206,7 @@ class Team_m extends MY_Model {
         $this->db->where('plays_for.team_id', $this->uri->segment(2));
         $this->db->order_by('username', 'asc');
         $squad = $this->db->get();
-        
+
         if($squad->num_rows() > 0)
         {
             foreach($squad->result_array() as $v)
@@ -221,7 +221,7 @@ class Team_m extends MY_Model {
             return $data;
         }
     }
-    
+
     public function get_staff()
     {
         $this->db->select('username, id, email, group_id');
@@ -230,7 +230,7 @@ class Team_m extends MY_Model {
         $this->db->where('is_coach_of.team_id', $this->uri->segment(2));
         $this->db->order_by('username', 'asc');
         $staff = $this->db->get();
-        
+
         if($staff->num_rows() > 0)
         {
             foreach($staff->result_array() as $v)
@@ -245,21 +245,21 @@ class Team_m extends MY_Model {
             return $data;
         }
     }
-    
+
     public function getTeamEvents()
     {
         $this->db->select('id, name, description, location, start_time, end_time, add_to_statistics');
         $this->db->from('events');
         $this->db->where('team_id', $this->uri->segment(2));
         $events = $this->db->get();
-        
+
         if($events->num_rows() > 0)
         {
             foreach($events->result_array() as $v)
             {
                 $start_time = substr($v['start_time'], 0, -3);
                 $end_time = substr($v['end_time'], 0, -3);
-                
+
                 $data[] = array(
                     'id'            =>  $v['id'],
                     'name'          =>  $v['name'],
@@ -273,28 +273,27 @@ class Team_m extends MY_Model {
             return $data;
         }
     }
-    
+
     public function get_players()
-    {		
+    {
         // Fetch all players from database
         $this->db->select('id, username, email');
         $this->db->from('users');
         $this->db->where('group_id', '300');
         $this->db->order_by('username asc');
-        $allplrs = $this->db->get(); 
-        
+        $allplrs = $this->db->get();
+
         // Store in array
         $players = array();
         foreach ($allplrs->result_array() as $v)
-        {	
+        {
             $this->db->select('team_id');
             $result = $this->db->get_where('plays_for', array(
-               "user_id" => $v['id'] 
+               "user_id" => $v['id']
             ));
-            
+
             $teamcount = $result->num_rows();
-            
-            
+
             $players[] = array(
                 'id'        =>  $v['id'],
                 'username'  =>  $v['username'],
@@ -306,27 +305,27 @@ class Team_m extends MY_Model {
         // Returns players
         return $players;
     }
-    
+
     public function get_coaches()
-    {		
+    {
         // Fetch all players from database
         $this->db->select('id, username, email');
         $this->db->from('users');
         $this->db->where('group_id', '100');
         $this->db->order_by('username asc');
-        $allcoaches = $this->db->get(); 
+        $allcoaches = $this->db->get();
 
         // Store in array
         $coaches = array();
         foreach ($allcoaches->result_array() as $v)
-        {	
+        {
             $this->db->select('team_id');
             $result = $this->db->get_where('is_coach_of', array(
-               "user_id" => $v['id'] 
+               "user_id" => $v['id']
             ));
-            
+
             $teamcount = $result->num_rows();
-            
+
             $coaches[] = array(
                 'id'        =>  $v['id'],
                 'username'  =>  $v['username'],
@@ -338,21 +337,21 @@ class Team_m extends MY_Model {
         // Returns players
         return $coaches;
     }
-    
+
     public function add_player($players)
     {
         $this->db->set('user_id', $players);
         $this->db->set('team_id', $this->uri->segment(3));
         $this->db->insert('plays_for');
-        
+
         $this->db->select('id');
         $this->db->from('events');
         $this->db->where('team_id', $this->uri->segment(3));
         $eventids = $this->db->get();
-        
+
         if ($eventids->num_rows() > 0) {
             $eventarray = array();
-            foreach ($eventids->result_array() as $id) 
+            foreach ($eventids->result_array() as $id)
                 {
                     $eventarray[] = $id['id'];
                 }
@@ -362,10 +361,10 @@ class Team_m extends MY_Model {
             $this->db->where_in('event_id', $eventarray);
             $episodes = $this->db->get();
 
-            if ($episodes->num_rows() > 0) 
+            if ($episodes->num_rows() > 0)
             {
 
-            foreach ($episodes->result_array() as $row) 
+            foreach ($episodes->result_array() as $row)
                 {
                     $attendanceinsert = array(
                         'user_id'       =>  $players,
@@ -379,86 +378,34 @@ class Team_m extends MY_Model {
             return $this->db->affected_rows();
             }
         }
-        
+
     }
-    
-    public function add_coach($coaches) 
+
+    public function add_coach($coaches)
     {
         $this->db->set('user_id', $coaches);
         $this->db->set('team_id', $this->uri->segment(3));
         $this->db->on_duplicate('is_coach_of');
-        
+
         return $this->db->affected_rows();
     }
-   
+
     public function remove_player($players)
     {
         $this->db->delete('plays_for', array(
             'user_id'   =>  $players,
             'team_id'   =>  $this->uri->segment(3)
         ));
-        
+
         $this->db->select('id');
         $this->db->from('events');
         $this->db->where('team_id', $this->uri->segment(3));
         $eventids = $this->db->get();
-        
+
         if ($eventids->num_rows() > 0) {
-        
+
             $eventarray = array();
-            foreach ($eventids->result_array() as $id) 
-                {
-                    $eventarray[] = $id['id'];
-                }
-
-            $this->db->select('id');
-            $this->db->from('episodes');
-            $this->db->where_in('event_id', $eventarray);
-            $episodes = $this->db->get();
-
-            if ($episodes->num_rows() > 0) 
-            {
-
-            foreach ($episodes->result_array() as $row) 
-                {
-                    $this->db->where('episode_id' , $row['id']);
-                    $this->db->where('user_id', $players);
-                    $this->db->delete('attendance_status');
-                }
-
-            return $this->db->affected_rows() > 0;
-            }
-        }
-    }
-    
-    public function remove_coach($coaches)
-    {
-        $this->db->delete('is_coach_of', array(
-            'user_id'   =>  $coaches,
-            'team_id'   =>  $this->uri->segment(3)
-        ));
-        
-        return $this->db->affected_rows();
-    }
-    
-    public function join_team($t)
-    {      
-        
-            $this->db->set('user_id', $this->session->userdata('user_id'));
-            $this->db->set('team_id', $t);
-            $this->db->on_duplicate('plays_for');
-
-            $count = $this->db->affected_rows();
-
-            $this->db->select('id');
-            $this->db->from('events');
-            $this->db->where('team_id', $t);
-            $eventids = $this->db->get();
-
-            if ($eventids->num_rows() > 0)
-            {
-            $eventarray = array();
-            foreach ($eventids->result_array() as $id) 
+            foreach ($eventids->result_array() as $id)
                 {
                     $eventarray[] = $id['id'];
                 }
@@ -469,23 +416,74 @@ class Team_m extends MY_Model {
             $episodes = $this->db->get();
 
             if ($episodes->num_rows() > 0)
-
-            foreach ($episodes->result_array() as $row) 
-                {
-                    $attendanceinsert = array(
-                        'user_id'       =>  $this->session->userdata('user_id'),
-                        'episode_id'    =>  $row['id'],
-                        'is_attending'  =>  0
-                        );
-
-                        $this->db->on_duplicate('attendance_status', $attendanceinsert);
-                }
-            }
-            else
             {
-                return false;
+
+            foreach ($episodes->result_array() as $row)
+                {
+                    $this->db->where('episode_id' , $row['id']);
+                    $this->db->where('user_id', $players);
+                    $this->db->delete('attendance_status');
+                }
+
+            return $this->db->affected_rows() > 0;
             }
-            return $count;
+        }
+    }
+
+    public function remove_coach($coaches)
+    {
+        $this->db->delete('is_coach_of', array(
+            'user_id'   =>  $coaches,
+            'team_id'   =>  $this->uri->segment(3)
+        ));
+
+        return $this->db->affected_rows();
+    }
+
+    public function join_team($t)
+    {
+        $this->db->set('user_id', $this->session->userdata('user_id'));
+        $this->db->set('team_id', $t);
+        $this->db->on_duplicate('plays_for');
+
+        $count = $this->db->affected_rows();
+
+        $this->db->select('id');
+        $this->db->from('events');
+        $this->db->where('team_id', $t);
+        $eventids = $this->db->get();
+
+        if ($eventids->num_rows() > 0)
+        {
+        $eventarray = array();
+        foreach ($eventids->result_array() as $id)
+            {
+                $eventarray[] = $id['id'];
+            }
+
+        $this->db->select('id');
+        $this->db->from('episodes');
+        $this->db->where_in('event_id', $eventarray);
+        $episodes = $this->db->get();
+
+        if ($episodes->num_rows() > 0)
+
+        foreach ($episodes->result_array() as $row)
+            {
+                $attendanceinsert = array(
+                    'user_id'       =>  $this->session->userdata('user_id'),
+                    'episode_id'    =>  $row['id'],
+                    'is_attending'  =>  0
+                    );
+
+                    $this->db->on_duplicate('attendance_status', $attendanceinsert);
+            }
+        }
+        else
+        {
+            return false;
+        }
+        return $count;
     }
 
     public function leave_team($team_id)

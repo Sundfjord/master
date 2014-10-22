@@ -47,13 +47,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Login user on the site
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function login()
@@ -201,13 +197,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Logout user
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function logout()
@@ -225,13 +217,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Register user on the site
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function register()
@@ -401,13 +389,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Send activation email again, to the same or new email address
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function send_again()
@@ -471,17 +455,11 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Activate user account.
-
 	 * User is verified by user_id and authentication code in the URL.
-
 	 * Can be called by clicking on link in mail.
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function activate()
@@ -515,13 +493,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Generate reset code (to change password) and send it to user
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function forgot_password()
@@ -591,17 +565,11 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Replace user password (forgotten) with a new one (set by user).
-
 	 * User is verified by user_id and authentication code in the URL.
-
 	 * Can be called by clicking on link in mail.
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function reset_password()
@@ -681,13 +649,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Change user password
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function change_password()
@@ -751,13 +715,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Change user email
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function change_email()
@@ -825,17 +785,11 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Replace user email with a new one.
-
 	 * User is verified by user_id and authentication code in the URL.
-
 	 * Can be called by clicking on link in mail.
-
 	 *
-
 	 * @return void
-
 	 */
 
 	function reset_email()
@@ -1028,15 +982,10 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Callback function. Check if CAPTCHA test is passed.
-
 	 *
-
 	 * @param	string
-
 	 * @return	bool
-
 	 */
 
 	function _check_captcha($code)
@@ -1082,13 +1031,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Create reCAPTCHA JS and non-JS HTML to verify user as a human
-
 	 *
-
 	 * @return	string
-
 	 */
 
 	function _create_recaptcha()
@@ -1118,13 +1063,9 @@ class Auth extends CI_Controller
 
 
 	/**
-
 	 * Callback function. Check if reCAPTCHA test is passed.
-
 	 *
-
 	 * @return	bool
-
 	 */
 
 	function _check_recaptcha()
