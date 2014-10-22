@@ -1,5 +1,5 @@
 <?php
-$this->config->load('tankstrap'); 
+$this->config->load('tankstrap');
 $tankstrap = $this->config->item('tankstrap');
 $password = array(
     'name' => 'password',
@@ -31,7 +31,7 @@ $email = array(
                             <div class="control-group">
                                 <?php echo form_label('Password', $password['id'], array('class' => 'control-label')); ?>
                                 <div class="controls">
-                                    <?php echo form_error('password'); ?>                                
+                                    <?php echo form_error('password'); ?>
                                     <?php echo form_input($password); ?>
                                     <p class="help-block"></p>
                                 </div>
@@ -39,7 +39,7 @@ $email = array(
                             <div class="control-group">
                                 <?php echo form_label('New email address', $email['id'], array('class' => 'control-label')); ?>
                                 <div class="controls">
-                                    <?php echo form_error('email'); ?>                                
+                                    <?php echo form_error('email'); ?>
                                     <?php echo form_input($email); ?>
                                     <p class="help-block"></p>
                                 </div>

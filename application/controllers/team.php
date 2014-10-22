@@ -1,580 +1,255 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-
-
 class Team extends MY_Controller
-
 {
-
     function __construct() {
-
-
-
         parent::__construct();
-
         $this->load->library('form_validation');
-
         $this->load->library('When');
-
     }
-
-
-
     public function index()
-
     {
-
         if ($this->team_m->check_access() === false)
-
         {
-
             redirect('/');
-
         }
-
-
-
         $id = $this->uri->segment(2);
-
         $team_data['title'] = $this->team_m->get_teamname($id);
-
         $team_data['main_content'] = 'team_v';
-
         $team_data['teaminfo'] = $this->team_m->get_page($id);
-
         $team_data['teams'] = $this->team_m->get_teams();
-
         $team_data['squad'] = $this->team_m->get_squad();
-
         $team_data['staff'] = $this->team_m->get_staff();
-
         $team_data['coaches'] = $this->team_m->get_coaches();
-
         $team_data['players'] = $this->team_m->get_players();
-
         $team_data['eventdata'] = $this->team_m->getTeamEvents();
-
         $this->load->vars($team_data);
-
         $this->load->view('includes/template');
-
     }
-
-
-
     public function get_squad()
-
     {
-
        redirect($this->input->post('squad_redirect'));
-
     }
-
-
-
     public function add_player()
-
     {
-
         $data = $this->input->post('players'); //this returns an array so use foreach to extract data
-
-
-
         foreach($data as $key => $players)
-
         {
-
             $this->db->where('user_id', $players);
-
             $exists = $this->db->get_where('plays_for', array(
-
                 'team_id' => $this->uri->segment(3))
-
                     );
-
                 if($exists->num_rows() === 0)
-
                 {
-
                     $this->team_m->add_player($players);
-
                 }
-
                 else
-
                 {
-
                     continue;
-
                 }
-
-
-
         }
-
         $count = count($data);
-
         echo json_encode(array(
-
             "count" => $count
-
         ));
-
     }
-
-
-
     public function add_coach()
-
     {
-
         $data = $this->input->post('coaches');
-
-
-
         foreach ($data as $key => $coaches)
-
         {
-
             $this->db->where('user_id', $coaches);
-
             $exists = $this->db->get_where('is_coach_of', array(
-
                 'team_id'   => $this->uri->segment(3)
-
                 ));
-
             if($exists->num_rows() === 0)
-
             {
-
                 $this->team_m->add_coach($coaches);
-
             }
-
             else
-
             {
-
                 continue;
-
             }
-
         }
-
         $count = count($data);
-
         echo json_encode(array(
-
             "count" => $count
-
         ));
-
     }
-
-
-
     public function remove_player()
-
     {
-
         $data = $this->input->post('squad'); //this returns an array so use foreach to extract data
-
-
-
         foreach($data as $key => $players)
-
         {
-
             $this->team_m->remove_player($players);
-
         }
-
-
-
         $count = count($data);
-
         echo json_encode(array(
-
             "count" => $count
-
         ));
-
-
-
     }
-
-
-
     public function remove_coach()
-
     {
-
         $data = $this->input->post('staff'); //this returns an array so use foreach to extract data
-
-
-
         foreach($data as $key => $coaches)
-
         {
-
             $this->team_m->remove_coach($coaches);
-
         }
-
-
-
         $count = count($data);
-
         echo json_encode(array(
-
             "count" => $count
-
         ));
-
-
-
     }
-
-
-
     public function update_team()
-
     {
-
         $this->form_validation->set_rules('teamname', 'Team Name', 'trim|min_length[4]|max_length[50]|xss_clean|required');
-
         $this->form_validation->set_rules('sport', 'Sport', 'trim|callback_check_default');
-
         $this->form_validation->set_message('check_default', 'Please choose a sport.');
-
         $this->form_validation->set_error_delimiters('', '');
-
-
-
         if($this->form_validation->run() === FALSE) {
-
             if($this->input->is_ajax_request()) {
-
                 echo json_encode(
-
                 array (
-
                     "teamnameError" =>  form_error('teamname'),
-
                     "sportError"    =>  form_error('sport')
-
                 ));
-
             }
-
             else
-
             {
-
                 echo 'fuck';
-
             }
-
-
-
         }
-
         else
-
         {
-
             $count = $this->team_m->update_team();
-
             echo json_encode(array(
-
                 "count" => $count
-
             ));
-
         }
-
     }
-
-
-
     public function check_default($sportstring)
-
     {
-
         if ($sportstring === '0')
-
         {
-
             return false;
-
         }
-
     }
-
-
-
     public function delete_team()
-
     {
-
         $this->form_validation->set_rules('deletion', 'Delete', 'required|trim');
-
         $this->form_validation->set_error_delimiters('', '');
-
-
-
         if ($this->form_validation->run() === FALSE)
-
         {
-
             echo json_encode(array(
-
                 "deleteError"   => form_error('deletion')
-
             ));
-
-
-
         }
-
         else //on success
-
-            {
-
-                if ($this->input->post('deletion') === $this->input->post('match'))
-
-                {
-
-                    $count = $this->team_m->delete_team();
-
-                    echo json_encode(array(
-
-                        "count" => $count
-
-                    ));
-
-                }
-
-                else
-
-                {
-
-                    echo json_encode(array(
-
-                       "matchError" => 'Your input did not match team name. Try again.'
-
-                    ));
-
-                }
-
-        }
-
-
-
-    }
-
-
-
-    public function join_team()
-
-    {
-
-        $data = $this->input->post('teams'); //this returns an array of teams so use foreach to extract data
-
-        $i = 0;
-
-        $e = 0;
-
-        foreach( $data as $key => $value)
-
         {
-
-            $this->db->select('team_id');
-
-            $result = $this->db->get_where('plays_for', array(
-
-               'user_id'    => $this->session->userdata('user_id')
-
-            ));
-
-            if ($result->num_rows() >= 3)
-
+            if ($this->input->post('deletion') === $this->input->post('match'))
             {
-
-                $this->db->select('teamname');
-
-                $result = $this->db->get_where('teams', array(
-
-                   'id' => $value
-
+                $count = $this->team_m->delete_team();
+                echo json_encode(array(
+                    "count" => $count
                 ));
-
+            }
+            else
+            {
+                echo json_encode(array(
+                   "matchError" => 'Your input did not match team name. Try again.'
+                ));
+            }
+        }
+    }
+    public function join_team()
+    {
+        $data = $this->input->post('teams'); //this returns an array of teams so use foreach to extract data
+        $i = 0;
+        $e = 0;
+        foreach( $data as $key => $value)
+        {
+            $this->db->select('team_id');
+            $result = $this->db->get_where('plays_for', array(
+               'user_id'    => $this->session->userdata('user_id')
+            ));
+            if ($result->num_rows() >= 3)
+            {
+                $this->db->select('teamname');
+                $result = $this->db->get_where('teams', array(
+                   'id' => $value
+                ));
                 $resultrow = $result->row(1);
-
                 $teamname = $resultrow->teamname;
-
-
-
                 $e++;
-
                 break;
-
             }
-
             else
-
             {
-
                 $this->team_m->join_team($value);
-
                 $i++;
-
             }
-
         }
-
-
-
         if ($e > 0)
-
         {
-
             echo json_encode(array(
-
                 "joinError" => "You can not play for more than three teams at a time. Some teams may have been joined.",
-
             ));
-
         }
-
-
-
         else
-
         {
-
             echo json_encode(array(
-
                 "count" => $i
-
             ));
-
         }
-
     }
-
-
-
     public function leave_team()
-
     {
-
         $team_id = $this->input->post('team_id');
-
-
-
         $count = $this->team_m->leave_team($team_id);
-
-
-
         echo json_encode(array(
-
             "count" => $count
-
         ));
-
     }
-
-
-
     public function json()
-
     {
-
         echo $this->team_m->jsonEvents();
-
     }
-
-
-
     public function add_event()
-
     {
-
         $this->form_validation->set_rules('eventname', 'Event Name', 'required|max_length[25]|min_length[3]');
-
         $this->form_validation->set_rules('eventdesc', 'Event Description', 'max_length[140]');
-
         $this->form_validation->set_rules('frequency', 'Frequency', 'required');
-
         $this->form_validation->set_rules('start_date', 'Start Date', 'required');
-
         if($this->input->post('frequency') !== 'single')
-
         {
-
             $this->form_validation->set_rules('end_date', 'End Date', 'required|callback_compareDates');
-
         }
-
         $this->form_validation->set_rules('start_time', 'Start Time', 'required|callback_compareToNow');
-
         $this->form_validation->set_rules('end_time', 'End Time', 'required|callback_compareTimes|callback_minDuration');
-
         $this->form_validation->set_rules('eventlocation', 'Location', 'trim|required');
-
         $this->form_validation->set_error_delimiters('', '');
-
-
-
         if($this->form_validation->run() === FALSE) {
-
-
-
             if($this->input->is_ajax_request()) {
-
                 echo json_encode(
-
                 array (
-
                     "times"         => $this->compareTimes(),
-
                     "nameerror"     =>  form_error('eventname'),
-
                     "descerror"     =>  form_error('eventdesc'),
-
                     "freqerror"     =>  form_error('frequency'),
-
                     "stdateerror"   =>  form_error('start_date'),
-
                     "enddateerror"  =>  form_error('end_date'),
-
                     "sttimeerror"   =>  form_error('start_time'),
-
                     "endtimeerror"  =>  form_error('end_time'),
-
                     "locerror"      =>  form_error('eventlocation')
-
                     )
-
                 );
-
             }
-
             else
-
             {
-
                 echo 'fuck';
-
             }
-
         }
-
-
-
-        else { //on success
+        else
+        { //on success
 
             $start_date = $this->input->post('start_date');
             //convert to valid MYSQL date format
@@ -613,21 +288,12 @@ class Team extends MY_Controller
                         $this->team_m->add_episodes($eventid, $result, $teamid);
 
                     }
-
-
-
                     $count = count($r);
-
                     echo json_encode(array(
-
                         "count" => $count
-
                     ));
-
             }
-
             else
-
             {
 
                 $teamid = $this->uri->segment(3);

@@ -868,7 +868,7 @@ class Team_m extends MY_Model {
             $statEvents[] = $row['id'];
         }
 
-        $this->db->select('id, event_date');
+        $this->db->select('id, event_date, is_added');
         $this->db->from('episodes');
         $this->db->where_in('event_id', $statEvents);
         $this->db->order_by('event_date', 'asc');
@@ -876,16 +876,19 @@ class Team_m extends MY_Model {
 
         if ($episodes->num_rows() > 0)
         {
+            //Episodes
             $i = 0;
+            // Attendance rows
             $a = 0;
             foreach ($episodes->result_array() as $row)
             {
-                //checks if the episode is more than 24 hours (1day) old relative to current date
                 $now = date('Y-m-d');
                 $eventdate = date('Y-m-d', strtotime($row['event_date']));
                 $validstat = date('Y-m-d', strtotime($eventdate. ' + 1 day'));
 
-                if ($now > $validstat)
+                //checks if the episode is more than 24 hours (1day) old relative to current date
+                //and whether or not stats for this episode has been added before
+                if ($now > $validstat && $row['is_added']==0)
                 {
                     $i++;
                     $this->db->select('user_id, episode_id');
@@ -901,6 +904,11 @@ class Team_m extends MY_Model {
                         $this->db->on_duplicate('attendance_statistics', $statinfo);
                         $a++;
                     }
+                    $data = array(
+                            'is_added' => 1
+                        );
+                    $this->db->where('id', $row['id']);
+                    $this->db->update('episodes', $data);
                 }
             }
             $result = "$i episodes affected <br> $a new attendance rows added to statistics";
