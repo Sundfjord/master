@@ -227,10 +227,8 @@
                     <?php endif; ?>
 
                 </div>
-
-
-
                     <div class='col-xs-12 col-md-6'>
+                        <?php if ( $coach !== TRUE ) : ?>
 
                         <div id="attendance_select" class='row'>
 
@@ -276,7 +274,7 @@
 
                     </div>
 
-
+                    <?php endif; ?>
 
                         <div id='attendance_tables' class='row'>
 
