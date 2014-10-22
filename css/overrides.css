@@ -511,6 +511,23 @@ a:focus {
 #red input {
     opacity: 1;
 }
+
+#label_yes, #label_no {
+    margin-bottom: 0;
+}
+
+@media(max-width: 400px) {
+    #label_yes, #label_no {
+        font-size: 12px;
+    }
+}
+
+@media(max-width: 340px) {
+    #label_yes, #label_no {
+        font-size: 10px;
+    }
+}
+
 #notallowed.bg-danger{
     padding: 5px;
 }
