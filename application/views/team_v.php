@@ -1049,6 +1049,22 @@
 
 
                     <form id="add_event_form" action="" method="post">
+                        <?php if(!empty($eventdata)) { ?>
+                        <div class="col-xs-6 row">
+                            <div class="form-group">
+                                <label class="sr-only">Use event information from other events</label>
+                                <select id="import-data" class="form-control" name="select-event-data">
+                                    <option id="0">Import event data from</option>
+                                    <?php foreach($eventdata as $event) { ?>
+                                        <?php echo'<option class="autofill" id="'.$event['id'].'">'.$event['name'].'</option>';?>
+                                    <?php } ?>
+
+                                </select>
+                            </div>
+                        </div>
+                        <?php } ?>
+
+                    <input type="hidden" id="referrer_id">
 
                     <div class="form-group" id="error">
 
@@ -1253,22 +1269,12 @@
                     <div class="modal-body">
 
                         <?php if (empty($eventdata)) {?>
-
-
-
                         <div>
-
                             <h4>Apparently, there are no events. </h4> <br> <h4>You better add some, fool.</h4>
-
                         </div>
-
-
-
                     </div>
 
                     <?php } else {?>
-
-
 
                     <div class="panel-group" id="accordion">
 

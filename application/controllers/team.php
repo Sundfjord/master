@@ -255,9 +255,12 @@ class Team extends MY_Controller
             $start = date("Y-m-d", strtotime($start_date));
             $this->input->post('end_time');
             $teamid = $this->uri->segment(3);
+            $referrer_id = $this->input->post('referrer_id');
             //Insert event information into Events table
-            $this->team_m->add_event($teamid);
-            $eventid = $this->db->insert_id();
+            if($referrer_id == 0 || !$referrer_id) {
+                $this->team_m->add_event($teamid);
+                $eventid = $this->db->insert_id();
+            }
             if($this->input->post('frequency') === 'single')
             {
                 $r  = new When();
@@ -266,7 +269,11 @@ class Team extends MY_Controller
                     ->wkst(1);
                 while($result = $r->next())
                     {
-                        $this->team_m->add_episodes($eventid, $result, $teamid);
+                        if($referrer_id > 0) {
+                            $this->team_m->add_episodes($referrer_id, $result, $teamid);
+                        } else {
+                            $this->team_m->add_episodes($eventid, $result, $teamid);
+                        }
                     }
                     $count = count($r);
                     echo json_encode(array(
@@ -285,7 +292,11 @@ class Team extends MY_Controller
                         ->wkst(1);
                     while($result = $r->next())
                     {
-                        $this->team_m->add_episodes($eventid, $result, $teamid);
+                        if($referrer_id > 0) {
+                            $this->team_m->add_episodes($referrer_id, $result, $teamid);
+                        } else {
+                            $this->team_m->add_episodes($eventid, $result, $teamid);
+                        }
                     }
                     $count = count($r);
                     echo json_encode(array(
@@ -482,6 +493,11 @@ class Team extends MY_Controller
                 "count" =>  $count
             ));
         }
+    }
+    public function get_event($id) {
+        $eventdata = $this->team_m->get_event($id);
+        echo json_encode($eventdata);
+        return;
     }
     public function edit_episode()
     {

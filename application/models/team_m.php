@@ -273,6 +273,26 @@ class Team_m extends MY_Model {
             return $data;
         }
     }
+    public function get_event($id) {
+        $this->db->select('id, name, description, location, start_time, end_time');
+        $this->db->from('events');
+        $this->db->where('id', $id);
+        $result = $this->db->get();
+
+        if ($result->num_rows() > 0)
+        {
+           $row = $result->row();
+           $event_data[] = array(
+            'id' =>             $row->id,
+            'name' =>           $row->name,
+            'description' =>    $row->description,
+            'location' =>       $row->location,
+            'start_time' =>     $row->start_time,
+            'end_time' =>       $row->end_time
+            );
+        }
+        return $event_data;
+    }
 
     public function get_players()
     {

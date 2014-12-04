@@ -24,7 +24,7 @@ $(document).ready(function(){
         eventColor: "#336799",
         timeFormat: 'H(:mm)',
         allDayDefault: false,
-        header: 
+        header:
         {
             left: 'prev,next',
             center: '',
@@ -1104,6 +1104,7 @@ $(document).ready(function(){
         var start_time      = $("#start_time").val();
         var end_time        = $("#end_time").val();
         var eventlocation   = $("#eventlocation").val();
+        var referrer_id     = $("#referrer_id").val();
         if($("#add_to_statistics").is(":checked")) {
             var add_to_stats = 1;
         } else {
@@ -1124,7 +1125,8 @@ $(document).ready(function(){
                 start_time: start_time,
                 end_time: end_time,
                 eventlocation: eventlocation,
-                add_to_stats: add_to_stats
+                add_to_stats: add_to_stats,
+                referrer_id: referrer_id
             },
             success:
             function(data)
@@ -1220,6 +1222,41 @@ $(document).ready(function(){
                         $('#error8inline p').text('');
                     }
             }
+        });
+    });
+
+    $("#import-data").change(function(){
+        var id = $(this).find(":selected").attr("id");
+        console.log(id);
+        if(id === '0') {
+            $("#event_name").val('');
+            $("#event_desc").val('');
+            $("#start_date").val('');
+            $("#end_date").val('');
+            $("#start_time").val('');
+            $("#end_time").val('');
+            $("#location").val('');
+            $("#referrer_id").val('');
+            return false;
+        }
+        // Write AJAX function that sends id and gets back event information, which it inputs into input fields.
+        $.ajax({
+            url: base_url+"/index.php/team/get_event/"+id,
+            type: "POST",
+            dataType: "json",
+            success:
+                function(data)
+                {
+                    data = data[0];
+                    $("#event_name").val(data.name);
+                    if(data.name != '' || data.name != 'NULL') {
+                        $("#event_desc").val(data.description);
+                    }
+                    $("#start_time").val(data.start_time);
+                    $("#end_time").val(data.end_time);
+                    $("#eventlocation").val(data.location);
+                    $("#referrer_id").val(data.id);
+                }
         });
     });
 
