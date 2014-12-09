@@ -1239,7 +1239,6 @@ $(document).ready(function(){
             $("#referrer_id").val('');
             return false;
         }
-        // Write AJAX function that sends id and gets back event information, which it inputs into input fields.
         $.ajax({
             url: base_url+"/index.php/team/get_event/"+id,
             type: "POST",
@@ -1705,6 +1704,9 @@ $(document).ready(function(){
     }
 
     $(document).ajaxComplete(function(){
-        $("#loading").hide();
+        setTimeout(function() {
+            $("#loading").hide();
+        }, 1500);
+        
     });
 });
