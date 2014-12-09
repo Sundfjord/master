@@ -1544,7 +1544,7 @@ $(document).ready(function(){
         }]
     });
 
-    $('#statistics_table').dataTable({
+    /*$('#statistics_table').dataTable({
         bSortClasses: false,
         bInfo: false,
         bPaginate: false,
@@ -1556,7 +1556,7 @@ $(document).ready(function(){
             "sInfoEmpty": '',
             "sZeroRecords": ''
         }
-    });
+    });*/
 
     $('#event_table').dataTable({
         bSortClasses: false,
