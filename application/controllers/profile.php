@@ -59,6 +59,7 @@ class Profile extends MY_Controller
     public function profile_leave_team()
     {
         $team_id = $this->input->post('team_id');
+        $player = $this->input->post('player');
 
         $this->db->select('group_id');
         $result = $this->db->get_where('users', array(
@@ -67,10 +68,38 @@ class Profile extends MY_Controller
         $row = $result->row();
         $role = $row->group_id;
 
+
+        $iscoach = false;
+        $this->db->select('user_id, team_id');
+        $this->db->from('is_coach_of');
+        $this->db->where('user_id', $this->session->userdata('user_id'));
+        $result = $this->db->get();
+        $coachof = array();
+        foreach ($result->result_array() as $row)
+        {
+            $coachof[] = $row['team_id'];
+        }
+        if (in_array($team_id, $coachof)) {
+            $iscoach = true;
+        }
+        // If user is coach of team
         if ($role === '100')
         {
             $count = $this->profile_m->coach_leave_team($team_id);
         }
+        // If user is playercoach and may be coach of the team,
+        // but only wants to leave as player
+        elseif ($role === '200' && $player)
+        {
+            $count = $this->team_m->leave_team($team_id);
+        }
+        // If user's role is playercoach and is coach of the team
+        elseif ($role === '200' && $iscoach)
+        {
+            var_dump('iscoach = true = wrong loop');die();
+            $count = $this->profile_m->coach_leave_team($team_id);
+        }
+        // If user is player of team
         else
         {
             $count = $this->team_m->leave_team($team_id);

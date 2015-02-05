@@ -160,7 +160,7 @@ class Team extends MY_Controller
             }
         }
     }
-    public function join_team()
+    public function join_team($id = null)
     {
         $data = $this->input->post('teams'); //this returns an array of teams so use foreach to extract data
         $i = 0;

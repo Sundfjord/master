@@ -116,6 +116,7 @@ class Team_m extends MY_Model {
                 $this->db->join('users', 'is_coach_of.user_id = users.id');
                 $this->db->where('team_id', $row->id);
                 $result = $this->db->get('is_coach_of');
+                // This should be changed to a comma separated string with all coaches using explode
                 $coachcount = $result->num_rows();
                 if ($coachcount > 0)
                 {
@@ -299,7 +300,9 @@ class Team_m extends MY_Model {
         // Fetch all players from database
         $this->db->select('id, username, email');
         $this->db->from('users');
+        //Needs to be changed to greater than 100
         $this->db->where('group_id', '300');
+        $this->db->or_where('group_id', '200');
         $this->db->order_by('username asc');
         $allplrs = $this->db->get();
 
@@ -332,6 +335,7 @@ class Team_m extends MY_Model {
         $this->db->select('id, username, email');
         $this->db->from('users');
         $this->db->where('group_id', '100');
+        $this->db->or_where('group_id', '200');
         $this->db->order_by('username asc');
         $allcoaches = $this->db->get();
 
@@ -475,29 +479,28 @@ class Team_m extends MY_Model {
 
         if ($eventids->num_rows() > 0)
         {
-        $eventarray = array();
-        foreach ($eventids->result_array() as $id)
+            $eventarray = array();
+            foreach ($eventids->result_array() as $id)
             {
                 $eventarray[] = $id['id'];
             }
 
-        $this->db->select('id');
-        $this->db->from('episodes');
-        $this->db->where_in('event_id', $eventarray);
-        $episodes = $this->db->get();
+            $this->db->select('id');
+            $this->db->from('episodes');
+            $this->db->where_in('event_id', $eventarray);
+            $episodes = $this->db->get();
 
-        if ($episodes->num_rows() > 0)
+            if ($episodes->num_rows() > 0)
 
-        foreach ($episodes->result_array() as $row)
-            {
-                $attendanceinsert = array(
-                    'user_id'       =>  $this->session->userdata('user_id'),
-                    'episode_id'    =>  $row['id'],
-                    'is_attending'  =>  0
+            foreach ($episodes->result_array() as $row)
+                {
+                    $attendanceinsert = array(
+                        'user_id'       =>  $this->session->userdata('user_id'),
+                        'episode_id'    =>  $row['id'],
+                        'is_attending'  =>  0
                     );
-
                     $this->db->on_duplicate('attendance_status', $attendanceinsert);
-            }
+                }
         }
         else
         {

@@ -355,6 +355,10 @@ $(document).ready(function(){
         $('#create_team_modal').modal();
     });
 
+    $('#home_create_or_join_team, #create_or_join_team').click(function() {
+        $('#team_modal').modal();
+    });
+
     $('#create_team_modal').on('hidden.bs.modal', function () {
         $('#error_createteam').removeClass('has-error');
         $('#errorinline_createteam p').text('');
@@ -498,7 +502,7 @@ $(document).ready(function(){
         maxDate: moment(),
         showDropdowns: true,
         showWeekNumbers: true,
-        ranges: 
+        ranges:
         {
            'Last 7 Days': [moment().subtract('days', 7), moment()],
            'Last 30 Days': [moment().subtract('days', 29), moment()],
@@ -510,7 +514,7 @@ $(document).ready(function(){
         cancelClass: 'btn-small',
         format: 'DD/MM/YYYY',
         separator: ' to ',
-        locale: 
+        locale:
         {
             applyLabel: 'Submit',
             cancelLabel: 'Clear',
@@ -774,8 +778,8 @@ $(document).ready(function(){
     {
         var teams = new Array();
         $("input[name='team[]']:checked").each(function() {
-                teams.push($(this).val());
-                });
+            teams.push($(this).val());
+        });
 
         var request = $.ajax({
             type: "POST",
@@ -802,6 +806,50 @@ $(document).ready(function(){
             });
     });
 
+    $('.jointeamaction').click(function() {
+        var teams = new Array()
+        var teamid = $(this).closest(".list-group-item").find(".team_id").val();
+        teams.push(teamid);
+        $.ajax({
+            type: "POST",
+            datatype: "json",
+            url: base_url+"/index.php/team/join_team/"+teamid,
+            data: {teams : teams },
+            success:
+                function(data) {
+                    console.log(data);
+                }
+        });
+    });
+
+    $('.leaveteamaction').click(function() {
+        var team_id = $(this).closest(".list-group-item").find(".team_id").val();
+        var button = $(this).closest(".list-group-item").find(".leaveteamaction");
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: base_url+"/index.php/profile/profile_leave_team",
+            data: {team_id:team_id},
+            success:
+                function(data)
+            {
+                if(data.count > 0)
+                {
+                    button.removeClass("btn btn-sm btn-danger");
+                    button.addClass("btn btn-sm btn-success");
+                    button.text("");
+                    button.append('<span class="glyphicon glyphicon-ok"></span>Done!');
+                    setTimeout(function ()
+                    {
+                        button.text('');
+                        button.append('<span class="glyphicon glyphicon-plus"></span>Join team as player');
+                    }, 2500);
+                }
+            }
+        });
+    });
+
     $('#leaveteamsubmit').click(function()
     {
         $.ajax({
@@ -812,7 +860,6 @@ $(document).ready(function(){
             success:
                 function(data)
             {
-
                 if(data.count > 0)
                 {
                     $('#leave_team_modal').modal('hide');
@@ -829,15 +876,21 @@ $(document).ready(function(){
         $('#profile_leave_team_modal').modal();
     });
 
-    $('#profileleaveteamsubmit').click(function()
+    $('#profileleaveteamsubmit, .leaveteamaction').click(function()
     {
         var team_id = $("#teamid").val();
+        var player = false;
+        if ($(this).hasClass('player')) {
+            var player = true;
+        }
 
         $.ajax({
             type: "POST",
             dataType: "json",
             url: base_url+"/index.php/profile/profile_leave_team",
-            data: {team_id:team_id},
+            data: {team_id:team_id,
+                    player:player
+                },
             success:
                 function(data)
             {

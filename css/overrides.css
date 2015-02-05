@@ -32,13 +32,13 @@ body {
 **************************************
 *************************************/
 
-.header { 
+.header {
     background-color: #3b5999;
     border-bottom: 1px solid black;
     color: white;
     display: none;
 }
-  
+
 /*************************************
 **************************************
 * LOGIN AND REGISTRATION
@@ -133,7 +133,7 @@ a:focus {
     display: none;
     opacity: 0.4;
 }
- 
+
 #loading {
     background:  #000 url('../img/ajax-loader.gif') no-repeat center;
     z-index: 10000;
@@ -670,8 +670,11 @@ p.danger {
 *************************************/
 
 li.list-group-item p {
-    font-size: 18px;
+    font-size: 16px;
     margin: 0 0 5px 0;
+}
+.jointeamaction, .leaveteamaction {
+    margin-right: 10px;
 }
 
 /*************************************
@@ -690,7 +693,7 @@ li.list-group-item p {
 
 .fc-today {
     background-color: #e68e8c;
-}   
+}
 
 .fc-event {
     cursor: pointer;
