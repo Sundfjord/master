@@ -38,6 +38,22 @@ class Tank_auth_groups extends Tank_auth {
      * @return        bool
      */
 
+    function role() {
+        if ($this->ci->session->userdata('group_id') === '100') {
+            $role = 'Coach';
+        } elseif ($this->ci->session->userdata('group_id') === '200') {
+            $role = 'Playercoach';
+        } else {
+            $role = 'Player';
+        }
+        return $role;
+    }
+
+    /**
+     * Check if logged in user is an admin
+     *
+     * @return        bool
+     */
     function is_admin()
     {
         return $this->ci->session->userdata('group_id') === '100';

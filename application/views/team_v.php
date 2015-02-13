@@ -1,26 +1,52 @@
 <?php
-$playercoachcheck = false;
-$checkarray = array();
-foreach ($staff as $s) {
-    $checkarray[] = $s['id'];
+$showcoachstuff = false;
+$showplayerstuff = false;
+$id = $this->session->userdata('user_id');
+if ($role == 'Coach') {
+    $showcoachstuff = true;
+    $showplayerstuff = false;
+} elseif ($role == 'Playercoach') {
+    // Get array of squad members
+    $playercheckarray = array();
+    foreach ($squad as $sq) {
+        $playercheckarray[] = $sq['id'];
+    }
+    // Get array of coaches
+    $coachcheckarray = array();
+    foreach ($staff as $s) {
+        $coachcheckarray[] = $s['id'];
+    }
+    // Check if they are player of team
+    if (in_array($id, $playercheckarray)) {
+        $showplayerstuff = true;
+    }
+    // Check if they are coach of team
+    if (in_array($id, $coachcheckarray)) {
+        $showcoachstuff = true;
+    }
+} else {
+    // If they are players
+    $showcoachstuff = false;
+    $showplayerstuff = true;
 }
-if (in_array($this->session->userdata('user_id'), $checkarray)) {
-    $playercoachcheck = true;
-}
+
+// Need to find out whether user is player coach only playing for team or also coaching, or if it is
+// only player or only coach. Use above arrays to find variables for all possible scenarios to be used further down
+
 ?>
 <div id="success" class="success"></div>
 <div id="loading" class='loadingoverlay pageoverlay'></div>
 <div id="top" class="container-fluid">
     <div id="inner_top" class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><?php echo $teaminfo->teamname; ?> </h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <h2><?php echo $teaminfo->teamname; ?> </h2>
+            </div>
         </div>
     </div>
-        </div>
-        <div class="row">
+    <div class="row">
         <div class="col-sm-12">
-            <?php if ( $coach === true || $playercoachcheck ) : ?>
+            <?php if ($showcoachstuff) : ?>
             <ul id="team_tabs" class="nav nav-tabs">
                 <li><a href="#schedule" data-toggle="tab"><span class="glyphicon glyphicon-calendar"></span>Schedule</a></li>
                 <li><a href="#stats" data-toggle="tab"><span class="glyphicon glyphicon-stats"></span>Statistics</a></li>
@@ -38,17 +64,17 @@ if (in_array($this->session->userdata('user_id'), $checkarray)) {
 </div>
 <div id="container" class="container">
     <input id="filter_id" type="hidden" name="filter_id" value="<?php echo $this->uri->segment(2); ?>">
-    <input id='user' type='hidden' name='user_id' value='<?php echo $this->session->userdata('user_id'); ?>'>
+    <input id='user' type='hidden' name='user_id' value='<?php echo $id; ?>'>
     <!-- Tab panes -->
     <div id="team_content" class="tab-content">
         <div class="tab-pane fade in active" id="schedule">
-            <?php if ( $coach !== true || !$playercoachcheck ) : ?>
+            <?php if ($showplayerstuff && !$showcoachstuff) : ?>
             <h3 class="margin">Schedule</h3>
             <?php else : ?>
             <h3 class="push">Schedule</h3>
             <?php endif; ?>
             <div class='row'>
-                <?php if ( $coach === true || $playercoachcheck ) : ?>
+            <?php if ($showcoachstuff) : ?>
             <div id="knapp_bar" class="col-sm-7 col-md-6">
                 <button type="button" id="add_event" class="btn btn-info" href="#add_event_modal"> <span class="glyphicon glyphicon-plus-sign"></span>Add event</button>
                 <button type="button" id="edit_event" class="btn btn-default" href="#edit_event_modal"> <span class="glyphicon glyphicon-edit"></span>Edit events</button>
@@ -101,13 +127,13 @@ if (in_array($this->session->userdata('user_id'), $checkarray)) {
                         <div id='invisible'>
                         </div>
                     </div>
-                        <?php if ( $coach === true || $playercoachcheck) : ?>
+                        <?php if ($showcoachstuff) : ?>
                     <div id="coach-only">
                     </div>
                     <?php endif; ?>
                 </div>
                     <div class='col-xs-12 col-md-6'>
-                        <?php if ( $coach !== true ) : ?>
+                    <?php if ($showplayerstuff) : ?>
                         <div id="attendance_select" class='row'>
                         <form class="after" id="set_attendance_form" action="" method="post">
                             <div class='col-xs-12'>

@@ -42,6 +42,8 @@ class MY_Controller extends CI_Controller
 
             $data['coach'] = $this->tank_auth->is_admin();
 
+            $data['role'] = $this->tank_auth->role();
+
             $data['playercoach'] = $this->tank_auth->is_group_member('200');
 
             $data['coachteam'] = $this->team_m->get_team_by_coach();
