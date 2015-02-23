@@ -607,7 +607,6 @@ class Team extends MY_Controller
         echo $attendance_result;
     }
     public function set_attendance()
-
     {
         $ep_id = $this->input->post('episode_id');
         $status = $this->input->post('attendance_choice');
@@ -628,6 +627,11 @@ class Team extends MY_Controller
     public function archive_attendance()
     {
         $this->team_m->archive_attendance();
+        redirect('/');
+    }
+    public function cleanup_events()
+    {
+        $this->team_m->cleanup_events();
         redirect('/');
     }
 }

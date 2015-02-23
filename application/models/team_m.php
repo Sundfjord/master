@@ -876,6 +876,46 @@ class Team_m extends MY_Model {
         }
     }
 
+    public function cleanup_events() {
+        // Fetch all events
+        $this->db->select('id');
+        $this->db->from('events');
+        $allevents = $this->db->get();
+
+        // Fetch the most recent episode of each event
+        $eventids = array();
+        foreach ($allevents->result_array() as $event) {
+            $eventids[] = $event['id'];
+        }
+        $newestArray = array();
+        foreach($eventids as $row) {
+            $this->db->select('event_id, event_date');
+            $this->db->order_by('event_date', 'desc');
+            $this->db->limit(1);
+            $this->db->from('episodes');
+            $this->db->where('event_id', $row);
+            $newest = $this->db->get();
+            foreach($newest->result_array() as $new) {
+                array_push($newestArray, $new);
+            }
+        }
+        // Check if each episode date is more than thirty days ago
+        $now = date('Y-m-d');
+        $del = 0;
+        foreach($newestArray as $date) {
+            $eventdate = date('Y-m-d', strtotime($date['event_date']));
+            $validDate = date('Y-m-d', strtotime($now.' -1 month'));
+            if ($eventdate < $validDate) {
+                echo $eventdate.' is deleted<br>';
+                $this->db->where('id', $date['event_id']);
+                $this->db->delete('events');
+                $del++;
+            }
+        }
+        $result = $del > 1 ? $del . ' events were deleted' : $del . ' event was deleted';
+        echo $result;
+    }
+
     public function archive_attendance()
     {
         $this->db->select('id');
@@ -921,18 +961,18 @@ class Team_m extends MY_Model {
                         $statinfo = array(
                             'user_id'       =>  $stat['user_id'],
                             'episode_id'    =>  $stat['episode_id']
-                            );
+                        );
                         $this->db->on_duplicate('attendance_statistics', $statinfo);
                         $a++;
                     }
                     $data = array(
-                            'is_added' => 1
-                        );
+                        'is_added' => 1
+                    );
                     $this->db->where('id', $row['id']);
                     $this->db->update('episodes', $data);
                 }
             }
-            $result = "$i episodes affected <br> $a new attendance rows added to statistics";
+            $result = '$i episodes affected <br> $a new attendance rows added to statistics';
             echo $result;
         }
         else
