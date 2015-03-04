@@ -882,38 +882,41 @@ class Team_m extends MY_Model {
         $this->db->from('events');
         $allevents = $this->db->get();
 
-        // Fetch the most recent episode of each event
         $eventids = array();
         foreach ($allevents->result_array() as $event) {
             $eventids[] = $event['id'];
         }
-        $newestArray = array();
-        foreach($eventids as $row) {
-            $this->db->select('event_id, event_date');
-            $this->db->order_by('event_date', 'desc');
-            $this->db->limit(1);
-            $this->db->from('episodes');
-            $this->db->where('event_id', $row);
-            $newest = $this->db->get();
-            foreach($newest->result_array() as $new) {
-                array_push($newestArray, $new);
+        if (!empty($eventids)) {
+            $newestArray = array();
+            // Fetch the most recent episode of each event
+            foreach($eventids as $row) {
+                $this->db->select('event_id, event_date');
+                $this->db->order_by('event_date', 'desc');
+                $this->db->limit(1);
+                $this->db->from('episodes');
+                $this->db->where('event_id', $row);
+                $newest = $this->db->get();
+                foreach($newest->result_array() as $new) {
+                    array_push($newestArray, $new);
+                }
+            }
+            // Check if each episode date is more than thirty days ago
+            if (!empty($newestArray)) {
+                $now = date('Y-m-d');
+                $del = 0;
+                foreach($newestArray as $date) {
+                    $eventdate = date('Y-m-d', strtotime($date['event_date']));
+                    $validDate = date('Y-m-d', strtotime($now.' -1 month'));
+                    if ($eventdate < $validDate) {
+                        $this->db->where('id', $date['event_id']);
+                        $this->db->delete('events');
+                        $del++;
+                    }
+                }
+                $result = $del > 1 ? $del . ' events were deleted' : $del . ' event was deleted';
+                echo $result;
             }
         }
-        // Check if each episode date is more than thirty days ago
-        $now = date('Y-m-d');
-        $del = 0;
-        foreach($newestArray as $date) {
-            $eventdate = date('Y-m-d', strtotime($date['event_date']));
-            $validDate = date('Y-m-d', strtotime($now.' -1 month'));
-            if ($eventdate < $validDate) {
-                echo $eventdate.' is deleted<br>';
-                $this->db->where('id', $date['event_id']);
-                $this->db->delete('events');
-                $del++;
-            }
-        }
-        $result = $del > 1 ? $del . ' events were deleted' : $del . ' event was deleted';
-        echo $result;
     }
 
     public function archive_attendance()
