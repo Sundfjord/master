@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="<?php echo base_url();?>css/rockenroll.css" type="text/css" media="screen" />
         <link rel="stylesheet" href="<?php echo base_url();?>css/overrides.css" type="text/css" media="screen" />
     </head>
-    
+
     <body>
         <div id="wrap">
             <?php $this->load->view('includes/header'); ?>
@@ -22,7 +22,7 @@
             </div>
             <?php $this->load->view('includes/footer'); ?>
         </div>
-    
+
         <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="<?php echo base_url(); ?>js/icheck.js" type='text/javascript' ></script>
@@ -34,9 +34,9 @@
         <script src="<?php echo base_url(); ?>js/daterangepicker.js" type="text/javascript" charset="utf-8"></script>
         <script src="<?php echo base_url(); ?>js/fullcalendar.js" type='text/javascript' ></script>
         <script src="<?php echo base_url(); ?>js/functions.js" type="text/javascript" charset="utf-8"></script>
+        <script src="<?php echo base_url(); ?>js/notifications.js" type="text/javascript" charset="utf-8"></script>
     </body>
 </html>
-        
 
 
 

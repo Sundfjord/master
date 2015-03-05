@@ -284,6 +284,7 @@ class Team extends MY_Controller
             {
                 $teamid = $this->uri->segment(3);
                 $end_date = $this->input->post('end_date');
+                $count = 0;
                 //convert to valid MYSQL date format
                 $end = date("Y-m-d", strtotime($end_date));
                     $r  = new When();
@@ -294,15 +295,20 @@ class Team extends MY_Controller
                     {
                         if($referrer_id > 0) {
                             $this->team_m->add_episodes($referrer_id, $result, $teamid);
+                            $count++;
                         } else {
                             $this->team_m->add_episodes($eventid, $result, $teamid);
+                            $count++;
                         }
                     }
-                    $count = count($r);
+                    //$count = count($r);
                     echo json_encode(array(
                         "count" => $count
                     ));
             }
+            // Create some notifications to send to players
+            $this->load->model('notification_m');
+            $this->notification_m->saveNotifications(5, $this->session->userdata('user_id'), $teamid, $count);
         }
     }
     public function compareDates()
