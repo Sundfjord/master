@@ -3,8 +3,6 @@ class Notification extends MY_Controller
 {
     function __construct() {
         parent::__construct();
-        $this->load->library('form_validation');
-        $this->load->library('When');
         $this->load->model('notification_m');
     }
     public function index()
@@ -21,8 +19,17 @@ class Notification extends MY_Controller
     {
     	$user_id = $this->session->userdata('user_id');
         $response = json_encode($this->notification_m->getNotifications($user_id));
-        die(var_dump($response));
-        return $response;
+        echo $response;
+    }
+    // Let's see if we can make a function that concatenates notifications, so that
+    // instead of one notification per player attending a particular episode,
+    // we make one notification saying these three players are going to the event
+    public function concatNotifications() {
+
+    }
+    // Function that marks notification as seen
+    public function readNotification($id) {
+
     }
     public function removeNotifications()
     {

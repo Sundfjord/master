@@ -5,6 +5,7 @@ class Team extends MY_Controller
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->library('When');
+        $this->load->model('notification_m');
     }
     public function index()
     {
@@ -307,7 +308,6 @@ class Team extends MY_Controller
                     ));
             }
             // Create some notifications to send to players
-            $this->load->model('notification_m');
             $this->notification_m->saveNotifications(5, $this->session->userdata('user_id'), $teamid, $count);
         }
     }

@@ -176,6 +176,20 @@ a:focus {
     }
 }
 
+#notifications:hover, #notifications:focus {
+    color: #000;
+    background-color: transparent !important;
+}
+
+#notifications {
+    color: #fff;
+    font-size: 1.3em;
+    margin-right: -15px!important;
+    width: 57px;
+    padding: 19px 15px!important;
+}
+
+
 .dropdown-menu .glyphicon {
     margin-right: 10px;
 }
@@ -191,6 +205,59 @@ a:focus {
 #join_team_table {
     border: 1px solid #ddd;
 }
+
+/*************************************
+**************************************
+* NOTIFICATIONS
+**************************************
+*************************************/
+
+.badge {
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    background-color: red;
+}
+
+#notificationsFlyOut {
+    display: none;
+    position: absolute;
+    width: 430px;
+    overflow: visible;
+    z-index: 1;
+    top: 60px;
+    right: 445px;
+    background: #fff;
+    border: 1px solid rgba(100, 100, 100, .4);
+    -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+}
+
+.beeper {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 15px 10px;
+    border-color: transparent transparent #ffffff transparent;
+    position: absolute;
+    right: 165px;
+    top: -15px;
+}
+
+.notificationsHeader {
+    border-bottom: 1px solid #ddd;
+}
+
+.notificationsHeader h4 {
+    padding-left: 10px;
+}
+
+.notification {
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    padding: 10px;
+}
+
+
 /*************************************
 **************************************
 * HOME
@@ -211,8 +278,7 @@ a:focus {
 
 .teams >li {
     display: inline-block;
-    float:left; 
-    
+    float:left;
 }
 
 .teamlist {

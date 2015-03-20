@@ -68,16 +68,35 @@
             <?php endif; ?>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+                <li class="no-bgc"><a class="no-bg glyphicon glyphicon-bell" href="#" id="notifications">&nbsp;<span class="badge pull-right"></span></a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $userdata->username; ?> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="<?php echo base_url(); ?>index.php/profile"><span class="glyphicon glyphicon-user"></span>My Profile</a></li>
                         <li><a href="<?php echo base_url(); ?>index.php/auth/logout"><span class="glyphicon glyphicon-log-out"></span>Logout</a></li>
                     </ul>
-            </ul>
+                </li>
+        </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+<div id="notificationsFlyOut">
+    <div class="beeperHeader">
+        <div class="beeperWrapper">
+            <div class="beeper"></div>
+        </div>
+    </div>
+    <div class="notificationsHeader">
+        <h4>Notifications</h4>
+    </div>
+    <div class="notifications">
+
+    </div>
+    <div class="allNotifications">
+        <? // A link to a view with all notifications ?>
+    </div>
+</div>
 
 <div id="team_modals">
 

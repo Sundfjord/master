@@ -181,7 +181,7 @@ class Team_m extends MY_Model {
 
     public function update_team()
     {
-        $data = array (
+        $data = array(
             'teamname'  => $this->input->post('teamname'),
             'sport'     => $this->input->post('sport'));
         $this->db->where('id', $this->uri->segment(3));

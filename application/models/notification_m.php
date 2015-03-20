@@ -40,40 +40,39 @@ class Notification_m extends MY_Model {
     	switch($type){
             # Notifications for players
             case 1: # Team name change
-                $message = '';
+                $message = $username . ' changed the name of your team ' . $detail . ' to ' . $teamname . '.';
             break;
             case 2: # Sport change
-                $message = '';
+                $message = $username . ' changed the sport of your team ' . $teamname . ' to ' . $detail . '.';
             break;
             case 3: # Team name and sport change
-                $message = '';
+                $message = $username . ' changed team name and sport of your team ' . $detail . '.';
             break;
             case 4: # Player joins team
-                $message = '';
+                $message = $detail . ' has joined ' . $teamname . ' as player.';
             break;
             case 5: # Events added to team
                 $countString = $count == 1 ? 'event' : 'events';
                 $message = $count . ' ' . $countString . ' were added to the ' . $teamname . ' calendar by ' . $username . '.';
             break;
             case 6: # Event details changed
-                $message = '';
+                $message = $username . ' changed the event ' . $detail . '.';
             break;
             case 7: # Episode details changed
-                $message = '';
+                $message = $username . ' changed the details of the event ' . $detail . '.';
             break;
-                $message = '';
             # Notifications for coaches
             case 8: # Player left team
-                $message = '';
+                $message = $username . ' left ' . $teamname . '.';
             break;
             case 9: # Player has requested to join team
-                $message = '';
+                $message = $username . ' has requested to join ' . $teamname . '.';
             break;
             case 10: # Player attendance status changed
-                $message = '';
+                $message = $username . ' changed his attendance status to ' . $detail . ' on the event ' . $somevariable . '.';
             break;
             case 11: # User added as coach for team
-                $message = '';
+                $message = $username . ' added ' . $detail . ' as a coach of ' . $teamname . '.';
             break;
         }
 
@@ -95,8 +94,7 @@ class Notification_m extends MY_Model {
 
             if ($playerquery->num_rows() > 0) {
                 foreach($playerquery->result_array() as $row) {
-                    // We don't bother sending a player notification to player coaches
-                    // who added the events themselves
+                    // We rule out player coaches who added the events themselves
                     if ($row['user_id'] != $creator_id) {
                         $notificationInsert['user_id'] = $row['user_id'];
                         $this->db->insert('notifications', $notificationInsert);
@@ -150,6 +148,7 @@ class Notification_m extends MY_Model {
                     $teamname = $teaminfo->teamname;
                 }
                 $notification = array(
+                    'id'        => $row['id'],
                     'created'   => $row['created'],
                     'teamname'  => $teamname,
                     'creator'   => $creatorname,
