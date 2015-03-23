@@ -224,7 +224,7 @@ a:focus {
     position: absolute;
     width: 430px;
     overflow: visible;
-    z-index: 1;
+    z-index: 15;
     top: 60px;
     right: 445px;
     background: #fff;

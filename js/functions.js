@@ -1037,6 +1037,7 @@ $(document).ready(function(){
         var edited_episodeEndTime = $("#edited_episodeEndTime").val();
         var edited_episodeLocation = $("#edited_episodeLocation").val();
         var episodeId = $("#edited_episodeId").val();
+        var teamid = $("#filter_id").val();
 
         $.ajax({
             type: "POST",
@@ -1049,8 +1050,8 @@ $(document).ready(function(){
                 edited_episodeDate:edited_episodeDate,
                 edited_episodeStartTime:edited_episodeStartTime,
                 edited_episodeEndTime:edited_episodeEndTime,
-                edited_episodeLocation:edited_episodeLocation
-
+                edited_episodeLocation:edited_episodeLocation,
+                teamid:teamid
             },
             success:
             function(data)
@@ -1288,7 +1289,7 @@ $(document).ready(function(){
             $("#end_date").val('');
             $("#start_time").val('');
             $("#end_time").val('');
-            $("#location").val('');
+            $("#eventlocation").val('');
             $("#referrer_id").val('');
             return false;
         }
@@ -1300,6 +1301,11 @@ $(document).ready(function(){
                 function(data)
                 {
                     data = data[0];
+                    $("#start_time").attr("disabled","disabled");
+                    $("#end_time").attr("disabled","disabled");
+                    $("#eventlocation").attr("disabled","disabled");
+                    $("#event_desc").attr("disabled","disabled");
+                    $("#event_name").attr("disabled","disabled");
                     $("#event_name").val(data.name);
                     if(data.name != '' || data.name != 'NULL') {
                         $("#event_desc").val(data.description);
@@ -1308,6 +1314,7 @@ $(document).ready(function(){
                     $("#end_time").val(data.end_time);
                     $("#eventlocation").val(data.location);
                     $("#referrer_id").val(data.id);
+
                 }
         });
     });
@@ -1326,6 +1333,7 @@ $(document).ready(function(){
         } else {
             var edited_add_to_statistics = 0;
         }
+        var teamid = $("#filter_id").val();
 
         $.ajax({
             type: "POST",
@@ -1338,7 +1346,8 @@ $(document).ready(function(){
                 edited_start_time: edited_start_time,
                 edited_end_time: edited_end_time,
                 edited_location: edited_location,
-                edited_add_to_statistics: edited_add_to_statistics
+                edited_add_to_statistics: edited_add_to_statistics,
+                teamid:teamid
             },
             success:
                     function(data)

@@ -639,12 +639,11 @@ class Team_m extends MY_Model {
                     'episode_id'    =>  $episodeid,
                     'is_attending'  =>  0
                     );
-
-                    $this->db->insert('attendance_status', $attendanceinsert);
+                $this->db->insert('attendance_status', $attendanceinsert);
             }
     }
 
-    public function edit_event() //$date should be available
+    public function edit_event()
     {
         $updateinfo = array(
             'name'          =>  $this->input->post('edited_eventname'),
@@ -680,11 +679,9 @@ class Team_m extends MY_Model {
             'altered_end_time'      =>  $this->input->post('edited_episodeEndTime'),
             'is_altered'            =>  1
         );
-
-        $this->db->join('events', 'episodes.event_id = events.id');
         $this->db->where('id', $id);
         $this->db->update('episodes', $updateinfo);
-
+        $this->db->flush_cache();
         return $this->db->affected_rows() > 0;
     }
 

@@ -20,7 +20,7 @@ $(document).ready(function() {
 				$.each(data, function(i, item) {
 					var count = 0;
 					if ($('#n'+item.id).length == 0) {
-    					$('.notifications').append('<li class="notification" id="n'+item.id+'">'+item.message+'</li>');
+    					$('.notifications').prepend('<li class="notification" id="n'+item.id+'">'+item.message+'</li>');
     					count++;
 					}
 				});
@@ -37,7 +37,7 @@ $(document).ready(function() {
 		});
 	}
 
-	setInterval(getNotifications, 10000);
+	setInterval(getNotifications, 30000);
 
 	$('#notifications').click(function() {
 		/*if (!$('#notificationsFlyOut').is(':visible')) {

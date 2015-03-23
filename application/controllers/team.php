@@ -56,6 +56,8 @@ class Team extends MY_Controller
     public function add_coach()
     {
         $data = $this->input->post('coaches');
+        $coachNames = array();
+        $c = 0;
         foreach ($data as $key => $coaches)
         {
             $this->db->where('user_id', $coaches);
@@ -64,14 +66,23 @@ class Team extends MY_Controller
                 ));
             if($exists->num_rows() === 0)
             {
+                $this->db->select('username')->from('users')->where('id', $coaches);
+                $coachquery = $this->db->get();
+                if ($coachquery->num_rows() > 0) {
+                    $row = $coachquery->row();
+                    $coachNames[] = $row->username;
+                }
                 $this->team_m->add_coach($coaches);
+                $c++;
             }
             else
             {
                 continue;
             }
         }
-        $count = count($data);
+        $count = $c;
+        // Create notifications
+        $this->notification_m->saveNotifications(11, $this->session->userdata('user_id'), $this->uri->segment(3), $coachNames);
         echo json_encode(array(
             "count" => $count
         ));
@@ -121,10 +132,16 @@ class Team extends MY_Controller
         }
         else
         {
+            $teamid= $this->uri->segment(3);
+            $teamname = $this->team_m->get_teamname($teamid);
             $count = $this->team_m->update_team();
             echo json_encode(array(
                 "count" => $count
             ));
+
+            // Create notifications
+            $this->notification_m->saveNotifications(3, $this->session->userdata('user_id'), $this->uri->segment(3), false, $teamname);
+
         }
     }
     public function check_default($sportstring)
@@ -164,6 +181,7 @@ class Team extends MY_Controller
     public function join_team($id = null)
     {
         $data = $this->input->post('teams'); //this returns an array of teams so use foreach to extract data
+        $detail = $this->tank_auth->get_username();
         $i = 0;
         $e = 0;
         foreach( $data as $key => $value)
@@ -186,6 +204,8 @@ class Team extends MY_Controller
             else
             {
                 $this->team_m->join_team($value);
+                // Create notifications
+                $this->notification_m->saveNotifications(4, $this->session->userdata('user_id'), $value);
                 $i++;
             }
         }
@@ -206,6 +226,8 @@ class Team extends MY_Controller
     {
         $team_id = $this->input->post('team_id');
         $count = $this->team_m->leave_team($team_id);
+        // Create notifications
+        $this->notification_m->saveNotifications(8, $this->session->userdata('user_id'), $team_id);
         echo json_encode(array(
             "count" => $count
         ));
@@ -257,7 +279,7 @@ class Team extends MY_Controller
             $this->input->post('end_time');
             $teamid = $this->uri->segment(3);
             $referrer_id = $this->input->post('referrer_id');
-            //Insert event information into Events table
+            // Insert event information into Events table
             if($referrer_id == 0 || !$referrer_id) {
                 $this->team_m->add_event($teamid);
                 $eventid = $this->db->insert_id();
@@ -307,7 +329,7 @@ class Team extends MY_Controller
                         "count" => $count
                     ));
             }
-            // Create some notifications to send to players
+            // Create notifications
             $this->notification_m->saveNotifications(5, $this->session->userdata('user_id'), $teamid, $count);
         }
     }
@@ -463,7 +485,10 @@ class Team extends MY_Controller
         }
         else
         { //on success
+            $teamid = $this->input->post('teamid');
             $count = $this->team_m->edit_event();
+            // Create notifications
+            $this->notification_m->saveNotifications(6, $this->session->userdata('user_id'), $teamid, false, $this->input->post('edited_eventname'));
             echo json_encode(array(
                 "count" => $count
             ));
@@ -518,7 +543,7 @@ class Team extends MY_Controller
         if($this->form_validation->run() === FALSE) {
             if($this->input->is_ajax_request()) {
                 echo json_encode(
-                array (
+                array(
                     "episodeNameError"      =>  form_error('edited_episodeName'),
                     "episodeDescError"      =>  form_error('edited_episodeDesc'),
                     "episodeDateError"      =>  form_error('edited_episodeDate'),
@@ -535,11 +560,17 @@ class Team extends MY_Controller
         }
         else
         { //on success
+            $episodeName = $this->input->post('edited_episodeName');
+            $episodeDate = date('\o\n F jS. \a\t G:i', strtotime($this->input->post('edited_episodeDate')));
+            $notificationString = $episodeName . ' ' . $episodeDate;
             $id = $this->uri->segment(3);
-            $edited_date = $this->input->post('edited_episodeDate');
+            $teamid = $this->input->post('teamid');
+
             //convert to valid MYSQL date format
-            $date = date("Y-m-d", strtotime($edited_date));
+            $date = date("Y-m-d", strtotime($this->input->post('edited_episodeDate')));
             $count = $this->team_m->edit_episode($id, $date);
+            // Create notifications
+            $this->notification_m->saveNotifications(7, $this->session->userdata('user_id'), $teamid, false, $notificationString);
             echo json_encode(array(
                 "count" => $count
             ));
@@ -617,6 +648,31 @@ class Team extends MY_Controller
         $ep_id = $this->input->post('episode_id');
         $status = $this->input->post('attendance_choice');
         $count= $this->team_m->set_attendance($ep_id, $status);
+        // Create notifications
+        $this->db->select('event_id, event_date, altered_name, altered_start_time')->from('episodes')->where('id', $ep_id);
+        $eventquery = $this->db->get();
+        if ($eventquery->num_rows() > 0) {
+            $row = $eventquery->row();
+            $event_id = $row->event_id;
+            $event_name = $row->altered_name;
+            $event_date = $row->event_date;
+            $event_start_time = $row->altered_start_time;
+        }
+        $this->db->select('team_id, name, start_time')->from('events')->where('id', $event_id);
+        $idquery = $this->db->get();
+        if ($idquery->num_rows() > 0) {
+            $row = $idquery->row();
+            $team_id = $row->team_id;
+            if ($event_name == null) {
+                $event_name == $row->name;
+            }
+            if ($event_start_time == null) {
+                $event_start_time = $row->start_time;
+            }
+        }
+        $eventString = date('\o\n F jS. \a\t G:i', strtotime($event_date . ' ' . $event_start_time));
+        // Create notifications
+        $this->notification_m->saveNotifications(10, $this->session->userdata('user_id'), $team_id, $status, $eventString);
         echo json_encode(array(
            "count"  =>  $count
         ));

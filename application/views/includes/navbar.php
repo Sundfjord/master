@@ -99,7 +99,7 @@
 </div>
 
 <div id="team_modals">
-
+<?php if ($playercoach) { ?>
 <div class="modal fade" id="team_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -189,6 +189,10 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<?php }
+
+if ($coach) { ?>
+
 <div class="modal fade" id="create_team_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -235,6 +239,10 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<?php }
+
+if (!$playercoach && !$coach) { ?>
 
 <div class="modal fade" id="join_team_modal" keyboard="true" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -284,5 +292,5 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
+<?php } ?>
 </div>

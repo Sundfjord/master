@@ -24,11 +24,13 @@ class Notification extends MY_Controller
     // Let's see if we can make a function that concatenates notifications, so that
     // instead of one notification per player attending a particular episode,
     // we make one notification saying these three players are going to the event
-    public function concatNotifications() {
+    public function concatNotifications()
+    {
 
     }
     // Function that marks notification as seen
-    public function readNotification($id) {
+    public function markNotificationAsRead($id)
+    {
 
     }
     public function removeNotifications()
