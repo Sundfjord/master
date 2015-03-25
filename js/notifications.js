@@ -18,9 +18,11 @@ $(document).ready(function() {
 			function(data) {
 				var count = $('.notifications li').length;
 				$.each(data, function(i, item) {
+					var timestamp = moment(item.created).fromNow();
 					var count = 0;
+					// We check if the notification has already been pushed
 					if ($('#n'+item.id).length == 0) {
-    					$('.notifications').prepend('<li class="notification" id="n'+item.id+'">'+item.message+'</li>');
+    					$('.notifications').prepend('<li class="notification" id="n'+item.id+'"><a class="block" href="'+base_url+'/index.php/team/'+item.team_id+'"><div class="message">'+item.message+'</div><div class="timestamp small"><span class="glyphicon glyphicon-time"></span>'+timestamp+'</div></a></li>');
     					count++;
 					}
 				});
@@ -36,14 +38,36 @@ $(document).ready(function() {
 			}
 		});
 	}
-
 	setInterval(getNotifications, 30000);
 
-	$('#notifications').click(function() {
-		/*if (!$('#notificationsFlyOut').is(':visible')) {
-			getNotifications();
-		}*/
-		$('#notificationsFlyOut').toggle();
-		$('.badge').text('');
+	// Hides notifications if click anywhere else
+	$(document).mouseup(function(event) {
+		var div = $('#notificationsFlyOut');
+		var alreadyDone = false;
+		if (event.target.id == 'notifications') {
+			if (!$('#notificationsFlyOut').is(':visible')) {
+				$('#notificationsFlyOut').show();
+				changeColor('show');
+				alreadyDone = true;
+			}
+		}
+	    if (!div.is(event.target) && div.has(event.target).length === 0) {
+	        if($(div).is(":visible") && !alreadyDone) {
+	            $(div).hide();
+	            changeColor('hide');
+	        }
+	    }
 	});
+	function changeColor(type) {
+		if (type == 'show') {
+			$('#notifications').css('color', '#000');
+		} else {
+			$('#notifications').css('color', '#fff');
+			$('#notifications').hover(function() {
+				$(this).css('color', '#e7e7e7');
+			}, function() {
+				$(this).css('color', '');
+			})
+		}
+	}
 });

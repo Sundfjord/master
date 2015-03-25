@@ -160,6 +160,7 @@ class Notification_m extends MY_Model {
                 $notification = array(
                     'id'        => $row['id'],
                     'created'   => $row['created'],
+                    'team_id'   => $row['team_id'],
                     'teamname'  => $teamname,
                     'creator'   => $creatorname,
                     'message'   => $row['message']
