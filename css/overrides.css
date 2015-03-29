@@ -221,7 +221,8 @@ a:focus {
     position: absolute;
     top: 5px;
     left: 20px;
-    background-color: red;
+    background-color: #369;
+    padding: 1px 7px 4px 7px;
 }
 
 .block {
@@ -245,11 +246,11 @@ a:focus {
 #notificationsFlyOut {
     display: none;
     position: absolute;
-    width: 430px;
+    width: 500px;
     overflow: visible;
     z-index: 15;
     top: 60px;
-    right: 445px;
+    right: 10%;
     background: #fff;
     border: 1px solid rgba(100, 100, 100, .4);
     -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
@@ -279,6 +280,24 @@ a:focus {
     overflow: hidden;
 }
 
+.seen {
+    margin: 10px;;
+}
+
+.allNotifications {
+    height: 40px;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+}
+
+#notificationList {
+    width: 700px;
+}
+
+#notificationList>li {
+    border-bottom: 1px solid #777;
+}
 
 /*************************************
 **************************************

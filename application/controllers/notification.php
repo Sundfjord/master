@@ -7,6 +7,14 @@ class Notification extends MY_Controller
     }
     public function index()
     {
+        $notification_data['title'] = 'Your Notifications';
+        $notification_data['main_content'] = 'notifications_v';
+        $notification_data['username'] = $this->tank_auth->get_username();
+        $notification_data['teams'] = $this->team_m->get_teams();
+        $notification_data['coach'] = $this->tank_auth->is_admin();
+        $notification_data['notifications'] = $this->notification_m->getNotifications($this->session->userdata['user_id'], true);
+        $this->load->vars($notification_data);
+        $this->load->view('includes/template');
     }
     public function saveNotifications()
     {
@@ -15,10 +23,9 @@ class Notification extends MY_Controller
     	$return = $this->notification_m->saveNotifications(5, $this->session->userdata('user_id'), $teamid, $count);
         redirect('/');
     }
-    public function getNotifications()
+    public function getNotifications($all = false)
     {
-    	$user_id = $this->session->userdata('user_id');
-        $response = json_encode($this->notification_m->getNotifications($user_id));
+        $response = json_encode($this->notification_m->getNotifications($this->session->userdata('user_id')));
         echo $response;
     }
     // Let's see if we can make a function that concatenates notifications, so that
@@ -31,7 +38,9 @@ class Notification extends MY_Controller
     // Function that marks notification as seen
     public function markNotificationAsRead($id)
     {
-
+        $done = $this->notification_m->markNotificationAsRead($id);
+        die(var_dump($done));
+        return $done;
     }
     public function removeNotifications()
     {

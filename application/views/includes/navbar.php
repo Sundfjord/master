@@ -94,7 +94,7 @@
 
     </div>
     <div class="allNotifications">
-        <? // A link to a view with all notifications ?>
+        <a href="<?php echo base_url(); ?>index.php/notification/allNotifications" title="See all notifications">See all</a>
     </div>
 </div>
 

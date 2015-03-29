@@ -131,12 +131,18 @@ class Notification_m extends MY_Model {
      * and returns them to present them in a view
      *
      * @param int $user_id ID of the user we are looking for notifications for
+     * @param boolean $all True if we want both seen and not seen notifications, false otherwise
      *
-     * @return [type] [description]
+     * @return boolean True if results, false otherwise
      */
-    public function getNotifications($user_id)
+    public function getNotifications($user_id, $all = false)
     {
-        $this->db->from('notifications')->where('user_id', $user_id)->where('seen', 0);
+        //$this->db->select();
+        $this->db->from('notifications');
+        $this->db->where('user_id', $user_id);
+        if (!$all) {
+            $this->db->where('seen', 0);
+        }
         $allnotifications = $this->db->get();
 
         if ($allnotifications->num_rows() > 0) {
@@ -160,6 +166,7 @@ class Notification_m extends MY_Model {
                 $notification = array(
                     'id'        => $row['id'],
                     'created'   => $row['created'],
+                    'seen'      => $row['seen'],
                     'team_id'   => $row['team_id'],
                     'teamname'  => $teamname,
                     'creator'   => $creatorname,
@@ -173,5 +180,13 @@ class Notification_m extends MY_Model {
         } else {
             return false;
         }
+    }
+
+    public function markNotificationAsRead($id)
+    {
+        $this->db->set('seen', 1)->where('id', $id)->update('notifications');
+        return true;
+        //$this->db->where('user_id', $this->session->userdata('user_id'));
+        //$this->db->update('attendance_status');
     }
 }

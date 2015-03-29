@@ -15,7 +15,7 @@ class Profile extends MY_Controller
 
     public function index()
     {
-        $profile_data['title'] = 'My Profile';
+        $profile_data['title'] = 'Your Profile';
         $profile_data['main_content'] = 'profile_v';
         $profile_data['username'] = $this->tank_auth->get_username();
         $profile_data['teams'] = $this->team_m->get_teams();
