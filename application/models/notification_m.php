@@ -189,4 +189,15 @@ class Notification_m extends MY_Model {
         //$this->db->where('user_id', $this->session->userdata('user_id'));
         //$this->db->update('attendance_status');
     }
+
+    public function removeNotifications()
+    {
+        // Remove seen notifications older than 7 days
+        $limit = date('Y-m-d H:i:s', strtotime('7 days ago'));
+        $this->db->where('seen', 1);
+        $this->db->where('created <=', $limit);
+        $this->db->delete('notifications');
+
+        return $this->db->affected_rows();
+    }
 }

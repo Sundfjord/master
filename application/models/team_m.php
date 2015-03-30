@@ -800,7 +800,7 @@ class Team_m extends MY_Model {
             $this->db->where_in('event_id', $eventarray);
             $this->db->where('event_date >=', $startrange);
             $this->db->where('event_date <=', $endrange);
-            //Fetches all episodes for a specific team
+            // Fetches all episodes for a specific team
             $episodes = $this->db->get();
 
             if ($episodes->num_rows() > 0)

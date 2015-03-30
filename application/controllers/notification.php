@@ -18,10 +18,6 @@ class Notification extends MY_Controller
     }
     public function saveNotifications()
     {
-        $teamid = 89;
-        $count = 5;
-    	$return = $this->notification_m->saveNotifications(5, $this->session->userdata('user_id'), $teamid, $count);
-        redirect('/');
     }
     public function getNotifications($all = false)
     {
@@ -39,12 +35,12 @@ class Notification extends MY_Controller
     public function markNotificationAsRead($id)
     {
         $done = $this->notification_m->markNotificationAsRead($id);
-        die(var_dump($done));
         return $done;
     }
     public function removeNotifications()
     {
-    	// Remove seen notifications older than 7 days
-    	// Designed to be run as a daily cronjob
+        $count = $this->notification_m->removeNotifications();
+        $countString = $count = 1 ? $count . ' notification was' : $count . ' notifications were';
+        echo $countString . ' deleted from the database';
     }
 }
